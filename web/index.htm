@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Tournament Analyzer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <div id="alertcontainer"></div>
+        <div class="row">
+            <div class="col-4">
+                <div class="float-end">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownPreset"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Load preset
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownPreset" id="dropdownPresetList">
+                        </ul>
+                    </div>
+                </div>
+                <h3>Teams</h3>
+                <div class="list-group" id="teams">
+                </div>
+            </div>
+            <div class="col-8">
+                <h3>Matches</h3>
+                <table class="table" id="matchTable">
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <h3>Simulation settings</h3>
+                <button id="startSimulation" type="button" class="btn btn-primary">Start simulation</button>
+                <button id="stopSimulation" type="button" class="btn btn-primary" disabled="disabled">Stop
+                    simulation</button>
+            </div>
+            <div class="col-8">
+                <h3>Simulation results</h3>
+                <div id="simulationStats">After 0 simulations</div>
+                <table class="table" id="simulationTable">
+                </table>
+            </div>
+        </div>
+
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="simulationDetailOffCanvas"
+            aria-labelledby="offCanvasSimulationHeader">
+            <div class="offcanvas-header">
+                <h4 id="offCanvasSimulationHeader">Simulation results for <span id="simulationDetailTeam"></span>’s
+                    <span id="simulationDetailPlace"></span> place</h5>
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <h5>Success matches</h5>
+                <table class="table" id="simulationSuccessMatches">
+                </table>
+                <h5>Failure matches</h5>
+                <table class="table" id="simulationFailMatches">
+                </table>
+            </div>
+        </div>
+
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/common.js"></script>
+        <script src="js/script.js"></script>
+</body>
+
+</html>

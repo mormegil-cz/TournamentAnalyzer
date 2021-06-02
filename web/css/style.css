@@ -1,0 +1,7 @@
+#matchTable td, #matchTable th {
+    text-align: center;
+}
+
+#matchTable .pointsCol {
+    text-align: right;
+}
