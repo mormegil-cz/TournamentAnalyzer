@@ -7,17 +7,153 @@
     const RESULT_LOSS = { type: 'done', result: 'L', caption: 'Loss', home: 0, away: 3 };
 
     const RULES = {
-        IIHF: {results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS]},
-        UEFA: {results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS]},
+        IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS] },
+        UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS] },
+    };
+
+    const UEFA_COUNTRY_COEFF_2021 = {
+        ENG: 24.357,
+        ESP: 19.500,
+        ITA: 16.285,
+        GER: 15.214,
+        FRA: 7.916,
+        POR: 9.600,
+        NED: 9.200,
+        RUS: 4.333,
+        BEL: 6.000,
+        AUT: 6.700,
+        SCO: 8.500,
+        UKR: 6.800,
+        TUR: 3.100,
+        DEN: 4.125,
+        CYP: 4.000,
+        SRB: 5.500,
+        CZE: 6.600,
+        CRO: 5.900,
+        SUI: 5.125,
+        GRE: 5.100,
+        ISR: 7.000,
+        NOR: 6.500,
+        SWE: 2.500,
+        BUL: 4.000,
+        ROM: 3.750,
+        AZE: 2.500,
+        KAZ: 1.000,
+        HUN: 4.250,
+        BLR: 1.500,
+        POL: 4.000,
+        SLO: 2.250,
+        SVK: 1.500,
+        LIE: 0.500,
+        LTH: 1.625,
+        LUX: 1.000,
+        BOS: 2.625,
+        IRE: 1.875,
+        MKD: 1.750,
+        ARM: 1.375,
+        LAT: 1.375,
+        ALB: 2.000,
+        NIR: 2.833,
+        GEO: 1.750,
+        FIN: 1.375,
+        MOL: 1.375,
+        MAL: 1.500,
+        FAR: 2.750,
+        KOS: 1.833,
+        GIB: 1.666,
+        MNG: 1.625,
+        WAL: 1.500,
+        ICE: 0.625,
+        EST: 1.375,
+        AND: 0.666,
+        SMA: 0.500,
+    };
+
+    const FIFA_RANKING = {
+        BEL: 1783.38,
+        FRA: 1757.3,
+        ENG: 1686.78,
+        POR: 1666.12,
+        ESP: 1648.13,
+        ITA: 1642.06,
+        DEN: 1631.55,
+        GER: 1609.12,
+        SUI: 1606.21,
+        CRO: 1605.75,
+        NED: 1598.04,
+        WAL: 1570.36,
+        SWE: 1569.81,
+        POL: 1549.87,
+        AUT: 1523.42,
+        UKR: 1514.64,
+        SRB: 1512.9,
+        TUR: 1505.05,
+        SVK: 1475.24,
+        HUN: 1468.75,
+        RUS: 1462.65,
+        CZE: 1458.81,
+        NOR: 1452.34,
+        ROU: 1449.23,
+        SCO: 1441.43,
+        IRL: 1427.22,
+        NIR: 1425.74,
+        GRE: 1418.7,
+        ISL: 1415.99,
+        FIN: 1410.82,
+        BIH: 1404.87,
+        MKD: 1374.73,
+        SVN: 1369.88,
+        MNE: 1368.49,
+        ALB: 1362.09,
+        BUL: 1339.03,
+        ISR: 1283.36,
+        BLR: 1276.79,
+        ARM: 1273.28,
+        GEO: 1259.51,
+        LUX: 1244.86,
+        CYP: 1240.78,
+        AZE: 1168.53,
+        FRO: 1165.45,
+        EST: 1161.58,
+        KVX: 1151.73,
+        KAZ: 1147.35,
+        LTU: 1102.84,
+        LVA: 1081.66,
+        AND: 1034.9,
+        MLT: 955.89,
+        MDA: 948.16,
+        LIE: 911.05,
+        GIB: 880.16,
+        SMR: 804.71
+    };
+
+    const POINTS_FORTUNA_LIGA_2021 = {
+        SLA: 86,
+        SPA: 74,
+        JAB: 69,
+        SLO: 63,
+        PLZ: 58,
+        LIB: 52,
+        PAR: 52,
+        BAN: 49,
+        OLO: 45,
+        BOH: 43,
+        MBO: 39,
+        KAR: 39,
+        CBU: 38,
+        ZLI: 32,
+        TEP: 30,
+        HRK: 26
     };
 
     const PRESETS = {
-        "UEFA 2020 Group A": { teams: ["TUR", "ITA", "WAL", "SUI"], matches: preparePresetMatches({ 'TUR-ITA': '', 'WAL-SUI': '', 'TUR-WAL': '', 'ITA-SUI': '', 'SUI-TUR': '', 'ITA-WAL': '' }), rules: RULES.UEFA },
-        "UEFA 2020 Group B": { teams: ["DEN", "FIN", "BEL", "RUS"], matches: preparePresetMatches({ 'DEN-FIN': '', 'BEL-RUS': '', 'FIN-RUS': '', 'DEN-BEL': '', 'RUS-DEN': '', 'FIN-BEL': '' }), rules: RULES.UEFA },
-        "UEFA 2020 Group C": { teams: ["NED", "UKR", "AUT", "MKD"], matches: preparePresetMatches({ 'AUT-MKD': '', 'NED-UKR': '', 'UKR-MKD': '', 'NED-AUT': '', 'MKD-NED': '', 'UKR-AUT': '' }), rules: RULES.UEFA },
-        "UEFA 2020 Group D": { teams: ["ENG", "CRO", "CZE", "SCO"], matches: preparePresetMatches({ 'ENG-CRO': '', 'SCO-CZE': '', 'CRO-CZE': '', 'ENG-SCO': '', 'CRO-SCO': '', 'CZE-ENG': '' }), rules: RULES.UEFA },
-        "UEFA 2020 Group E": { teams: ["ESP", "SWE", "POL", "SVK"], matches: preparePresetMatches({ 'POL-SVK': '', 'ESP-SWE': '', 'SWE-SVK': '', 'ESP-POL': '', 'SVK-ESP': '', 'SWE-POL': '' }), rules: RULES.UEFA },
-        "UEFA 2020 Group F": { teams: ["FRA", "GER", "HUN", "POR"], matches: preparePresetMatches({ 'HUN-POR': '', 'FRA-GER': '', 'HUN-FRA': '', 'POR-GER': '', 'POR-FRA': '', 'GER-HUN': '' }), rules: RULES.UEFA },
+        "UEFA 2020 Group A": { teams: ["TUR", "ITA", "WAL", "SUI"], matches: preparePresetMatches({ 'TUR-ITA': '', 'WAL-SUI': '', 'TUR-WAL': '', 'ITA-SUI': '', 'SUI-TUR': '', 'ITA-WAL': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
+        "UEFA 2020 Group B": { teams: ["DEN", "FIN", "BEL", "RUS"], matches: preparePresetMatches({ 'DEN-FIN': '', 'BEL-RUS': '', 'FIN-RUS': '', 'DEN-BEL': '', 'RUS-DEN': '', 'FIN-BEL': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
+        "UEFA 2020 Group C": { teams: ["NED", "UKR", "AUT", "MKD"], matches: preparePresetMatches({ 'AUT-MKD': '', 'NED-UKR': '', 'UKR-MKD': '', 'NED-AUT': '', 'MKD-NED': '', 'UKR-AUT': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
+        "UEFA 2020 Group D": { teams: ["ENG", "CRO", "CZE", "SCO"], matches: preparePresetMatches({ 'ENG-CRO': '', 'SCO-CZE': '', 'CRO-CZE': '', 'ENG-SCO': '', 'CRO-SCO': '', 'CZE-ENG': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
+        "UEFA 2020 Group E": { teams: ["ESP", "SWE", "POL", "SVK"], matches: preparePresetMatches({ 'POL-SVK': '', 'ESP-SWE': '', 'SWE-SVK': '', 'ESP-POL': '', 'SVK-ESP': '', 'SWE-POL': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
+        "UEFA 2020 Group F": { teams: ["FRA", "GER", "HUN", "POR"], matches: preparePresetMatches({ 'HUN-POR': '', 'FRA-GER': '', 'HUN-FRA': '', 'POR-GER': '', 'POR-FRA': '', 'GER-HUN': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
+        "Fortuna:LIGA 2021/22": { teams: Object.keys(POINTS_FORTUNA_LIGA_2021), matches: prepareAllMatches(Object.keys(POINTS_FORTUNA_LIGA_2021)), rules: RULES.UEFA, teamParameters: POINTS_FORTUNA_LIGA_2021 },
     };
 
     var simulationWorker;
@@ -25,6 +161,7 @@
 
     var rules = {};
     var teams = [];
+    var teamParameters = {};
     var teamPoints = {};
     var matches = {};
 
@@ -75,7 +212,7 @@
                     r = RESULT_LOSS;
                     break;
 
-                    case 'D':
+                case 'D':
                     r = RESULT_DRAW;
                     break;
 
@@ -83,6 +220,16 @@
                     throw 'Invalid preset match result';
             }
             result[m] = r;
+        }
+        return result;
+    }
+
+    function prepareAllMatches(teams) {
+        let result = {};
+        for (let home of teams) {
+            for (let away of teams) {
+                if (home !== away) result[home + '-' + away] = ENTRY_TO_PLAY;
+            }
         }
         return result;
     }
@@ -100,8 +247,9 @@
             a.addEventListener('click', function () {
                 let chosen = PRESETS[p];
                 rules = chosen.rules;
-                teams = chosen.teams;
-                matches = chosen.matches;
+                teams = chosen.teams.slice();
+                teamParameters = JSON.parse(JSON.stringify(chosen.teamParameters));
+                matches = JSON.parse(JSON.stringify(chosen.matches));
                 refreshTeams();
             });
             li.append(a);
@@ -130,7 +278,7 @@
     }
 
     function removeTeam(team) {
-        if (!confirm("Really remove " + team + "?")) return;
+        if (!window.confirm("Really remove " + team + "?")) return;
 
         var index = teams.indexOf(team);
         if (index < 0) return;
@@ -145,15 +293,31 @@
         refreshTeams();
     }
 
+    function configureTeamParams(team) {
+        let param = window.prompt('Team parameter for ' + team + '?', teamParameters[team] || '0');
+        if (!param) return;
+
+        teamParameters[team] = +param;
+        refreshTeams();
+    }
+
     function refreshTeams() {
         let container = document.getElementById('teams');
         container.innerText = '';
         for (let team of teams) {
             let a = document.createElement('a');
             a.setAttribute('href', '#');
-            a.className = 'list-group-item list-group-item-action';
+            a.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
             a.innerText = team;
+
             let t = team;
+
+            let badge = document.createElement('span');
+            badge.className = 'badge bg-primary rounded-pill';
+            badge.innerText = teamParameters[team] || '0';
+            badge.addEventListener('click', function (e) { configureTeamParams(t); e.stopPropagation(); });
+            a.append(badge);
+
             a.addEventListener('click', function () { removeTeam(t); });
             container.append(a);
         }
@@ -265,9 +429,10 @@
         }
     }
 
-    function appendSimulatedMatch(tr, count, total) {
+    function appendSimulatedMatch(tr, count, total, matches) {
         let td = document.createElement('td');
         td.innerText = count ? (Math.round(100 * count / total) + ' %') : '—';
+        td.setAttribute('title', JSON.stringify(matches));
         tr.append(td);
     }
 
@@ -297,7 +462,7 @@
             tr.append(th);
 
             for (let r of rules.results) {
-                appendSimulatedMatch(tr, simulatedMatch[r.result], total);
+                appendSimulatedMatch(tr, simulatedMatch[r.result], total, simulatedMatch[r.result + '-matches']);
             }
 
             detail.append(tr);
@@ -386,10 +551,9 @@
         divider.innerHTML = '<hr class="dropdown-divider" />';
         ul.append(divider)
 
-        ul.append(createMatchResultOption('Win', matchId, RESULT_WIN));
-        ul.append(createMatchResultOption('OT win', matchId, RESULT_OT_WIN));
-        ul.append(createMatchResultOption('OT loss', matchId, RESULT_OT_LOSS));
-        ul.append(createMatchResultOption('Loss', matchId, RESULT_LOSS));
+        for (let r of rules.results) {
+            ul.append(createMatchResultOption(r.caption, matchId, r));
+        }
 
         div.append(ul);
         return div;
@@ -419,7 +583,7 @@
             document.getElementById('simulationStats').innerText = 'After ' + msg.simulationCount + ' simulations (' + Math.round(msg.simulationTime / 1000) + ' sec)';
             refreshSimulationResults();
         }
-        simulationWorker.postMessage({ request: 'start', teams: teams, matches: matches, rules: rules });
+        simulationWorker.postMessage({ request: 'start', teams: teams, teamParameters: teamParameters, matches: matches, rules: rules });
     }
 
     function stopSimulation() {
