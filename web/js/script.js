@@ -146,6 +146,29 @@
         HRK: 26
     };
 
+    const HOCKEY_ELO_RATINGS = {
+        USA: 2530,
+        FIN: 2511,
+        RUS: 2508,
+        CZE: 2477,
+        SWE: 2464,
+        CAN: 2437,
+        SVK: 2395,
+        SUI: 2340,
+        DEN: 2280,
+        GER: 2195,
+        NOR: 2083,
+        LAT: 2073,
+        KAZ: 2048,
+        BLR: 2018,
+        SLO: 1942,
+        AUT: 1938,
+        FRA: 1930,
+        HUN: 1782,
+        ITA: 1735,
+        GBR: 1723,
+    };
+
     const PRESETS = {
         "UEFA 2020 Group A": { teams: ["TUR", "ITA", "WAL", "SUI"], matches: preparePresetMatches({ 'TUR-ITA': '', 'WAL-SUI': '', 'TUR-WAL': '', 'ITA-SUI': '', 'SUI-TUR': '', 'ITA-WAL': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
         "UEFA 2020 Group B": { teams: ["DEN", "FIN", "BEL", "RUS"], matches: preparePresetMatches({ 'DEN-FIN': '', 'BEL-RUS': '', 'FIN-RUS': '', 'DEN-BEL': '', 'RUS-DEN': '', 'FIN-BEL': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
@@ -154,6 +177,8 @@
         "UEFA 2020 Group E": { teams: ["ESP", "SWE", "POL", "SVK"], matches: preparePresetMatches({ 'POL-SVK': '', 'ESP-SWE': '', 'SWE-SVK': '', 'ESP-POL': '', 'SVK-ESP': '', 'SWE-POL': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
         "UEFA 2020 Group F": { teams: ["FRA", "GER", "HUN", "POR"], matches: preparePresetMatches({ 'HUN-POR': '', 'FRA-GER': '', 'HUN-FRA': '', 'POR-GER': '', 'POR-FRA': '', 'GER-HUN': '' }), rules: RULES.UEFA, teamParameters: FIFA_RANKING },
         "Fortuna:LIGA 2021/22": { teams: Object.keys(POINTS_FORTUNA_LIGA_2021), matches: prepareAllMatches(Object.keys(POINTS_FORTUNA_LIGA_2021)), rules: RULES.UEFA, teamParameters: POINTS_FORTUNA_LIGA_2021 },
+        "IIHF 2022 Group A": { teams: ["CAN", "GER", "SUI", "SVK", "DEN", "KAZ", "ITA", "FRA"], matches: preparePresetMatches({ 'FRA-SVK': '', 'GER-CAN': '', 'DEN-KAZ': '', 'SUI-ITA': '', 'SVK-GER': '', 'ITA-CAN': '', 'FRA-KAZ': '', 'DEN-SUI': '', 'SVK-CAN': '', 'FRA-GER': '', 'ITA-DEN': '', 'SUI-KAZ': '', 'FRA-ITA': '', 'SUI-SVK': '', 'GER-DEN': '', 'CAN-KAZ': '', 'GER-ITA': '', 'KAZ-SVK': '', 'DEN-FRA': '', 'CAN-SUI': '', 'ITA-SVK': '', 'KAZ-GER': '', 'SUI-FRA': '', 'KAZ-ITA': '', 'CAN-DEN': '', 'GER-SUI': '', 'SVK-DEN': '', 'CAN-FRA': ''}), rules: RULES.IIHF, teamParameters: HOCKEY_ELO_RATINGS },
+        "IIHF 2022 Group B": { teams: ["FIN", "USA", "CZE", "SWE", "LAT", "NOR", "GBR", "AUT"], matches: preparePresetMatches({ 'USA-LAT': '', 'FIN-NOR': '', 'SWE-AUT': '', 'CZE-GBR': '', 'LAT-FIN': '', 'NOR-GBR': '', 'AUT-USA': '', 'CZE-SWE': '', 'LAT-NOR': '', 'FIN-USA': '', 'CZE-AUT': '', 'SWE-GBR': '', 'NOR-AUT': '', 'FIN-SWE': '', 'GBR-USA': '', 'CZE-LAT': '', 'GBR-FIN': '', 'LAT-AUT': '', 'USA-SWE': '', 'AUT-FIN': '', 'NOR-CZE': '', 'GBR-LAT': '', 'SWE-NOR': '', 'USA-CZE': '', 'AUT-GBR': '', 'SWE-LAT': '', 'USA-NOR': '', 'FIN-CZE': ''}), rules: RULES.IIHF, teamParameters: HOCKEY_ELO_RATINGS },
     };
 
     var simulationWorker;
