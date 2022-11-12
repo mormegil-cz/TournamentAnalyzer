@@ -540,10 +540,12 @@ const RESULT_LOSS = { type: 'done', result: 'L', caption: 'Loss', home: 0, away:
 
 const UEFA_EURO_2020_RANKING = ['BEL', 'ITA', 'ENG', 'GER', 'ESP', 'UKR', 'FRA', 'POL', 'SUI', 'CRO', 'NED', 'RUS', 'POR', 'TUR', 'DEN', 'AUT', 'SWE', 'CZE', 'WAL', 'FIN', 'SRB', 'SVK', 'IRL', 'ISL', 'NIR', 'NOR', 'KVX', 'GRE', 'SCO', 'MKD', 'HUN', 'SVN', 'ROU', 'GEO', 'ALB', 'BIH', 'BUL', 'LUX', 'BLR', 'CYP', 'ARM', 'ISR', 'KAZ', 'MNE', 'AZE', 'AND', 'LTU', 'EST', 'FRO', 'GIB', 'MDA', 'MLT', 'LVA', 'LIE', 'SMR'];
 const UEFA_EURO_2020_SORTING_ALGORITHM = [computeMatchPoints, computeGoalDifference, computeGoalsScored, computeGlobalGoalDifference, computeGlobalGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
+const FIFA_WORLD_2022_SORTING_ALGORITHM = [computeMatchPoints, computeGlobalGoalDifference, computeGlobalGoalsScored, computeGoalDifference, computeGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
 
 const RULES = {
     IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS] },
     UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: UEFA_EURO_2020_SORTING_ALGORITHM },
+    FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: FIFA_WORLD_2022_SORTING_ALGORITHM },
 };
 
 const FIFA_RANKING = {
@@ -723,6 +725,14 @@ function runSimulationMain(iterations) {
         //new PlayoffTree('_result', ['BEL', 'ITA', 'SUI', 'ESP', 'UKR', 'ENG', 'CZE', 'DEN'], RULES.UEFA)
 
         new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('B', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('C', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('D', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('E', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('F', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('G', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('H', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA)
     ];
     
     let teamPlacements = {};
@@ -742,18 +752,6 @@ function runSimulationMain(iterations) {
             teamPlacements[team] = placements;
         }
         // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
-        let r16Teams = results.stageTeams[0];
-        let czePartner = null;
-        for (let t = 0; t < r16Teams.length; ++t) {
-            if (r16Teams[t] === 'CZE') {
-                czePartner = r16Teams[t % 2 ? t - 1 : t + 1];
-                break;
-            }
-        }
-        if (czePartner) {
-            let currCount = interestingResults[czePartner] || 0;
-            interestingResults[czePartner] = currCount + 1;
-        }
         let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
         sfTeams.sort();
         var id = sfTeams.join('+');
