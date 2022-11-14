@@ -19,6 +19,20 @@ function computeMatchPoints(teams, matches) {
     return teamPoints;
 }
 
+function computeGlobalMatchPoints(teams, matches) {
+    let teamPoints = {};
+    for (let team of teams) {
+        let pts = 0;
+        for (let match of Object.keys(matches)) {
+            let matchResult = matches[match];
+            if (match.startsWith(`${team}-`)) pts += matchResult.home;
+            else if (match.endsWith(`-${team}`)) pts += matchResult.away;
+        }
+        teamPoints[team] = pts;
+    }
+    return teamPoints;
+}
+
 function computeGoalDifference(teams, matches) {
     let teamPoints = {};
     for (let team of teams) {
@@ -540,7 +554,7 @@ const RESULT_LOSS = { type: 'done', result: 'L', caption: 'Loss', home: 0, away:
 
 const UEFA_EURO_2020_RANKING = ['BEL', 'ITA', 'ENG', 'GER', 'ESP', 'UKR', 'FRA', 'POL', 'SUI', 'CRO', 'NED', 'RUS', 'POR', 'TUR', 'DEN', 'AUT', 'SWE', 'CZE', 'WAL', 'FIN', 'SRB', 'SVK', 'IRL', 'ISL', 'NIR', 'NOR', 'KVX', 'GRE', 'SCO', 'MKD', 'HUN', 'SVN', 'ROU', 'GEO', 'ALB', 'BIH', 'BUL', 'LUX', 'BLR', 'CYP', 'ARM', 'ISR', 'KAZ', 'MNE', 'AZE', 'AND', 'LTU', 'EST', 'FRO', 'GIB', 'MDA', 'MLT', 'LVA', 'LIE', 'SMR'];
 const UEFA_EURO_2020_SORTING_ALGORITHM = [computeMatchPoints, computeGoalDifference, computeGoalsScored, computeGlobalGoalDifference, computeGlobalGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
-const FIFA_WORLD_2022_SORTING_ALGORITHM = [computeMatchPoints, computeGlobalGoalDifference, computeGlobalGoalsScored, computeGoalDifference, computeGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
+const FIFA_WORLD_2022_SORTING_ALGORITHM = [computeGlobalMatchPoints, computeGlobalGoalDifference, computeGlobalGoalsScored, computeMatchPoints, computeGoalDifference, computeGoalsScored, computeRandomRanking];
 
 const RULES = {
     IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS] },
