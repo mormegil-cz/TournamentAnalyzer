@@ -1,7 +1,7 @@
 const { Worker, isMainThread } = require('worker_threads');
 
 const THREAD_COUNT = 5;
-const ITER_COUNT = 10000;
+const ITER_COUNT = 5000;
 
 function mergeData(data, addedData) {
     if (!addedData) return;
@@ -40,6 +40,12 @@ function fmtOdds(num) {
     return (ITER_COUNT * THREAD_COUNT / num).toFixed(3);
 }
 
+function fmtNegOdds(num) {
+    if (typeof num !== 'number') return "(all)";
+    if (num === ITER_COUNT * THREAD_COUNT) return "—";
+    return (ITER_COUNT * THREAD_COUNT / (ITER_COUNT * THREAD_COUNT - num)).toFixed(3);
+}
+
 function finished(teamPlacements, phaseTeamCounts, interestingResults) {
     let phaseTeams = Object.keys(phaseTeamCounts);
     phaseTeams.sort((a, b) => phaseTeamCounts[b] - phaseTeamCounts[a]);
@@ -50,7 +56,7 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults) {
 
     let chosenTeamCount = 0;
     for (let t of phaseTeams) {
-        if (t.indexOf("FRA") >= 0 && t.indexOf("BEL") >= 0 && t.indexOf("NED") >= 0) chosenTeamCount += phaseTeamCounts[t];
+        if (t.indexOf("FRA") >= 0 && t.indexOf("BRA") >= 0 && t.indexOf("ARG") >= 0) chosenTeamCount += phaseTeamCounts[t];
     }
     console.log(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
 
@@ -69,10 +75,15 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults) {
         let placements = teamPlacements[team];
         console.log(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
     }
-
+    console.log('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
         console.log(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}`);
+    }
+    console.log('---');
+    for (let team of teams) {
+        let placements = teamPlacements[team];
+        console.log(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
     }
 
     let interestingTeams = Object.keys(interestingResults);

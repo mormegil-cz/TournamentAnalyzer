@@ -788,7 +788,7 @@ function runSimulationMain(iterations) {
             teamPlacements[team] = placements;
         }
         // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
-        let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
+        let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
         sfTeams.sort();
         var id = sfTeams.join('+');
         let currCount = phaseTeamCounts[id] || 0;
