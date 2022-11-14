@@ -1,7 +1,7 @@
 const { Worker, isMainThread } = require('worker_threads');
 
-const THREAD_COUNT = 1;
-const ITER_COUNT = 100;
+const THREAD_COUNT = 5;
+const ITER_COUNT = 10000;
 
 function mergeData(data, addedData) {
     if (!addedData) return;
