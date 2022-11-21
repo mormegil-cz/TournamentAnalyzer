@@ -758,8 +758,8 @@ function runSimulationMain(iterations) {
         //new PlayoffTree('_result', ['BEL', 'POR', 'ITA', 'AUT', 'FRA', 'SUI', 'CRO', 'ESP', 'SWE', 'UKR', 'ENG', 'GER', 'NED', 'CZE', 'WAL', 'DEN'], RULES.UEFA)
         //new PlayoffTree('_result', ['BEL', 'ITA', 'SUI', 'ESP', 'UKR', 'ENG', 'CZE', 'DEN'], RULES.UEFA)
 
-        new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
-        new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '', 'USA-WAL': '', 'WAL-IRN': '', 'ENG-USA': '', 'WAL-ENG': '', 'IRN-USA': '' }), RULES.FIFA),
+        new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '0:2', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
+        new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '', 'WAL-IRN': '', 'ENG-USA': '', 'WAL-ENG': '', 'IRN-USA': '' }), RULES.FIFA),
         new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '', 'MEX-POL': '', 'POL-KSA': '', 'ARG-MEX': '', 'POL-ARG': '', 'KSA-MEX': '' }), RULES.FIFA),
         new Group('D', ["FRA", "AUS", "DEN", "TUN"], preparePresetMatches({ 'DEN-TUN': '', 'FRA-AUS': '', 'TUN-AUS': '', 'FRA-DEN': '', 'AUS-DEN': '', 'TUN-FRA': '' }), RULES.FIFA),
         new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '', 'ESP-CRC': '', 'JPN-CRC': '', 'ESP-GER': '', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
@@ -773,7 +773,7 @@ function runSimulationMain(iterations) {
 
     let teamPlacements = {};
     let phaseTeamCounts = {};
-    let interestingResults = {};
+    let interestingResults = [];
 
     for (let i = 0; i < iterations; ++i) {
         let scenarioResults = executeScenario(scenario, rating);
@@ -788,18 +788,34 @@ function runSimulationMain(iterations) {
             teamPlacements[team] = placements;
         }
         // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
+        if ((results.stageTeams[1].indexOf('NED') >= 0) && (results.stageTeams[1].indexOf('ECU') >= 0)) {
+            interestingResults.push(scenarioResults.full);
+        }
+
         let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
         sfTeams.sort();
         var id = sfTeams.join('+');
         let currCount = phaseTeamCounts[id] || 0;
         phaseTeamCounts[id] = currCount + 1;
+
+        /*
+        let winner = results.stageTeams[results.stageTeams.length - 1][0];
+        let finals = results.stageTeams[results.stageTeams.length - 2];
+        let semis = results.stageTeams[results.stageTeams.length - 3];
+
+        finals.sort();
+        semis.sort();
+        var id = winner + '|' + finals.join('+') + '|' + semis.join('+');
+        let currCount = phaseTeamCounts[id] || 0;
+        phaseTeamCounts[id] = currCount + 1;
+        */
     }
 
     parentPort.postMessage({
         type: 'done',
         teamPlacements: teamPlacements,
         phaseTeamCounts: phaseTeamCounts,
-        interestingResults: interestingResults
+        interestingResults: { count: interestingResults.length }
     });
 }
 

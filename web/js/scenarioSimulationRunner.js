@@ -1,7 +1,7 @@
 const { Worker, isMainThread } = require('worker_threads');
 
 const THREAD_COUNT = 5;
-const ITER_COUNT = 5000;
+const ITER_COUNT = 10000;
 
 function mergeData(data, addedData) {
     if (!addedData) return;
@@ -86,11 +86,15 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults) {
         console.log(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
     }
 
+    console.log('===');
+    console.log(`Interesting results: ${fmtPerc(interestingResults.count)} / ${fmtOdds(interestingResults.count)} / ${fmtNegOdds(interestingResults.count)}`);
+    /*
     let interestingTeams = Object.keys(interestingResults);
     interestingTeams.sort((a, b) => interestingResults[b] - interestingResults[a]);
     for (let team of interestingTeams) {
         console.log(`${team}: ${fmtPerc(interestingResults[team])}`);
     }
+    */
 }
 
 function main() {
