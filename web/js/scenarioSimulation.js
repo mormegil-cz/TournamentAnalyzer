@@ -679,35 +679,35 @@ const ELO_RATING_UEFA = {
 
 const ELO_RATING_FIFA = {
     BRA: 2169,
-    ARG: 2141,
+    ARG: 2086, // 2141,
     ESP: 2045,
-    NED: 2040,
+    NED: 2050, // 2040,
     BEL: 2025,
     FRA: 2005,
     POR: 2004,
-    DEN: 1971,
+    DEN: 1952, // 1971,
     GER: 1960,
     URU: 1936,
     SUI: 1929,
     CRO: 1922,
-    ENG: 1920,
+    ENG: 1957, // 1920,
     SRB: 1892,
-    ECU: 1840,
+    ECU: 1871, // 1840,
     MEX: 1821,
-    IRN: 1817,
+    IRN: 1760, // 1817,
     POL: 1809,
-    USA: 1798,
+    USA: 1797, // 1798,
     JPN: 1798,
-    WAL: 1790,
+    WAL: 1791, // 1790,
     KOR: 1786,
     CAN: 1765,
     MAR: 1753,
     CRC: 1743,
     AUS: 1719,
-    TUN: 1687,
-    SEN: 1687,
-    QAT: 1680,
-    KSA: 1640,
+    TUN: 1726, // 1687,
+    SEN: 1677, // 1687,
+    QAT: 1642, // 1680,
+    KSA: 1692, // 1640,
     CMR: 1609,
     GHA: 1540,
 };
@@ -760,8 +760,8 @@ function runSimulationMain(iterations) {
 
         new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '0:2', 'SEN-NED': '0:2', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
         new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '1:1', 'WAL-IRN': '', 'ENG-USA': '', 'WAL-ENG': '', 'IRN-USA': '' }), RULES.FIFA),
-        new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '', 'MEX-POL': '', 'POL-KSA': '', 'ARG-MEX': '', 'POL-ARG': '', 'KSA-MEX': '' }), RULES.FIFA),
-        new Group('D', ["FRA", "AUS", "DEN", "TUN"], preparePresetMatches({ 'DEN-TUN': '', 'FRA-AUS': '', 'TUN-AUS': '', 'FRA-DEN': '', 'AUS-DEN': '', 'TUN-FRA': '' }), RULES.FIFA),
+        new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '1:2', 'MEX-POL': '', 'POL-KSA': '', 'ARG-MEX': '', 'POL-ARG': '', 'KSA-MEX': '' }), RULES.FIFA),
+        new Group('D', ["FRA", "AUS", "DEN", "TUN"], preparePresetMatches({ 'DEN-TUN': '0:0', 'FRA-AUS': '', 'TUN-AUS': '', 'FRA-DEN': '', 'AUS-DEN': '', 'TUN-FRA': '' }), RULES.FIFA),
         new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '', 'ESP-CRC': '', 'JPN-CRC': '', 'ESP-GER': '', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
         new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '', 'BEL-CAN': '', 'BEL-MAR': '', 'CRO-CAN': '', 'CRO-BEL': '', 'CAN-MAR': '' }), RULES.FIFA),
         new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '', 'BRA-SRB': '', 'CMR-SRB': '', 'BRA-SUI': '', 'SRB-SUI': '', 'CMR-BRA': '' }), RULES.FIFA),
@@ -792,7 +792,7 @@ function runSimulationMain(iterations) {
             interestingResults.push(scenarioResults.full);
         }
 
-        let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
+        let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
         sfTeams.sort();
         var id = sfTeams.join('+');
         let currCount = phaseTeamCounts[id] || 0;
