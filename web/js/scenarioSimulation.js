@@ -678,27 +678,27 @@ const ELO_RATING_UEFA = {
 };
 
 const ELO_RATING_FIFA = {
-    BRA: 2169,
+    BRA: 2185, // 2169,
     ARG: 2086, // 2141,
     ESP: 2068, // 2045,
     NED: 2050, // 2040,
     FRA: 2022, // 2005,
     BEL: 2020, // 2007,
-    POR: 2006,
+    POR: 2010, // 2006,
     DEN: 1952, // 1971,
     GER: 1919, // 1960,
     URU: 1924, // 1936,
     SUI: 1911, // 1902,
     CRO: 1914, // 1922,
     ENG: 1957, // 1920,
-    SRB: 1898,
+    SRB: 1882, // 1898,
     ECU: 1871, // 1840,
     MEX: 1809, // 1809,
-    IRN: 1760, // 1817,
+    IRN: 1809, // 1760, // 1817,
     POL: 1814, // 1814,
     USA: 1797, // 1798,
     JPN: 1831, // 1798,
-    WAL: 1791, // 1790,
+    WAL: 1742, // 1791, // 1790,
     KOR: 1798, // 1786,
     CAN: 1763, // 1776,
     MAR: 1779, // 1753,
@@ -709,7 +709,7 @@ const ELO_RATING_FIFA = {
     QAT: 1642, // 1680,
     KSA: 1692, // 1640,
     CMR: 1601, // 1610,
-    GHA: 1567,
+    GHA: 1563, // 1567,
 };
 
 function executeScenario(scenario, simulationParameters) {
@@ -759,13 +759,13 @@ function runSimulationMain(iterations) {
         //new PlayoffTree('_result', ['BEL', 'ITA', 'SUI', 'ESP', 'UKR', 'ENG', 'CZE', 'DEN'], RULES.UEFA)
 
         new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '0:2', 'SEN-NED': '0:2', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), RULES.FIFA),
-        new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '1:1', 'WAL-IRN': '', 'ENG-USA': '', 'WAL-ENG': '', 'IRN-USA': '' }), RULES.FIFA),
+        new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '1:1', 'WAL-IRN': '0:2', 'ENG-USA': '', 'WAL-ENG': '', 'IRN-USA': '' }), RULES.FIFA),
         new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '1:2', 'MEX-POL': '0:0', 'POL-KSA': '', 'ARG-MEX': '', 'POL-ARG': '', 'KSA-MEX': '' }), RULES.FIFA),
         new Group('D', ["FRA", "AUS", "DEN", "TUN"], preparePresetMatches({ 'DEN-TUN': '0:0', 'FRA-AUS': '4:1', 'TUN-AUS': '', 'FRA-DEN': '', 'AUS-DEN': '', 'TUN-FRA': '' }), RULES.FIFA),
         new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '1:2', 'ESP-CRC': '7:0', 'JPN-CRC': '', 'ESP-GER': '', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
         new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '0:0', 'BEL-CAN': '1:0', 'BEL-MAR': '', 'CRO-CAN': '', 'CRO-BEL': '', 'CAN-MAR': '' }), RULES.FIFA),
-        new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '1:0', 'BRA-SRB': '', 'CMR-SRB': '', 'BRA-SUI': '', 'SRB-SUI': '', 'CMR-BRA': '' }), RULES.FIFA),
-        new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '', 'KOR-GHA': '', 'POR-URU': '', 'GHA-URU': '', 'KOR-POR': '' }), RULES.FIFA),
+        new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '1:0', 'BRA-SRB': '2:0', 'CMR-SRB': '', 'BRA-SUI': '', 'SRB-SUI': '', 'CMR-BRA': '' }), RULES.FIFA),
+        new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '3:2', 'KOR-GHA': '', 'POR-URU': '', 'GHA-URU': '', 'KOR-POR': '' }), RULES.FIFA),
         new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA)
     ];
 
