@@ -680,16 +680,16 @@ const ELO_RATING_UEFA = {
 const ELO_RATING_FIFA = {
     BRA: 2185, // 2169,
     ARG: 2101, // 2086, // 2141,
-    ESP: 2068, // 2045,
+    ESP: 2056, // 2068, // 2045,
     NED: 2036, // 2050, // 2040,
     FRA: 2046, // 2022, // 2005,
-    BEL: 2020, // 2007,
+    BEL: 1948, // 2020, // 2007,
     POR: 2010, // 2006,
     DEN: 1928, // 1952, // 1971,
-    GER: 1919, // 1960,
+    GER: 1931, // 1919, // 1960,
     URU: 1924, // 1936,
     SUI: 1911, // 1902,
-    CRO: 1914, // 1922,
+    CRO: 1945, // 1914, // 1922,
     ENG: 1944, // 1957, // 1920,
     SRB: 1882, // 1898,
     ECU: 1885, // 1871, // 1840,
@@ -697,12 +697,12 @@ const ELO_RATING_FIFA = {
     IRN: 1809, // 1760, // 1817,
     POL: 1844, // 1814, // 1814,
     USA: 1810, // 1797, // 1798,
-    JPN: 1831, // 1798,
+    JPN: 1792, // 1831, // 1798,
     WAL: 1742, // 1791, // 1790,
     KOR: 1798, // 1786,
-    CAN: 1763, // 1776,
-    MAR: 1779, // 1753,
-    CRC: 1723, // 1743,
+    CAN: 1732, // 1763, // 1776,
+    MAR: 1851, // 1779, // 1753,
+    CRC: 1762, // 1723, // 1743,
     AUS: 1734, // 1702, // 1719,
     TUN: 1694, // 1726, // 1687,
     SEN: 1730, // 1677, // 1687,
@@ -762,8 +762,8 @@ function runSimulationMain(iterations) {
         new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '1:1', 'WAL-IRN': '0:2', 'ENG-USA': '0:0', 'WAL-ENG': '', 'IRN-USA': '' }), RULES.FIFA),
         new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '1:2', 'MEX-POL': '0:0', 'POL-KSA': '2:0', 'ARG-MEX': '2:0', 'POL-ARG': '', 'KSA-MEX': '' }), RULES.FIFA),
         new Group('D', ["FRA", "AUS", "DEN", "TUN"], preparePresetMatches({ 'DEN-TUN': '0:0', 'FRA-AUS': '4:1', 'TUN-AUS': '0:1', 'FRA-DEN': '2:1', 'AUS-DEN': '', 'TUN-FRA': '' }), RULES.FIFA),
-        new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '1:2', 'ESP-CRC': '7:0', 'JPN-CRC': '', 'ESP-GER': '', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
-        new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '0:0', 'BEL-CAN': '1:0', 'BEL-MAR': '', 'CRO-CAN': '', 'CRO-BEL': '', 'CAN-MAR': '' }), RULES.FIFA),
+        new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '1:2', 'ESP-CRC': '7:0', 'JPN-CRC': '0:1', 'ESP-GER': '1:1', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
+        new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '0:0', 'BEL-CAN': '1:0', 'BEL-MAR': '0:2', 'CRO-CAN': '4:1', 'CRO-BEL': '', 'CAN-MAR': '' }), RULES.FIFA),
         new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '1:0', 'BRA-SRB': '2:0', 'CMR-SRB': '', 'BRA-SUI': '', 'SRB-SUI': '', 'CMR-BRA': '' }), RULES.FIFA),
         new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '3:2', 'KOR-GHA': '', 'POR-URU': '', 'GHA-URU': '', 'KOR-POR': '' }), RULES.FIFA),
         new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA)
@@ -788,11 +788,11 @@ function runSimulationMain(iterations) {
             teamPlacements[team] = placements;
         }
         // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
-        if ((results.stageTeams[1].indexOf('NED') >= 0) && (results.stageTeams[1].indexOf('ECU') >= 0)) {
+        if ((results.stageTeams[0].indexOf('KOR') >= 0) && (results.stageTeams[1].indexOf('BRA') >= 0) && (results.stageTeams[1].indexOf('ARG') >= 0) && (results.stageTeams[1].indexOf('BEL') >= 0) && (results.stageTeams[1].indexOf('JPN') >= 0)) {
             interestingResults.push(scenarioResults.full);
         }
 
-        let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
+        let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
         sfTeams.sort();
         var id = sfTeams.join('+');
         let currCount = phaseTeamCounts[id] || 0;
