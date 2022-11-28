@@ -1,7 +1,3 @@
-const {
-    parentPort, workerData
-} = require('worker_threads');
-
 function computeMatchPoints(teams, matches) {
     let teamPoints = {};
     for (let team of teams) {
@@ -154,7 +150,7 @@ function preparePresetMatches(matches) {
                 } else if (homeScore < awayScore) {
                     r = RESULT_OT_LOSS;
                 } else {
-                    throw 'Invalid preset match overtime result';
+                    throw new Error('Invalid preset match overtime result');
                 }
             } else {
                 awayScore = +awayScore;
@@ -176,15 +172,12 @@ function preparePresetMatches(matches) {
     return result;
 }
 
-const crypto = require('crypto');
-
 const INV_32 = 1.0 / 0x100000000;
 
 function randomNumber() {
-    var buffer = new ArrayBuffer(4);
-    var view = new DataView(buffer);
-    crypto.randomFillSync(view);
-    return view.getUint32() * INV_32;
+    let array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    return array[0] * INV_32;
 }
 
 function randomPoisson(lambda) {
@@ -293,7 +286,7 @@ function sortGroup(teams, matches, algorithm) {
             let appliedLevel = group.levelApplied;
             if (appliedLevel >= algorithm.length) {
                 console.error(state);
-                throw 'Unable to sort group';
+                throw new Error('Unable to sort group');
             }
             let criteriumPoints = algorithm[appliedLevel](group.teams, matches);
             let sortedGroup = sortByCriteriumPoints(group.teams, criteriumPoints);
@@ -329,13 +322,13 @@ class ScenarioPart {
     }
 
     execute(_scenarioResults, _simulationParameters) {
-        throw 'Abstract method error';
+        throw new Error('Abstract method error');
     }
 }
 
 class ScenarioPartResult {
     getTeam(_specifier) {
-        throw 'Abstract method error';
+        throw new Error('Abstract method error');
     }
 }
 
@@ -470,7 +463,7 @@ class GroupOriginSorting extends ScenarioPart {
         }
 
         console.error(scenarioResults, groupTeams, teamGroups, participatingTeamFromGroup, participantGroups);
-        throw 'No ordering found!';
+        throw new Error('No ordering found!');
     }
 }
 
@@ -506,14 +499,14 @@ class PlayoffTreeResults extends ScenarioPartResult {
             }
 
             default:
-                throw 'Unsupported specifier';
+                throw new Error('Unsupported specifier');
         }
     }
 }
 
 class PlayoffTree extends ScenarioPart {
     constructor(id, teams, rules) {
-        if (teams.length === 0 || teams.length % 2 !== 0) throw 'Invalid number of playoff teams';
+        if (teams.length === 0 || teams.length % 2 !== 0) throw new Error('Invalid number of playoff teams');
 
         super(id);
         this.teams = teams;
@@ -811,7 +804,7 @@ function runSimulationMain(iterations) {
         */
     }
 
-    parentPort.postMessage({
+    postMessage({
         type: 'done',
         teamPlacements: teamPlacements,
         phaseTeamCounts: phaseTeamCounts,
@@ -819,4 +812,16 @@ function runSimulationMain(iterations) {
     });
 }
 
-runSimulationMain(workerData.iterations);
+addEventListener('message', (evt) => {
+    const msg = evt.data;
+    switch (msg.type) {
+        case 'run':
+            runSimulationMain(msg.workerData.iterations);
+            postMessage({ type: 'exit' });
+            close();
+            break;
+
+        default:
+            throw new Error('Unexpected message for worker thread');
+    }
+});

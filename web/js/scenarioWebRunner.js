@@ -1,7 +1,8 @@
-const Worker = require('web-worker');
+const THREAD_COUNT = 3;
+const ITER_COUNT = 1000;
 
-const THREAD_COUNT = 2;
-const ITER_COUNT = 500;
+const $runSimulation = document.getElementById('runSimulation');
+const $simulationResults = document.getElementById('simulationResults');
 
 function mergeData(data, addedData) {
     if (!addedData) return;
@@ -47,18 +48,20 @@ function fmtNegOdds(num) {
 }
 
 function finished(teamPlacements, phaseTeamCounts, interestingResults) {
+    let results = [];
+
     let phaseTeams = Object.keys(phaseTeamCounts);
     phaseTeams.sort((a, b) => phaseTeamCounts[b] - phaseTeamCounts[a]);
     for (let i = 0; i < 20; ++i) {
         let t = phaseTeams[i];
-        console.log(`${t}\t${fmtPerc(phaseTeamCounts[t])}\t${fmtOdds(phaseTeamCounts[t])}`);
+        results.push(`${t}\t${fmtPerc(phaseTeamCounts[t])}\t${fmtOdds(phaseTeamCounts[t])}`);
     }
 
     let chosenTeamCount = 0;
     for (let t of phaseTeams) {
         if (t.indexOf("FRA") >= 0 && t.indexOf("BRA") >= 0 && t.indexOf("ARG") >= 0) chosenTeamCount += phaseTeamCounts[t];
     }
-    console.log(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
+    results.push(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
 
     let teams = Object.keys(teamPlacements);
     teams.sort((a, b) => {
@@ -73,37 +76,40 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults) {
 
     for (let team of teams) {
         let placements = teamPlacements[team];
-        console.log(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
+        results.push(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
     }
-    console.log('---');
+    results.push('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
-        console.log(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}`);
+        results.push(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}`);
     }
-    console.log('---');
+    results.push('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
-        console.log(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
+        results.push(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
     }
 
-    console.log('===');
-    console.log(`Interesting results: ${fmtPerc(interestingResults.count)} / ${fmtOdds(interestingResults.count)} / ${fmtNegOdds(interestingResults.count)}`);
+    results.push('===');
+    results.push(`Interesting results: ${fmtPerc(interestingResults.count)} / ${fmtOdds(interestingResults.count)} / ${fmtNegOdds(interestingResults.count)}`);
     /*
     let interestingTeams = Object.keys(interestingResults);
     interestingTeams.sort((a, b) => interestingResults[b] - interestingResults[a]);
     for (let team of interestingTeams) {
-        console.log(`${team}: ${fmtPerc(interestingResults[team])}`);
+        results.push(`${team}: ${fmtPerc(interestingResults[team])}`);
     }
     */
+
+    $simulationResults.innerText = results.join('\n');
+    $runSimulation.disabled = false;
 }
 
-function main() {
+function runSimulation() {
     let threadsRunning = THREAD_COUNT;
     let teamPlacements = {};
     let phaseTeamCounts = {};
     let interestingResults = {};
     for (let thread = 0; thread < THREAD_COUNT; ++thread) {
-        const worker = new Worker('./scenarioSimulation.js');
+        const worker = new Worker('js/scenarioSimulation.js');
         worker.addEventListener('message', (evt) => {
             const msg = evt.data;
             switch(msg.type) {
@@ -136,4 +142,12 @@ function main() {
     }
 }
 
-main();
+function init() {
+    $runSimulation.addEventListener('click', () => {
+        $runSimulation.disabled = true;
+        runSimulation();
+        return false;
+    });
+}
+
+init();
