@@ -707,10 +707,10 @@
         NED: 2036, // 2050, // 2040,
         FRA: 2046, // 2022, // 2005,
         BEL: 1948, // 2020, // 2007,
-        POR: 2010, // 2006,
+        POR: 2044, // 2010, // 2006,
         DEN: 1928, // 1952, // 1971,
         GER: 1931, // 1919, // 1960,
-        URU: 1924, // 1936,
+        URU: 1890, // 1924, // 1936,
         SUI: 1901, // 1911, // 1902,
         CRO: 1945, // 1914, // 1922,
         ENG: 1944, // 1957, // 1920,
@@ -788,7 +788,7 @@
             new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '1:2', 'ESP-CRC': '7:0', 'JPN-CRC': '0:1', 'ESP-GER': '1:1', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
             new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '0:0', 'BEL-CAN': '1:0', 'BEL-MAR': '0:2', 'CRO-CAN': '4:1', 'CRO-BEL': '', 'CAN-MAR': '' }), RULES.FIFA),
             new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '1:0', 'BRA-SRB': '2:0', 'CMR-SRB': '3:3', 'BRA-SUI': '1:0', 'SRB-SUI': '', 'CMR-BRA': '' }), RULES.FIFA),
-            new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '3:2', 'KOR-GHA': '2:3', 'POR-URU': '', 'GHA-URU': '', 'KOR-POR': '' }), RULES.FIFA),
+            new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '3:2', 'KOR-GHA': '2:3', 'POR-URU': '2:0', 'GHA-URU': '', 'KOR-POR': '' }), RULES.FIFA),
             new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA)
         ];
 
