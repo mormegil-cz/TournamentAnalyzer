@@ -15,9 +15,10 @@
         <div class="row">
             <div class="col-4">
                 <h3>Simulation settings</h3>
-                <button id="runSimulation" type="button" class="btn btn-primary">Start simulation</button>
-                <!--button id="startSimulation" type="button" class="btn btn-primary">Start simulation</button>
-                <button id="stopSimulation" type="button" class="btn btn-primary" disabled="disabled">Stop simulation</button-->
+                <label for="threadCount" class="form-label">Simulation threads:</label>
+                <input type="number" class="form-input" id="threadCount" value="3" min="1" size="2" maxlength="2" />
+                <button id="startSimulation" type="button" class="btn btn-primary">Start simulation</button>
+                <button id="stopSimulation" type="button" class="btn btn-primary" disabled="disabled">Stop simulation</button>
             </div>
             <div class="col-8">
                 <h3>Simulation results</h3>
@@ -28,13 +29,12 @@
             </div>
         </div>
 
-        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="simulationDetailOffCanvas"
-            aria-labelledby="offCanvasSimulationHeader">
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="simulationDetailOffCanvas" aria-labelledby="offCanvasSimulationHeader">
             <div class="offcanvas-header">
                 <h4 id="offCanvasSimulationHeader">Simulation results for <span id="simulationDetailTeam"></span>’s
-                    <span id="simulationDetailPlace"></span> place</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
+                    <span id="simulationDetailPlace"></span> place
+                </h4>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <h5>Success matches</h5>

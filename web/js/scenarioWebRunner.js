@@ -1,8 +1,9 @@
-const THREAD_COUNT = 3;
-const ITER_COUNT = 1000;
-
-const $runSimulation = document.getElementById('runSimulation');
+const $startSimulation = document.getElementById('startSimulation');
+const $stopSimulation = document.getElementById('stopSimulation');
 const $simulationResults = document.getElementById('simulationResults');
+const $threadCount = document.getElementById('threadCount');
+
+let totalSimulationCount = 0;
 
 function mergeData(data, addedData) {
     if (!addedData) return;
@@ -31,23 +32,23 @@ function mergeData(data, addedData) {
 
 function fmtPerc(num) {
     if (typeof num !== 'number') return "(none)";
-    if (num === ITER_COUNT * THREAD_COUNT) return "(all)";
-    return (num * 100 / ITER_COUNT / THREAD_COUNT).toFixed(1) + ' %';
+    if (num === totalSimulationCount) return "(all)";
+    return (num * 100 / totalSimulationCount).toFixed(1) + ' %';
 }
 
 function fmtOdds(num) {
     if (typeof num !== 'number') return "(inf)";
-    if (num === ITER_COUNT * THREAD_COUNT) return "—";
-    return (ITER_COUNT * THREAD_COUNT / num).toFixed(3);
+    if (num === totalSimulationCount) return "—";
+    return (totalSimulationCount / num).toFixed(3);
 }
 
 function fmtNegOdds(num) {
     if (typeof num !== 'number') return "(all)";
-    if (num === ITER_COUNT * THREAD_COUNT) return "—";
-    return (ITER_COUNT * THREAD_COUNT / (ITER_COUNT * THREAD_COUNT - num)).toFixed(3);
+    if (num === totalSimulationCount) return "—";
+    return (totalSimulationCount / (totalSimulationCount - num)).toFixed(3);
 }
 
-function finished(teamPlacements, phaseTeamCounts, interestingResults) {
+function updateResults(teamPlacements, phaseTeamCounts, interestingResults) {
     let results = [];
 
     let phaseTeams = Object.keys(phaseTeamCounts);
@@ -100,32 +101,37 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults) {
     */
 
     $simulationResults.innerText = results.join('\n');
-    $runSimulation.disabled = false;
 }
 
-function runSimulation() {
-    let threadsRunning = THREAD_COUNT;
+let currentWorkerId = 0;
+let runningWorkers = new Map();
+
+function startSimulation() {
+    let threadCount = $threadCount.valueAsNumber;
     let teamPlacements = {};
     let phaseTeamCounts = {};
     let interestingResults = {};
-    for (let thread = 0; thread < THREAD_COUNT; ++thread) {
+    totalSimulationCount = 0;
+    for (let thread = 0; thread < threadCount; ++thread) {
         const worker = new Worker('js/scenarioSimulation.js');
+        const workerId = ++currentWorkerId;
+        runningWorkers.set(workerId, worker);
         worker.addEventListener('message', (evt) => {
             const msg = evt.data;
-            switch(msg.type) {
-                case 'done':
-                    mergeData(teamPlacements, msg.teamPlacements);
-                    mergeData(phaseTeamCounts, msg.phaseTeamCounts);
-                    mergeData(interestingResults, msg.interestingResults);
-                    // if (msg.interestingResults) console.dir(msg.interestingResults, {depth: null});
+            switch (msg.type) {
+                case 'update':
+                    let receivedResults = msg.results;
+                    totalSimulationCount += msg.simulationCount;
+                    mergeData(teamPlacements, receivedResults.teamPlacements);
+                    mergeData(phaseTeamCounts, receivedResults.phaseTeamCounts);
+                    mergeData(interestingResults, receivedResults.interestingResults);
+                    // if (msg.interestingResults) console.dir(receivedResults.interestingResults, {depth: null});
+                    updateResults(teamPlacements, phaseTeamCounts, interestingResults);
                     break;
 
                 case 'exit':
-                    --threadsRunning;
-
-                    if (threadsRunning === 0) {
-                        finished(teamPlacements, phaseTeamCounts, interestingResults);
-                    }
+                    runningWorkers.delete(msg.id);
+                    if (!runningWorkers.size) simulationStopped();
                     break;
 
                 default:
@@ -137,15 +143,30 @@ function runSimulation() {
             console.error(error);
             throw error;
         });
-
-        worker.postMessage({ type: 'run', workerData: { iterations: ITER_COUNT } });
+        worker.postMessage({ type: 'run', id: workerId, workerData: { } });
     }
 }
 
+function stopSimulation() {
+    for (let entry of runningWorkers) {    
+        entry[1].postMessage({ type: 'stop' });
+    }
+}
+
+function simulationStopped() {
+    $startSimulation.disabled = false;
+}
+
 function init() {
-    $runSimulation.addEventListener('click', () => {
-        $runSimulation.disabled = true;
-        runSimulation();
+    $startSimulation.addEventListener('click', () => {
+        $startSimulation.disabled = true;
+        $stopSimulation.disabled = false;
+        startSimulation();
+        return false;
+    });
+    $stopSimulation.addEventListener('click', () => {
+        $stopSimulation.disabled = true;
+        stopSimulation();
         return false;
     });
 }
