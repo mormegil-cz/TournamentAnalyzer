@@ -72,7 +72,7 @@
 
         let teams = Object.keys(teamPlacements);
         teams.sort((a, b) => {
-            for (let s = 3; s >= 0; --s) {
+            for (let s = Object.keys(teamPlacements[a]).length; s >= 0; --s) {
                 var aCount = teamPlacements[a]['' + s];
                 var bCount = teamPlacements[b]['' + s];
                 if (aCount > bCount) return -1;
