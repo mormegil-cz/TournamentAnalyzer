@@ -203,11 +203,16 @@
     }
 
     const INV_32 = 1.0 / 0x100000000;
+    const RANDOM_BUFFER_SIZE = 1024;
+    let randomBuffer = new Uint32Array(RANDOM_BUFFER_SIZE);
+    let randomPosition = 0;
 
     function randomNumber() {
-        let array = new Uint32Array(1);
-        crypto.getRandomValues(array);
-        return array[0] * INV_32;
+        if (randomPosition >= RANDOM_BUFFER_SIZE) {
+            crypto.getRandomValues(randomBuffer);
+            randomPosition = 0;
+        }
+        return randomBuffer[randomPosition++] * INV_32;
     }
 
     function randomPoisson(lambda) {
@@ -841,7 +846,7 @@
                 interestingResults.push(scenarioResults.full);
             }
 
-            let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
+            let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
             sfTeams.sort();
             var id = sfTeams.join('+');
             let currCount = phaseTeamCounts[id] || 0;
