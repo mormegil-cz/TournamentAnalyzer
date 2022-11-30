@@ -707,7 +707,7 @@
 
     const ELO_RATING_FIFA = {
         BRA: 2195, // 2185, // 2169,
-        ARG: 2101, // 2086, // 2141,
+        ARG: 2118, // 2101, // 2086, // 2141,
         ESP: 2056, // 2068, // 2045,
         NED: 2047, // 2036, // 2050, // 2040,
         FRA: 1993, // 2046, // 2022, // 2005,
@@ -721,9 +721,9 @@
         ENG: 1969, // 1944, // 1957, // 1920,
         SRB: 1862, // 1882, // 1898,
         ECU: 1842, // 1885, // 1871, // 1840,
-        MEX: 1794, // 1809, // 1809,
+        MEX: 1813, // 1794, // 1809, // 1809,
         IRN: 1779, // 1809, // 1760, // 1817,
-        POL: 1844, // 1814, // 1814,
+        POL: 1827, // 1844, // 1814, // 1814,
         USA: 1840, // 1810, // 1797, // 1798,
         JPN: 1792, // 1831, // 1798,
         WAL: 1717, // 1742, // 1791, // 1790,
@@ -735,7 +735,7 @@
         TUN: 1747, // 1694, // 1726, // 1687,
         SEN: 1773, // 1730, // 1677, // 1687,
         QAT: 1578, // 1589, // 1642, // 1680,
-        KSA: 1662, // 1692, // 1640,
+        KSA: 1643, // 1662, // 1692, // 1640,
         CMR: 1621, // 1601, // 1610,
         GHA: 1611, // 1563, // 1567,
     };
@@ -788,7 +788,7 @@
 
             new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '0:2', 'SEN-NED': '0:2', 'QAT-SEN': '1:3', 'NED-ECU': '1:1', 'ECU-SEN': '1:2', 'NED-QAT': '2:0' }), RULES.FIFA),
             new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '1:1', 'WAL-IRN': '0:2', 'ENG-USA': '0:0', 'WAL-ENG': '0:3', 'IRN-USA': '0:1' }), RULES.FIFA),
-            new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '1:2', 'MEX-POL': '0:0', 'POL-KSA': '2:0', 'ARG-MEX': '2:0', 'POL-ARG': '', 'KSA-MEX': '' }), RULES.FIFA),
+            new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '1:2', 'MEX-POL': '0:0', 'POL-KSA': '2:0', 'ARG-MEX': '2:0', 'POL-ARG': '0:2', 'KSA-MEX': '1:2' }), RULES.FIFA),
             new Group('D', ["FRA", "AUS", "DEN", "TUN"], preparePresetMatches({ 'DEN-TUN': '0:0', 'FRA-AUS': '4:1', 'TUN-AUS': '0:1', 'FRA-DEN': '2:1', 'AUS-DEN': '1:0', 'TUN-FRA': '1:0' }), RULES.FIFA),
             new Group('E', ["ESP", "CRC", "GER", "JPN"], preparePresetMatches({ 'GER-JPN': '1:2', 'ESP-CRC': '7:0', 'JPN-CRC': '0:1', 'ESP-GER': '1:1', 'JPN-ESP': '', 'CRC-GER': '' }), RULES.FIFA),
             new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '0:0', 'BEL-CAN': '1:0', 'BEL-MAR': '0:2', 'CRO-CAN': '4:1', 'CRO-BEL': '', 'CAN-MAR': '' }), RULES.FIFA),

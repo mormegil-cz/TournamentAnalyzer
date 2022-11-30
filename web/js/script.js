@@ -9,6 +9,7 @@
     const RULES = {
         IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS] },
         UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS] },
+        FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS] },
     };
 
     const UEFA_COUNTRY_COEFF_2021 = {
@@ -147,38 +148,38 @@
     };
 
     const FOOTBALL_ELO_RATINGS_2022 = {
-        BRA: 2169,
-        ARG: 2141,
-        ESP: 2045,
-        NED: 2040,
-        BEL: 2025,
-        FRA: 2005,
-        POR: 2004,
-        DEN: 1971,
-        GER: 1960,
-        URU: 1936,
-        SUI: 1929,
-        CRO: 1922,
-        ENG: 1920,
-        SRB: 1892,
-        ECU: 1840,
-        MEX: 1821,
-        IRN: 1817,
-        POL: 1809,
-        USA: 1798,
-        JPN: 1798,
-        WAL: 1790,
-        KOR: 1786,
-        CAN: 1765,
-        MAR: 1753,
-        CRC: 1743,
-        AUS: 1719,
-        TUN: 1687,
-        SEN: 1687,
-        QAT: 1680,
-        KSA: 1640,
-        CMR: 1609,
-        GHA: 1540,
+        BRA: 2195, // 2185, // 2169,
+        ARG: 2101, // 2086, // 2141,
+        ESP: 2056, // 2068, // 2045,
+        NED: 2047, // 2036, // 2050, // 2040,
+        FRA: 1993, // 2046, // 2022, // 2005,
+        BEL: 1948, // 2020, // 2007,
+        POR: 2044, // 2010, // 2006,
+        DEN: 1883, // 1928, // 1952, // 1971,
+        GER: 1931, // 1919, // 1960,
+        URU: 1890, // 1924, // 1936,
+        SUI: 1901, // 1911, // 1902,
+        CRO: 1945, // 1914, // 1922,
+        ENG: 1969, // 1944, // 1957, // 1920,
+        SRB: 1862, // 1882, // 1898,
+        ECU: 1842, // 1885, // 1871, // 1840,
+        MEX: 1794, // 1809, // 1809,
+        IRN: 1779, // 1809, // 1760, // 1817,
+        POL: 1844, // 1814, // 1814,
+        USA: 1840, // 1810, // 1797, // 1798,
+        JPN: 1792, // 1831, // 1798,
+        WAL: 1717, // 1742, // 1791, // 1790,
+        KOR: 1750, // 1798, // 1786,
+        CAN: 1732, // 1763, // 1776,
+        MAR: 1851, // 1779, // 1753,
+        CRC: 1762, // 1723, // 1743,
+        AUS: 1779, // 1734, // 1702, // 1719,
+        TUN: 1747, // 1694, // 1726, // 1687,
+        SEN: 1773, // 1730, // 1677, // 1687,
+        QAT: 1578, // 1589, // 1642, // 1680,
+        KSA: 1662, // 1692, // 1640,
+        CMR: 1621, // 1601, // 1610,
+        GHA: 1611, // 1563, // 1567,
     };
 
     const PRESETS = {
@@ -191,6 +192,7 @@
         "Fortuna:LIGA 2021/22": { teams: Object.keys(POINTS_FORTUNA_LIGA_2021), matches: prepareAllMatches(Object.keys(POINTS_FORTUNA_LIGA_2021)), rules: RULES.UEFA, teamParameters: POINTS_FORTUNA_LIGA_2021 },
 
         "FIFA 2022 Group A": { teams: ["QAT", "ECU", "SEN", "NED"], matches: preparePresetMatches({ 'QAT-ECU': '', 'SEN-NED': '', 'QAT-SEN': '', 'NED-ECU': '', 'ECU-SEN': '', 'NED-QAT': '' }), rules: RULES.FIFA, teamParameters: FOOTBALL_ELO_RATINGS_2022 },
+        "FIFA 2022 Group C": { teams: ["ARG", "KSA", "MEX", "POL"], matches: preparePresetMatches({ 'ARG-KSA': 'L', 'MEX-POL': 'D', 'POL-KSA': 'W', 'ARG-MEX': 'W', 'POL-ARG': '', 'KSA-MEX': '' }), rules: RULES.FIFA, teamParameters: FOOTBALL_ELO_RATINGS_2022 },
     };
 
     var simulationWorker;
