@@ -540,12 +540,13 @@
     }
 
     class PlayoffTree extends ScenarioPart {
-        constructor(id, teams, rules) {
+        constructor(id, teams, rules, knownResults) {
             if (teams.length === 0 || teams.length % 2 !== 0) throw new Error('Invalid number of playoff teams');
 
             super(id);
             this.teams = teams;
             this.rules = rules;
+            this.knownResults = knownResults || {};
         }
 
         execute(scenarioResults, simulationParameters) {
@@ -558,10 +559,12 @@
                 for (let i = 0; i < currTeams.length; i += 2) {
                     let homeTeam = currTeams[i];
                     let awayTeam = currTeams[i + 1];
-                    let matchResult;
-                    do {
-                        matchResult = generateRandomResult(homeTeam, awayTeam, this.rules, simulationParameters);
-                    } while (matchResult.home === matchResult.away);
+                    let matchResult = this.knownResults[`${homeTeam}-${awayTeam}`];
+                    if (!matchResult) {
+                        do {
+                            matchResult = generateRandomResult(homeTeam, awayTeam, this.rules, simulationParameters);
+                        } while (matchResult.home === matchResult.away);
+                    }
                     let winner = matchResult.home > matchResult.away ? homeTeam : awayTeam;
                     nextTeams.push(winner);
                 }
@@ -707,9 +710,9 @@
 
     const ELO_RATING_FIFA = {
         BRA: 2137, // 2195, // 2185, // 2169,
-        ARG: 2118, // 2101, // 2086, // 2141,
+        ARG: 2125, // 2118, // 2101, // 2086, // 2141,
         ESP: 2007, // 2056, // 2068, // 2045,
-        NED: 2047, // 2036, // 2050, // 2040,
+        NED: 2068, // 2047, // 2036, // 2050, // 2040,
         FRA: 1993, // 2046, // 2022, // 2005,
         BEL: 1948, // 1948, // 2020, // 2007,
         POR: 1993, // 2044, // 2010, // 2006,
@@ -724,14 +727,14 @@
         MEX: 1813, // 1794, // 1809, // 1809,
         IRN: 1779, // 1809, // 1760, // 1817,
         POL: 1827, // 1844, // 1814, // 1814,
-        USA: 1840, // 1810, // 1797, // 1798,
+        USA: 1819, // 1840, // 1810, // 1797, // 1798,
         JPN: 1841, // 1792, // 1831, // 1798,
         WAL: 1717, // 1742, // 1791, // 1790,
         KOR: 1801, // 1750, // 1798, // 1786,
         CAN: 1712, // 1732, // 1763, // 1776,
         MAR: 1871, // 1851, // 1779, // 1753,
         CRC: 1737, // 1762, // 1723, // 1743,
-        AUS: 1779, // 1734, // 1702, // 1719,
+        AUS: 1772, // 1779, // 1734, // 1702, // 1719,
         TUN: 1747, // 1694, // 1726, // 1687,
         SEN: 1773, // 1730, // 1677, // 1687,
         QAT: 1578, // 1589, // 1642, // 1680,
@@ -794,7 +797,7 @@
             new Group('F', ["BEL", "CAN", "MAR", "CRO"], preparePresetMatches({ 'MAR-CRO': '0:0', 'BEL-CAN': '1:0', 'BEL-MAR': '0:2', 'CRO-CAN': '4:1', 'CRO-BEL': '0:0', 'CAN-MAR': '1:2' }), RULES.FIFA),
             new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '1:0', 'BRA-SRB': '2:0', 'CMR-SRB': '3:3', 'BRA-SUI': '1:0', 'SRB-SUI': '2:3', 'CMR-BRA': '1:0' }), RULES.FIFA),
             new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '3:2', 'KOR-GHA': '2:3', 'POR-URU': '2:0', 'GHA-URU': '0:2', 'KOR-POR': '2:1' }), RULES.FIFA),
-            new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA)
+            new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA, preparePresetMatches({ 'NED-USA': '3:1', 'ARG-AUS': '2:1' }))
         ];
 
         validateScenario(scenario, rating);
