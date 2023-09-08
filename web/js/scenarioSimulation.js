@@ -93,6 +93,23 @@
         return teamPoints;
     }
 
+    function computeTriesScored(teams, matches) {
+        let teamPoints = {};
+        for (let team of teams) {
+            let tries = 0;
+            for (let otherTeam of teams) {
+                var homeMatch = matches[`${team}-${otherTeam}`];
+                if (homeMatch) tries += homeMatch.homeTries;
+                if (otherTeam !== team) {
+                    var awayMatch = matches[`${otherTeam}-${team}`];
+                    if (awayMatch) tries += awayMatch.awayTries;
+                }
+            }
+            teamPoints[team] = tries;
+        }
+        return teamPoints;
+    }
+
     function computeGlobalGoalDifference(teams, matches) {
         let teamSet = {};
         for (let team of teams) teamSet[team] = 1;
@@ -104,6 +121,31 @@
             let homeTeam = pieces[0];
             let awayTeam = pieces[1];
             let difference = match.homeScore - match.awayScore;
+            if (teamSet[homeTeam]) {
+                let currHome = teamPoints[homeTeam] || 0;
+                currHome += difference;
+                teamPoints[homeTeam] = currHome;
+            }
+            if (teamSet[awayTeam]) {
+                let currAway = teamPoints[awayTeam] || 0;
+                currAway -= difference;
+                teamPoints[awayTeam] = currAway;
+            }
+        }
+        return teamPoints;
+    }
+
+    function computeGlobalTriesDifference(teams, matches) {
+        let teamSet = {};
+        for (let team of teams) teamSet[team] = 1;
+
+        let teamPoints = {};
+        for (let id of Object.keys(matches)) {
+            let match = matches[id];
+            let pieces = id.split('-');
+            let homeTeam = pieces[0];
+            let awayTeam = pieces[1];
+            let difference = match.homeTries - match.awayTries;
             if (teamSet[homeTeam]) {
                 let currHome = teamPoints[homeTeam] || 0;
                 currHome += difference;
@@ -279,6 +321,44 @@
         else return makeResultWithScore(rules.results[2], goals, goals + goalDifference);
     }
 
+    function makeRugbyResultWithScore(template, homeScore, awayScore, homeTries, awayTries) {
+        return Object.assign({ homeScore: homeScore, awayScore: awayScore, homeTries: homeTries, awayTries: awayTries }, template);
+    }
+
+    function generateRandomRugbyResult(home, away, rules, teamParameters) {
+        var homeParam = teamParameters[home] || 0;
+        var awayParam = teamParameters[away] || 0;
+
+        // homeParam *= homeParam;
+        // awayParam *= awayParam;
+        // homeParam = Math.sqrt(homeParam);
+        // awayParam = Math.sqrt(awayParam);
+
+        var sumParam = homeParam + awayParam;
+        if (sumParam === 0) {
+            return rules.results[Math.floor(Math.random() * rules.results.length)];
+        }
+
+        var expWin = 1 / (Math.pow(10, -Math.abs(homeParam - awayParam) / 400) + 1)
+        var small = 1 - expWin;
+        var homeFrac = homeParam < awayParam ? small : expWin;
+
+        /*
+        var homeFrac = homeParam / sumParam;
+        var small = Math.min(homeFrac, 1 - homeFrac);
+        */
+        var draw2 = small / 3;
+        var drawLow = homeFrac - draw2;
+        var drawHigh = homeFrac + draw2;
+
+        var rnd = randomNumber();
+        var goals = randomPoisson(1);
+        if (rnd >= drawLow && rnd < drawHigh) return makeRugbyResultWithScore(rules.results[1], goals, goals);
+        var goalDifference = 1 + Math.round((randomTruncatedPoisson(1) - 1) / 2);
+        if (rnd < drawLow) return makeRugbyResultWithScore(rules.results[0], goals + goalDifference, goals);
+        else return makeRugbyResultWithScore(rules.results[2], goals, goals + goalDifference);
+    }
+
     function sortByCriteriumPoints(teams, teamPoints) {
         // 1. sort by points
         teams.sort(function (a, b) {
@@ -393,7 +473,7 @@
             for (let id of Object.keys(this.matches)) {
                 let teams = id.split('-');
                 let matchResult = this.matches[id];
-                matchResults[id] = matchResult.type === 'toplay' ? generateRandomResult(this.getTeam(teams[0], scenarioResults), this.getTeam(teams[1], scenarioResults), this.rules, simulationParameters) : matchResult;
+                matchResults[id] = matchResult.type === 'toplay' ? this.rules.genFunc(this.getTeam(teams[0], scenarioResults), this.getTeam(teams[1], scenarioResults), this.rules, simulationParameters) : matchResult;
             }
 
             return new GroupResult(teams, matchResults, this.rules);
@@ -562,7 +642,7 @@
                     let matchResult = this.knownResults[`${homeTeam}-${awayTeam}`];
                     if (!matchResult) {
                         do {
-                            matchResult = generateRandomResult(homeTeam, awayTeam, this.rules, simulationParameters);
+                            matchResult = this.rules.genFunc(homeTeam, awayTeam, this.rules, simulationParameters);
                         } while (matchResult.home === matchResult.away);
                     }
                     let winner = matchResult.home > matchResult.away ? homeTeam : awayTeam;
@@ -583,14 +663,45 @@
     const RESULT_OT_LOSS = { type: 'done', result: 'OL', caption: 'OT loss', home: 1, away: 2 };
     const RESULT_LOSS = { type: 'done', result: 'L', caption: 'Loss', home: 0, away: 3 };
 
+    const RESULT_WIN_BIG_WINNER_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_WINNER_BONUS', caption: 'RESULT_WIN_BIG_WINNER_BONUS', home: 5, away: 0 };
+    const RESULT_WIN_BIG_NO_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_NO_BONUS', caption: 'RESULT_WIN_BIG_NO_BONUS', home: 4, away: 0};
+    const RESULT_WIN_BIG_BOTH_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_BOTH_BONUS', caption: 'RESULT_WIN_BIG_BOTH_BONUS', home: 5, away: 1};
+    const RESULT_WIN_BIG_LOSER_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_LOSER_BONUS', caption: 'RESULT_WIN_BIG_LOSER_BONUS', home: 4, away: 1};
+    const RESULT_WIN_SMALL_WINNER_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_WINNER_BONUS', caption: 'RESULT_WIN_SMALL_WINNER_BONUS', home: 5, away: 1};
+    const RESULT_WIN_SMALL_NO_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_NO_BONUS', caption: 'RESULT_WIN_SMALL_NO_BONUS', home: 4, away: 1};
+    const RESULT_WIN_SMALL_BOTH_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_BOTH_BONUS', caption: 'RESULT_WIN_SMALL_BOTH_BONUS', home: 5, away: 2};
+    const RESULT_WIN_SMALL_LOSER_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_LOSER_BONUS', caption: 'RESULT_WIN_SMALL_LOSER_BONUS', home: 4, away: 2};
+    const RESULT_DRAW_HOME_BONUS = { type: 'done', result: 'RESULT_DRAW_HOME_BONUS', caption: 'RESULT_DRAW_HOME_BONUS', home: 3, away: 2};
+    const RESULT_DRAW_NO_BONUS = { type: 'done', result: 'RESULT_DRAW_NO_BONUS', caption: 'RESULT_DRAW_NO_BONUS', home: 2, away: 2};
+    const RESULT_DRAW_BOTH_BONUS = { type: 'done', result: 'RESULT_DRAW_BOTH_BONUS', caption: 'RESULT_DRAW_BOTH_BONUS', home: 3, away: 3};
+    const RESULT_DRAW_AWAY_BONUS = { type: 'done', result: 'RESULT_DRAW_AWAY_BONUS', caption: 'RESULT_DRAW_AWAY_BONUS', home: 2, away: 3};
+    const RESULT_LOSS_BIG_WINNER_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_WINNER_BONUS', caption: 'RESULT_LOSS_BIG_WINNER_BONUS', home: 0, away: 5};
+    const RESULT_LOSS_BIG_NO_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_NO_BONUS', caption: 'RESULT_LOSS_BIG_NO_BONUS', home: 0, away: 4};
+    const RESULT_LOSS_BIG_BOTH_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_BOTH_BONUS', caption: 'RESULT_LOSS_BIG_BOTH_BONUS', home: 1, away: 5};
+    const RESULT_LOSS_BIG_LOSER_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_LOSER_BONUS', caption: 'RESULT_LOSS_BIG_LOSER_BONUS', home: 1, away: 4};
+    const RESULT_LOSS_SMALL_WINNER_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_WINNER_BONUS', caption: 'RESULT_LOSS_SMALL_WINNER_BONUS', home: 1, away: 5};
+    const RESULT_LOSS_SMALL_NO_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_NO_BONUS', caption: 'RESULT_LOSS_SMALL_NO_BONUS', home: 1, away: 4};
+    const RESULT_LOSS_SMALL_BOTH_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_BOTH_BONUS', caption: 'RESULT_LOSS_SMALL_BOTH_BONUS', home: 2, away: 5};
+    const RESULT_LOSS_SMALL_LOSER_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_LOSER_BONUS', caption: 'RESULT_LOSS_SMALL_LOSER_BONUS', home: 2, away: 4};
+
     const UEFA_EURO_2020_RANKING = ['BEL', 'ITA', 'ENG', 'GER', 'ESP', 'UKR', 'FRA', 'POL', 'SUI', 'CRO', 'NED', 'RUS', 'POR', 'TUR', 'DEN', 'AUT', 'SWE', 'CZE', 'WAL', 'FIN', 'SRB', 'SVK', 'IRL', 'ISL', 'NIR', 'NOR', 'KVX', 'GRE', 'SCO', 'MKD', 'HUN', 'SVN', 'ROU', 'GEO', 'ALB', 'BIH', 'BUL', 'LUX', 'BLR', 'CYP', 'ARM', 'ISR', 'KAZ', 'MNE', 'AZE', 'AND', 'LTU', 'EST', 'FRO', 'GIB', 'MDA', 'MLT', 'LVA', 'LIE', 'SMR'];
     const UEFA_EURO_2020_SORTING_ALGORITHM = [computeMatchPoints, computeGoalDifference, computeGoalsScored, computeGlobalGoalDifference, computeGlobalGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
     const FIFA_WORLD_2022_SORTING_ALGORITHM = [computeGlobalMatchPoints, computeGlobalGoalDifference, computeGlobalGoalsScored, computeMatchPoints, computeGoalDifference, computeGoalsScored, computeRandomRanking];
 
+    const WORLD_RUGBY_2023_RANKING = ['IRL', 'RSA', 'FRA', 'NZL', 'SCO', 'ARG', 'FIJ', 'ENG', 'AUS', 'WAL', 'GEO', 'SAM', 'ITA', 'JPN', 'TON', 'POR', 'URU', 'USA', 'ROM', 'ESP', 'NAM', 'CHI'];
+    const RUGBY_WORLD_2023_SORTING_ALGORITHM = [computeMatchPoints, computeGlobalMatchPoints, computeGlobalTriesDifference, computeGlobalGoalDifference, computeTriesScored, makeRankingAlgorithm(WORLD_RUGBY_2023_RANKING)];
+
     const RULES = {
-        IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS] },
-        UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: UEFA_EURO_2020_SORTING_ALGORITHM },
-        FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: FIFA_WORLD_2022_SORTING_ALGORITHM },
+        IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS], genFunc: generateRandomResult },
+        UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: UEFA_EURO_2020_SORTING_ALGORITHM, genFunc: generateRandomResult },
+        FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: FIFA_WORLD_2022_SORTING_ALGORITHM, genFunc: generateRandomResult },
+        RWC: { results: [
+            RESULT_WIN_BIG_WINNER_BONUS, RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_BOTH_BONUS, RESULT_WIN_BIG_LOSER_BONUS,
+            RESULT_WIN_SMALL_WINNER_BONUS, RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, RESULT_WIN_SMALL_LOSER_BONUS,
+            RESULT_DRAW_HOME_BONUS, RESULT_DRAW_NO_BONUS, RESULT_DRAW_BOTH_BONUS, RESULT_DRAW_AWAY_BONUS,
+            RESULT_LOSS_BIG_WINNER_BONUS, RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, RESULT_LOSS_BIG_LOSER_BONUS,
+            RESULT_LOSS_SMALL_WINNER_BONUS, RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, RESULT_LOSS_SMALL_LOSER_BONUS,
+        ], sortingAlgorithm: RUGBY_WORLD_2023_SORTING_ALGORITHM, genFunc: generateRandomRugbyResult },
     };
 
     const FIFA_RANKING = {
@@ -743,6 +854,31 @@
         GHA: 1596, // 1611, // 1563, // 1567,
     };
 
+    const WORLD_RUGBY_RATING = {
+        IRL: 91.82,
+        RSA: 91.08,
+        FRA: 89.22,
+        NZL: 89.06,
+        SCO: 84.01,
+        ARG: 80.86,
+        FIJ: 80.28,
+        ENG: 79.95,
+        AUS: 79.87,
+        WAL: 78.26,
+        GEO: 76.23,
+        SAM: 76.19,
+        ITA: 75.63,
+        JPN: 73.29,
+        TON: 70.29,
+        POR: 68.61,
+        URU: 66.63,
+        USA: 66.22,
+        ROM: 64.56,
+        ESP: 64.05,
+        NAM: 61.61,
+        CHI: 60.49
+    };
+
     function executeScenario(scenario, simulationParameters) {
         let scenarioResults = {};
         for (let part of scenario) {
@@ -772,7 +908,7 @@
     }
 
     function runSimulationMain() {
-        rating = ELO_RATING_FIFA;
+        rating = WORLD_RUGBY_RATING;
         scenario = [
             /*
                 new Group('A', ["TUR", "ITA", "WAL", "SUI"], preparePresetMatches({ 'TUR-ITA': '0:3', 'WAL-SUI': '1:1', 'TUR-WAL': '0:2', 'ITA-SUI': '3:0', 'SUI-TUR': '3:1', 'ITA-WAL': '1:0' }), RULES.UEFA),
@@ -789,6 +925,7 @@
             //new PlayoffTree('_result', ['BEL', 'POR', 'ITA', 'AUT', 'FRA', 'SUI', 'CRO', 'ESP', 'SWE', 'UKR', 'ENG', 'GER', 'NED', 'CZE', 'WAL', 'DEN'], RULES.UEFA)
             //new PlayoffTree('_result', ['BEL', 'ITA', 'SUI', 'ESP', 'UKR', 'ENG', 'CZE', 'DEN'], RULES.UEFA)
 
+            /*
             new Group('A', ["QAT", "ECU", "SEN", "NED"], preparePresetMatches({ 'QAT-ECU': '0:2', 'SEN-NED': '0:2', 'QAT-SEN': '1:3', 'NED-ECU': '1:1', 'ECU-SEN': '1:2', 'NED-QAT': '2:0' }), RULES.FIFA),
             new Group('B', ["ENG", "IRN", "USA", "WAL"], preparePresetMatches({ 'ENG-IRN': '6:2', 'USA-WAL': '1:1', 'WAL-IRN': '0:2', 'ENG-USA': '0:0', 'WAL-ENG': '0:3', 'IRN-USA': '0:1' }), RULES.FIFA),
             new Group('C', ["ARG", "KSA", "MEX", "POL"], preparePresetMatches({ 'ARG-KSA': '1:2', 'MEX-POL': '0:0', 'POL-KSA': '2:0', 'ARG-MEX': '2:0', 'POL-ARG': '0:2', 'KSA-MEX': '1:2' }), RULES.FIFA),
@@ -798,6 +935,14 @@
             new Group('G', ["BRA", "SRB", "SUI", "CMR"], preparePresetMatches({ 'SUI-CMR': '1:0', 'BRA-SRB': '2:0', 'CMR-SRB': '3:3', 'BRA-SUI': '1:0', 'SRB-SUI': '2:3', 'CMR-BRA': '1:0' }), RULES.FIFA),
             new Group('H', ["POR", "GHA", "URU", "KOR"], preparePresetMatches({ 'URU-KOR': '0:0', 'POR-GHA': '3:2', 'KOR-GHA': '2:3', 'POR-URU': '2:0', 'GHA-URU': '0:2', 'KOR-POR': '2:1' }), RULES.FIFA),
             new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA, preparePresetMatches({ 'NED-USA': '3:1', 'ARG-AUS': '2:1', 'FRA-POL': '3:1', 'JPN-CRO': '1:2o', 'BRA-KOR': '4:1', 'ENG-SEN': '3:0', 'MAR-ESP': '1:0o', 'POR-SUI': '6:1', 'CRO-BRA': '2:1o', 'NED-ARG': '2:3o', 'MAR-POR': '1:0', 'ENG-FRA': '1:2', 'ARG-CRO': '3:0', 'FRA-MAR': '2:0' }))
+            */
+
+            new Group('A', ['NZL', 'FRA', 'ITA', 'URU', 'NAM'], preparePresetMatches( {'FRA-NZL': '', 'ITA-NAM': '', 'FRA-URU': '', 'NZL-NAM': '', 'ITA-URU': '', 'FRA-NAM': '', 'URU-NAM': '', 'NZL-ITA': '', 'NZL-URU': '', 'FRA-ITA': ''} ), RULES.RWC),
+            new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetMatches( {'IRL-ROM': '', 'RSA-SCO': '', 'IRL-TON': '', 'RSA-ROM': '', 'RSA-IRL': '', 'SCO-TON': '', 'SCO-ROM': '', 'RSA-TON': '', 'IRL-SCO': '', 'TON-ROM': ''} ), RULES.RWC),
+            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetMatches( {'AUS-GEO': '', 'WAL-FIJ': '', 'WAL-POR': '', 'AUS-FIJ': '', 'GEO-POR': '', 'WAL-AUS': '', 'FIJ-GEO': '', 'AUS-POR': '', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
+            new Group('D', ['ENG', 'JPN', 'ARG', 'SAM', 'CHI'], preparePresetMatches( {'ENG-ARG': '', 'JPN-CHI': '', 'SAM-CHI': '', 'ENG-JPN': '', 'ARG-SAM': '', 'ENG-CHI': '', 'JPN-SAM': '', 'ARG-CHI': '', 'ENG-SAM': '', 'JPN-ARG': ''} ), RULES.RWC),
+
+            new PlayoffTree('_result', ['C#1', 'D#2', 'B#1', 'A#2', 'D#1', 'C#2', 'A#1', 'B#2'], RULES.FIFA, preparePresetMatches({ }))
         ];
 
         validateScenario(scenario, rating);
@@ -845,9 +990,11 @@
                 teamPlacements[team] = placements;
             }
             // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
+            /*
             if ((results.stageTeams[2].indexOf('BRA') >= 0) && (results.stageTeams[2].indexOf('FRA') >= 0) && (results.stageTeams[2].indexOf('ARG') >= 0)) {
                 interestingResults.push(scenarioResults.full);
             }
+            */
 
             let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
             sfTeams.sort();
