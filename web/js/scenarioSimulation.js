@@ -326,37 +326,44 @@
     }
 
     function generateRandomRugbyResult(home, away, rules, teamParameters) {
-        var homeParam = teamParameters[home] || 0;
-        var awayParam = teamParameters[away] || 0;
+        const homeParam = teamParameters[home] || 0;
+        const awayParam = teamParameters[away] || 0;
 
-        // homeParam *= homeParam;
-        // awayParam *= awayParam;
-        // homeParam = Math.sqrt(homeParam);
-        // awayParam = Math.sqrt(awayParam);
-
-        var sumParam = homeParam + awayParam;
-        if (sumParam === 0) {
-            return rules.results[Math.floor(Math.random() * rules.results.length)];
+        if (homeParam === 0 || awayParam === 0) {
+            throw new Error(`No data for teams ${home}-${away}`);
         }
 
-        var expWin = 1 / (Math.pow(10, -Math.abs(homeParam - awayParam) / 400) + 1)
-        var small = 1 - expWin;
-        var homeFrac = homeParam < awayParam ? small : expWin;
+        const homeFrac = homeParam / awayParam;
+        const homeFrac2 = homeFrac * homeFrac;
 
-        /*
-        var homeFrac = homeParam / sumParam;
-        var small = Math.min(homeFrac, 1 - homeFrac);
-        */
-        var draw2 = small / 3;
-        var drawLow = homeFrac - draw2;
-        var drawHigh = homeFrac + draw2;
+        const homeTries = randomPoisson(2 * homeFrac2);
+        const awayTries = randomPoisson(2 / homeFrac2);
 
-        var rnd = randomNumber();
-        var goals = randomPoisson(1);
-        if (rnd >= drawLow && rnd < drawHigh) return makeRugbyResultWithScore(rules.results[1], goals, goals);
-        var goalDifference = 1 + Math.round((randomTruncatedPoisson(1) - 1) / 2);
-        if (rnd < drawLow) return makeRugbyResultWithScore(rules.results[0], goals + goalDifference, goals);
-        else return makeRugbyResultWithScore(rules.results[2], goals, goals + goalDifference);
+        const homeAdditional = randomPoisson(6 * homeFrac);
+        const awayAdditional = randomPoisson(6 / homeFrac);
+
+        const homeScore = 5 * homeTries + (homeTries ? (homeTries * 2 * 0.7 * randomNumber()) : 0) + homeAdditional;
+        const awayScore = 5 * awayTries + (awayTries ? (awayTries * 2 * 0.7 * randomNumber()) : 0) + awayAdditional;
+
+        const homeBonusPoint = homeTries >= 3;
+        const awayBonusPoint = awayTries >= 3;
+
+        if (homeScore === awayScore) {
+            // draw
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_DRAW_NO_BONUS, RESULT_DRAW_HOME_BONUS, RESULT_DRAW_AWAY_BONUS, RESULT_DRAW_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore >= awayScore + 7) {
+            // big home win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_HOME_BONUS, RESULT_WIN_BIG_AWAY_BONUS, RESULT_WIN_BIG_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore > awayScore) {
+            // small home win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_HOME_BONUS, RESULT_WIN_SMALL_AWAY_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore >= awayScore + 7) {
+            // big away win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_HOME_BONUS, RESULT_LOSS_BIG_AWAY_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore > awayScore) {
+            // small away win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_HOME_BONUS, RESULT_LOSS_SMALL_AWAY_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        }
     }
 
     function sortByCriteriumPoints(teams, teamPoints) {
