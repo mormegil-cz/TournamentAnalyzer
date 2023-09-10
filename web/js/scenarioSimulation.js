@@ -51,6 +51,9 @@
             let pts = 0;
             for (let match of Object.keys(matches)) {
                 let matchResult = matches[match];
+                if (!matchResult) {
+                    console.debug(matches, match, matchResult);
+                }
                 if (match.startsWith(`${team}-`)) pts += matchResult.home;
                 else if (match.endsWith(`-${team}`)) pts += matchResult.away;
             }
@@ -244,10 +247,34 @@
         return result;
     }
 
+    const rugbyScoreFormatParser = /(?<homeScore>[1-9][0-9]*)([(](?<homeTries>[1-9][0-9]*)[)])?:(?<awayScore>[1-9][0-9]*)([(](?<awayTries>[1-9][0-9]*)[)])?/;
+    function preparePresetRugbyMatches(matches) {
+        let result = {};
+        for (let m of Object.keys(matches)) {
+            let r = undefined;
+            const matchScoreStr = matches[m];
+            if (!matchScoreStr) r = ENTRY_TO_PLAY;
+            else {
+                const parsedScore = rugbyScoreFormatParser.exec(matchScoreStr);
+                if (!parsedScore) throw new Error('Invalid score syntax ' + matchScoreStr);
+
+                const homeScore = +parsedScore.groups.homeScore;
+                const awayScore = +parsedScore.groups.awayScore;
+                const homeTries = +(parsedScore.groups.homeTries || 0);
+                const awayTries = +(parsedScore.groups.awayTries || 0);
+
+                r = makeRugbyResult(homeScore, awayScore, homeTries, awayTries);
+            }
+
+            result[m] = r;
+        }
+        return result;
+    }
+
     const INV_32 = 1.0 / 0x100000000;
     const RANDOM_BUFFER_SIZE = 1024;
     let randomBuffer = new Uint32Array(RANDOM_BUFFER_SIZE);
-    let randomPosition = 0;
+    let randomPosition = RANDOM_BUFFER_SIZE;
 
     function randomNumber() {
         if (randomPosition >= RANDOM_BUFFER_SIZE) {
@@ -322,7 +349,43 @@
     }
 
     function makeRugbyResultWithScore(template, homeScore, awayScore, homeTries, awayTries) {
+        if (!template) throw new Error("Invalid score");
         return Object.assign({ homeScore: homeScore, awayScore: awayScore, homeTries: homeTries, awayTries: awayTries }, template);
+    }
+
+    function evalRugbyResult(resultNoBonus, resultHomeBonus, resultAwayBonus, resultBothBonus, isHomeBonus, isAwayBonus) {
+        if (isHomeBonus) {
+            return isAwayBonus ? resultBothBonus : resultHomeBonus;
+        } else if (isAwayBonus) {
+            return resultAwayBonus;
+        } else {
+            return resultNoBonus;
+        }
+    }
+
+    function makeRugbyResult(homeScore, awayScore, homeTries, awayTries) {
+        const homeBonusPoint = homeTries >= 3;
+        const awayBonusPoint = awayTries >= 3;
+
+        if (homeScore === awayScore) {
+            // draw
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_DRAW_NO_BONUS, RESULT_DRAW_HOME_BONUS, RESULT_DRAW_AWAY_BONUS, RESULT_DRAW_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore >= awayScore + 7) {
+            // big home win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_HOME_BONUS, RESULT_WIN_BIG_AWAY_BONUS, RESULT_WIN_BIG_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore > awayScore) {
+            // small home win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_HOME_BONUS, RESULT_WIN_SMALL_AWAY_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore + 7 <= awayScore) {
+            // big away win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_HOME_BONUS, RESULT_LOSS_BIG_AWAY_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else if (homeScore < awayScore) {
+            // small away win
+            return makeRugbyResultWithScore(evalRugbyResult(RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_HOME_BONUS, RESULT_LOSS_SMALL_AWAY_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
+        } else {
+            // WAT
+            throw new Error("Wat");
+        }
     }
 
     function generateRandomRugbyResult(home, away, rules, teamParameters) {
@@ -345,25 +408,7 @@
         const homeScore = 5 * homeTries + (homeTries ? (homeTries * 2 * 0.7 * randomNumber()) : 0) + homeAdditional;
         const awayScore = 5 * awayTries + (awayTries ? (awayTries * 2 * 0.7 * randomNumber()) : 0) + awayAdditional;
 
-        const homeBonusPoint = homeTries >= 3;
-        const awayBonusPoint = awayTries >= 3;
-
-        if (homeScore === awayScore) {
-            // draw
-            return makeRugbyResultWithScore(evalRugbyResult(RESULT_DRAW_NO_BONUS, RESULT_DRAW_HOME_BONUS, RESULT_DRAW_AWAY_BONUS, RESULT_DRAW_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
-        } else if (homeScore >= awayScore + 7) {
-            // big home win
-            return makeRugbyResultWithScore(evalRugbyResult(RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_HOME_BONUS, RESULT_WIN_BIG_AWAY_BONUS, RESULT_WIN_BIG_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
-        } else if (homeScore > awayScore) {
-            // small home win
-            return makeRugbyResultWithScore(evalRugbyResult(RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_HOME_BONUS, RESULT_WIN_SMALL_AWAY_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
-        } else if (homeScore >= awayScore + 7) {
-            // big away win
-            return makeRugbyResultWithScore(evalRugbyResult(RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_HOME_BONUS, RESULT_LOSS_BIG_AWAY_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
-        } else if (homeScore > awayScore) {
-            // small away win
-            return makeRugbyResultWithScore(evalRugbyResult(RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_HOME_BONUS, RESULT_LOSS_SMALL_AWAY_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, homeBonusPoint, awayBonusPoint), homeScore, awayScore, homeTries, awayTries);
-        }
+        return makeRugbyResult(homeScore, awayScore, homeTries, awayTries);
     }
 
     function sortByCriteriumPoints(teams, teamPoints) {
@@ -670,26 +715,26 @@
     const RESULT_OT_LOSS = { type: 'done', result: 'OL', caption: 'OT loss', home: 1, away: 2 };
     const RESULT_LOSS = { type: 'done', result: 'L', caption: 'Loss', home: 0, away: 3 };
 
-    const RESULT_WIN_BIG_WINNER_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_WINNER_BONUS', caption: 'RESULT_WIN_BIG_WINNER_BONUS', home: 5, away: 0 };
-    const RESULT_WIN_BIG_NO_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_NO_BONUS', caption: 'RESULT_WIN_BIG_NO_BONUS', home: 4, away: 0};
-    const RESULT_WIN_BIG_BOTH_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_BOTH_BONUS', caption: 'RESULT_WIN_BIG_BOTH_BONUS', home: 5, away: 1};
-    const RESULT_WIN_BIG_LOSER_BONUS = { type: 'done', result: 'RESULT_WIN_BIG_LOSER_BONUS', caption: 'RESULT_WIN_BIG_LOSER_BONUS', home: 4, away: 1};
-    const RESULT_WIN_SMALL_WINNER_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_WINNER_BONUS', caption: 'RESULT_WIN_SMALL_WINNER_BONUS', home: 5, away: 1};
-    const RESULT_WIN_SMALL_NO_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_NO_BONUS', caption: 'RESULT_WIN_SMALL_NO_BONUS', home: 4, away: 1};
-    const RESULT_WIN_SMALL_BOTH_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_BOTH_BONUS', caption: 'RESULT_WIN_SMALL_BOTH_BONUS', home: 5, away: 2};
-    const RESULT_WIN_SMALL_LOSER_BONUS = { type: 'done', result: 'RESULT_WIN_SMALL_LOSER_BONUS', caption: 'RESULT_WIN_SMALL_LOSER_BONUS', home: 4, away: 2};
-    const RESULT_DRAW_HOME_BONUS = { type: 'done', result: 'RESULT_DRAW_HOME_BONUS', caption: 'RESULT_DRAW_HOME_BONUS', home: 3, away: 2};
-    const RESULT_DRAW_NO_BONUS = { type: 'done', result: 'RESULT_DRAW_NO_BONUS', caption: 'RESULT_DRAW_NO_BONUS', home: 2, away: 2};
-    const RESULT_DRAW_BOTH_BONUS = { type: 'done', result: 'RESULT_DRAW_BOTH_BONUS', caption: 'RESULT_DRAW_BOTH_BONUS', home: 3, away: 3};
-    const RESULT_DRAW_AWAY_BONUS = { type: 'done', result: 'RESULT_DRAW_AWAY_BONUS', caption: 'RESULT_DRAW_AWAY_BONUS', home: 2, away: 3};
-    const RESULT_LOSS_BIG_WINNER_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_WINNER_BONUS', caption: 'RESULT_LOSS_BIG_WINNER_BONUS', home: 0, away: 5};
-    const RESULT_LOSS_BIG_NO_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_NO_BONUS', caption: 'RESULT_LOSS_BIG_NO_BONUS', home: 0, away: 4};
-    const RESULT_LOSS_BIG_BOTH_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_BOTH_BONUS', caption: 'RESULT_LOSS_BIG_BOTH_BONUS', home: 1, away: 5};
-    const RESULT_LOSS_BIG_LOSER_BONUS = { type: 'done', result: 'RESULT_LOSS_BIG_LOSER_BONUS', caption: 'RESULT_LOSS_BIG_LOSER_BONUS', home: 1, away: 4};
-    const RESULT_LOSS_SMALL_WINNER_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_WINNER_BONUS', caption: 'RESULT_LOSS_SMALL_WINNER_BONUS', home: 1, away: 5};
-    const RESULT_LOSS_SMALL_NO_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_NO_BONUS', caption: 'RESULT_LOSS_SMALL_NO_BONUS', home: 1, away: 4};
-    const RESULT_LOSS_SMALL_BOTH_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_BOTH_BONUS', caption: 'RESULT_LOSS_SMALL_BOTH_BONUS', home: 2, away: 5};
-    const RESULT_LOSS_SMALL_LOSER_BONUS = { type: 'done', result: 'RESULT_LOSS_SMALL_LOSER_BONUS', caption: 'RESULT_LOSS_SMALL_LOSER_BONUS', home: 2, away: 4};
+    const RESULT_WIN_BIG_HOME_BONUS = { type: 'done', result: 'WIN_BIG_WINNER_BONUS', caption: 'WIN_BIG_WINNER_BONUS', home: 5, away: 0 };
+    const RESULT_WIN_BIG_NO_BONUS = { type: 'done', result: 'WIN_BIG_NO_BONUS', caption: 'WIN_BIG_NO_BONUS', home: 4, away: 0};
+    const RESULT_WIN_BIG_BOTH_BONUS = { type: 'done', result: 'WIN_BIG_BOTH_BONUS', caption: 'WIN_BIG_BOTH_BONUS', home: 5, away: 1};
+    const RESULT_WIN_BIG_AWAY_BONUS = { type: 'done', result: 'WIN_BIG_LOSER_BONUS', caption: 'WIN_BIG_LOSER_BONUS', home: 4, away: 1};
+    const RESULT_WIN_SMALL_HOME_BONUS = { type: 'done', result: 'WIN_SMALL_WINNER_BONUS', caption: 'WIN_SMALL_WINNER_BONUS', home: 5, away: 1};
+    const RESULT_WIN_SMALL_NO_BONUS = { type: 'done', result: 'WIN_SMALL_NO_BONUS', caption: 'WIN_SMALL_NO_BONUS', home: 4, away: 1};
+    const RESULT_WIN_SMALL_BOTH_BONUS = { type: 'done', result: 'WIN_SMALL_BOTH_BONUS', caption: 'WIN_SMALL_BOTH_BONUS', home: 5, away: 2};
+    const RESULT_WIN_SMALL_AWAY_BONUS = { type: 'done', result: 'WIN_SMALL_LOSER_BONUS', caption: 'WIN_SMALL_LOSER_BONUS', home: 4, away: 2};
+    const RESULT_DRAW_HOME_BONUS = { type: 'done', result: 'DRAW_HOME_BONUS', caption: 'DRAW_HOME_BONUS', home: 3, away: 2};
+    const RESULT_DRAW_NO_BONUS = { type: 'done', result: 'DRAW_NO_BONUS', caption: 'DRAW_NO_BONUS', home: 2, away: 2};
+    const RESULT_DRAW_BOTH_BONUS = { type: 'done', result: 'DRAW_BOTH_BONUS', caption: 'DRAW_BOTH_BONUS', home: 3, away: 3};
+    const RESULT_DRAW_AWAY_BONUS = { type: 'done', result: 'DRAW_AWAY_BONUS', caption: 'DRAW_AWAY_BONUS', home: 2, away: 3};
+    const RESULT_LOSS_BIG_AWAY_BONUS = { type: 'done', result: 'LOSS_BIG_WINNER_BONUS', caption: 'LOSS_BIG_WINNER_BONUS', home: 0, away: 5};
+    const RESULT_LOSS_BIG_NO_BONUS = { type: 'done', result: 'LOSS_BIG_NO_BONUS', caption: 'LOSS_BIG_NO_BONUS', home: 0, away: 4};
+    const RESULT_LOSS_BIG_BOTH_BONUS = { type: 'done', result: 'LOSS_BIG_BOTH_BONUS', caption: 'LOSS_BIG_BOTH_BONUS', home: 1, away: 5};
+    const RESULT_LOSS_BIG_HOME_BONUS = { type: 'done', result: 'LOSS_BIG_LOSER_BONUS', caption: 'LOSS_BIG_LOSER_BONUS', home: 1, away: 4};
+    const RESULT_LOSS_SMALL_AWAY_BONUS = { type: 'done', result: 'LOSS_SMALL_WINNER_BONUS', caption: 'LOSS_SMALL_WINNER_BONUS', home: 1, away: 5};
+    const RESULT_LOSS_SMALL_NO_BONUS = { type: 'done', result: 'LOSS_SMALL_NO_BONUS', caption: 'LOSS_SMALL_NO_BONUS', home: 1, away: 4};
+    const RESULT_LOSS_SMALL_BOTH_BONUS = { type: 'done', result: 'LOSS_SMALL_BOTH_BONUS', caption: 'LOSS_SMALL_BOTH_BONUS', home: 2, away: 5};
+    const RESULT_LOSS_SMALL_HOME_BONUS = { type: 'done', result: 'LOSS_SMALL_LOSER_BONUS', caption: 'LOSS_SMALL_LOSER_BONUS', home: 2, away: 4};
 
     const UEFA_EURO_2020_RANKING = ['BEL', 'ITA', 'ENG', 'GER', 'ESP', 'UKR', 'FRA', 'POL', 'SUI', 'CRO', 'NED', 'RUS', 'POR', 'TUR', 'DEN', 'AUT', 'SWE', 'CZE', 'WAL', 'FIN', 'SRB', 'SVK', 'IRL', 'ISL', 'NIR', 'NOR', 'KVX', 'GRE', 'SCO', 'MKD', 'HUN', 'SVN', 'ROU', 'GEO', 'ALB', 'BIH', 'BUL', 'LUX', 'BLR', 'CYP', 'ARM', 'ISR', 'KAZ', 'MNE', 'AZE', 'AND', 'LTU', 'EST', 'FRO', 'GIB', 'MDA', 'MLT', 'LVA', 'LIE', 'SMR'];
     const UEFA_EURO_2020_SORTING_ALGORITHM = [computeMatchPoints, computeGoalDifference, computeGoalsScored, computeGlobalGoalDifference, computeGlobalGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
@@ -703,11 +748,11 @@
         UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: UEFA_EURO_2020_SORTING_ALGORITHM, genFunc: generateRandomResult },
         FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: FIFA_WORLD_2022_SORTING_ALGORITHM, genFunc: generateRandomResult },
         RWC: { results: [
-            RESULT_WIN_BIG_WINNER_BONUS, RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_BOTH_BONUS, RESULT_WIN_BIG_LOSER_BONUS,
-            RESULT_WIN_SMALL_WINNER_BONUS, RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, RESULT_WIN_SMALL_LOSER_BONUS,
+            RESULT_WIN_BIG_HOME_BONUS, RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_BOTH_BONUS, RESULT_WIN_BIG_AWAY_BONUS,
+            RESULT_WIN_SMALL_HOME_BONUS, RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, RESULT_WIN_SMALL_AWAY_BONUS,
             RESULT_DRAW_HOME_BONUS, RESULT_DRAW_NO_BONUS, RESULT_DRAW_BOTH_BONUS, RESULT_DRAW_AWAY_BONUS,
-            RESULT_LOSS_BIG_WINNER_BONUS, RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, RESULT_LOSS_BIG_LOSER_BONUS,
-            RESULT_LOSS_SMALL_WINNER_BONUS, RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, RESULT_LOSS_SMALL_LOSER_BONUS,
+            RESULT_LOSS_BIG_AWAY_BONUS, RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, RESULT_LOSS_BIG_HOME_BONUS,
+            RESULT_LOSS_SMALL_AWAY_BONUS, RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, RESULT_LOSS_SMALL_HOME_BONUS,
         ], sortingAlgorithm: RUGBY_WORLD_2023_SORTING_ALGORITHM, genFunc: generateRandomRugbyResult },
     };
 
@@ -944,12 +989,12 @@
             new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA, preparePresetMatches({ 'NED-USA': '3:1', 'ARG-AUS': '2:1', 'FRA-POL': '3:1', 'JPN-CRO': '1:2o', 'BRA-KOR': '4:1', 'ENG-SEN': '3:0', 'MAR-ESP': '1:0o', 'POR-SUI': '6:1', 'CRO-BRA': '2:1o', 'NED-ARG': '2:3o', 'MAR-POR': '1:0', 'ENG-FRA': '1:2', 'ARG-CRO': '3:0', 'FRA-MAR': '2:0' }))
             */
 
-            new Group('A', ['NZL', 'FRA', 'ITA', 'URU', 'NAM'], preparePresetMatches( {'FRA-NZL': '', 'ITA-NAM': '', 'FRA-URU': '', 'NZL-NAM': '', 'ITA-URU': '', 'FRA-NAM': '', 'URU-NAM': '', 'NZL-ITA': '', 'NZL-URU': '', 'FRA-ITA': ''} ), RULES.RWC),
-            new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetMatches( {'IRL-ROM': '', 'RSA-SCO': '', 'IRL-TON': '', 'RSA-ROM': '', 'RSA-IRL': '', 'SCO-TON': '', 'SCO-ROM': '', 'RSA-TON': '', 'IRL-SCO': '', 'TON-ROM': ''} ), RULES.RWC),
-            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetMatches( {'AUS-GEO': '', 'WAL-FIJ': '', 'WAL-POR': '', 'AUS-FIJ': '', 'GEO-POR': '', 'WAL-AUS': '', 'FIJ-GEO': '', 'AUS-POR': '', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
-            new Group('D', ['ENG', 'JPN', 'ARG', 'SAM', 'CHI'], preparePresetMatches( {'ENG-ARG': '', 'JPN-CHI': '', 'SAM-CHI': '', 'ENG-JPN': '', 'ARG-SAM': '', 'ENG-CHI': '', 'JPN-SAM': '', 'ARG-CHI': '', 'ENG-SAM': '', 'JPN-ARG': ''} ), RULES.RWC),
+            new Group('A', ['NZL', 'FRA', 'ITA', 'URU', 'NAM'], preparePresetRugbyMatches( {'FRA-NZL': '27(2):13(2)', 'ITA-NAM': '52(7):8(1)', 'FRA-URU': '', 'NZL-NAM': '', 'ITA-URU': '', 'FRA-NAM': '', 'URU-NAM': '', 'NZL-ITA': '', 'NZL-URU': '', 'FRA-ITA': ''} ), RULES.RWC),
+            new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetRugbyMatches( {'IRL-ROM': '82(12):8(1)', 'RSA-SCO': '', 'IRL-TON': '', 'RSA-ROM': '', 'RSA-IRL': '', 'SCO-TON': '', 'SCO-ROM': '', 'RSA-TON': '', 'IRL-SCO': '', 'TON-ROM': ''} ), RULES.RWC),
+            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetRugbyMatches( {'AUS-GEO': '35(4):15(2)', 'WAL-FIJ': '', 'WAL-POR': '', 'AUS-FIJ': '', 'GEO-POR': '', 'WAL-AUS': '', 'FIJ-GEO': '', 'AUS-POR': '', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
+            new Group('D', ['ENG', 'JPN', 'ARG', 'SAM', 'CHI'], preparePresetRugbyMatches( {'ENG-ARG': '27:10(1)', 'JPN-CHI': '', 'SAM-CHI': '', 'ENG-JPN': '', 'ARG-SAM': '', 'ENG-CHI': '', 'JPN-SAM': '', 'ARG-CHI': '', 'ENG-SAM': '', 'JPN-ARG': ''} ), RULES.RWC),
 
-            new PlayoffTree('_result', ['C#1', 'D#2', 'B#1', 'A#2', 'D#1', 'C#2', 'A#1', 'B#2'], RULES.FIFA, preparePresetMatches({ }))
+            new PlayoffTree('_result', ['C#1', 'D#2', 'B#1', 'A#2', 'D#1', 'C#2', 'A#1', 'B#2'], RULES.FIFA, preparePresetRugbyMatches({ }))
         ];
 
         validateScenario(scenario, rating);
@@ -997,11 +1042,9 @@
                 teamPlacements[team] = placements;
             }
             // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
-            /*
-            if ((results.stageTeams[2].indexOf('BRA') >= 0) && (results.stageTeams[2].indexOf('FRA') >= 0) && (results.stageTeams[2].indexOf('ARG') >= 0)) {
+            if ((results.stageTeams[0].indexOf('TON') >= 0) || (results.stageTeams[0].indexOf('SAM') >= 0) || (results.stageTeams[0].indexOf('FIJ') >= 0)) {
                 interestingResults.push(scenarioResults.full);
             }
-            */
 
             let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
             sfTeams.sort();

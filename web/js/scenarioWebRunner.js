@@ -66,7 +66,7 @@
 
         let chosenTeamCount = 0;
         for (let t of phaseTeams) {
-            if (t.indexOf("FRA") >= 0 && t.indexOf("BRA") >= 0 && t.indexOf("ARG") >= 0) chosenTeamCount += phaseTeamCounts[t];
+            if (t.indexOf("TON") >= 0 && t.indexOf("SAM") >= 0 && t.indexOf("FIJ") >= 0) chosenTeamCount += phaseTeamCounts[t];
         }
         results.push(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
 
@@ -122,8 +122,10 @@
         interestingResults = {};
         scheduledResultUpdate = false;
 
+        const cacheBuster = '?_=' + Date.now();
+        const workerScript = 'js/scenarioSimulation.js' + cacheBuster;
         for (let thread = 0; thread < threadCount; ++thread) {
-            const worker = new Worker('js/scenarioSimulation.js');
+            const worker = new Worker(workerScript);
             const workerId = ++currentWorkerId;
             runningWorkers.set(workerId, worker);
             worker.addEventListener('message', (evt) => {
