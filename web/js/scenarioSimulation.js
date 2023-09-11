@@ -991,7 +991,7 @@
 
             new Group('A', ['NZL', 'FRA', 'ITA', 'URU', 'NAM'], preparePresetRugbyMatches( {'FRA-NZL': '27(2):13(2)', 'ITA-NAM': '52(7):8(1)', 'FRA-URU': '', 'NZL-NAM': '', 'ITA-URU': '', 'FRA-NAM': '', 'URU-NAM': '', 'NZL-ITA': '', 'NZL-URU': '', 'FRA-ITA': ''} ), RULES.RWC),
             new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetRugbyMatches( {'IRL-ROM': '82(12):8(1)', 'RSA-SCO': '18(2):3', 'IRL-TON': '', 'RSA-ROM': '', 'RSA-IRL': '', 'SCO-TON': '', 'SCO-ROM': '', 'RSA-TON': '', 'IRL-SCO': '', 'TON-ROM': ''} ), RULES.RWC),
-            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetRugbyMatches( {'AUS-GEO': '35(4):15(2)', 'WAL-FIJ': '', 'WAL-POR': '', 'AUS-FIJ': '', 'GEO-POR': '', 'WAL-AUS': '', 'FIJ-GEO': '', 'AUS-POR': '', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
+            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetRugbyMatches( {'AUS-GEO': '35(4):15(2)', 'WAL-FIJ': '32(4):26(4)', 'WAL-POR': '', 'AUS-FIJ': '', 'GEO-POR': '', 'WAL-AUS': '', 'FIJ-GEO': '', 'AUS-POR': '', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
             new Group('D', ['ENG', 'JPN', 'ARG', 'SAM', 'CHI'], preparePresetRugbyMatches( {'ENG-ARG': '27:10(1)', 'JPN-CHI': '42(6):12(2)', 'SAM-CHI': '', 'ENG-JPN': '', 'ARG-SAM': '', 'ENG-CHI': '', 'JPN-SAM': '', 'ARG-CHI': '', 'ENG-SAM': '', 'JPN-ARG': ''} ), RULES.RWC),
 
             new PlayoffTree('_result', ['C#1', 'D#2', 'B#1', 'A#2', 'D#1', 'C#2', 'A#1', 'B#2'], RULES.FIFA, preparePresetRugbyMatches({ }))
