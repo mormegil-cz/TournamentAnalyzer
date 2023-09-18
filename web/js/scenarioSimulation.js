@@ -247,7 +247,7 @@
         return result;
     }
 
-    const rugbyScoreFormatParser = /(?<homeScore>[1-9][0-9]*)([(](?<homeTries>[1-9][0-9]*)[)])?:(?<awayScore>[1-9][0-9]*)([(](?<awayTries>[1-9][0-9]*)[)])?/;
+    const rugbyScoreFormatParser = /(?<homeScore>0|[1-9][0-9]*)([(](?<homeTries>[1-9][0-9]*)[)])?:(?<awayScore>0|[1-9][0-9]*)([(](?<awayTries>[1-9][0-9]*)[)])?/;
     function preparePresetRugbyMatches(matches) {
         let result = {};
         for (let m of Object.keys(matches)) {
