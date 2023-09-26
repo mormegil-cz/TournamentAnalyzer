@@ -113,6 +113,30 @@
         return teamPoints;
     }
 
+    function computeGlobalTriesScored(teams, matches) {
+        let teamSet = {};
+        for (let team of teams) teamSet[team] = 1;
+
+        let teamTries = {};
+        for (let id of Object.keys(matches)) {
+            let match = matches[id];
+            let pieces = id.split('-');
+            let homeTeam = pieces[0];
+            let awayTeam = pieces[1];
+            if (teamSet[homeTeam]) {
+                let currHome = teamTries[homeTeam] || 0;
+                teamTries += match.homeTries;
+                teamTries[homeTeam] = currHome;
+            }
+            if (teamSet[awayTeam]) {
+                let currAway = teamTries[awayTeam] || 0;
+                currAway += match.awayTries;
+                teamTries[awayTeam] = currAway;
+            }
+        }
+        return teamTries;
+    }
+
     function computeGlobalGoalDifference(teams, matches) {
         let teamSet = {};
         for (let team of teams) teamSet[team] = 1;
@@ -741,7 +765,7 @@
     const FIFA_WORLD_2022_SORTING_ALGORITHM = [computeGlobalMatchPoints, computeGlobalGoalDifference, computeGlobalGoalsScored, computeMatchPoints, computeGoalDifference, computeGoalsScored, computeRandomRanking];
 
     const WORLD_RUGBY_2023_RANKING = ['IRL', 'RSA', 'FRA', 'NZL', 'SCO', 'ARG', 'FIJ', 'ENG', 'AUS', 'WAL', 'GEO', 'SAM', 'ITA', 'JPN', 'TON', 'POR', 'URU', 'USA', 'ROM', 'ESP', 'NAM', 'CHI'];
-    const RUGBY_WORLD_2023_SORTING_ALGORITHM = [computeMatchPoints, computeGlobalMatchPoints, computeGlobalTriesDifference, computeGlobalGoalDifference, computeTriesScored, makeRankingAlgorithm(WORLD_RUGBY_2023_RANKING)];
+    const RUGBY_WORLD_2023_SORTING_ALGORITHM = [computeMatchPoints, computeGlobalGoalDifference, computeGlobalTriesDifference, computeGlobalGoalsScored, computeGlobalTriesScored, makeRankingAlgorithm(WORLD_RUGBY_2023_RANKING)];
 
     const RULES = {
         IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS], genFunc: generateRandomResult },
