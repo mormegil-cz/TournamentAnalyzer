@@ -1014,8 +1014,8 @@
             */
 
             new Group('A', ['NZL', 'FRA', 'ITA', 'URU', 'NAM'], preparePresetRugbyMatches( {'FRA-NZL': '27(2):13(2)', 'ITA-NAM': '52(7):8(1)', 'FRA-URU': '27(3):12(2)', 'NZL-NAM': '71(11):3', 'ITA-URU': '38(5):17(2)', 'FRA-NAM': '96(14):0', 'URU-NAM': '35(5):26(2)', 'NZL-ITA': '96(14):17(2)', 'NZL-URU': '', 'FRA-ITA': ''} ), RULES.RWC),
-            new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetRugbyMatches( {'IRL-ROM': '82(12):8(1)', 'RSA-SCO': '18(2):3', 'IRL-TON': '59(8):16(1)', 'RSA-ROM': '76(12):0', 'RSA-IRL': '8(1):13(1)', 'SCO-TON': '45(7):17(2)', 'SCO-ROM': '84(12):0', 'RSA-TON': '', 'IRL-SCO': '', 'TON-ROM': ''} ), RULES.RWC),
-            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetRugbyMatches( {'AUS-GEO': '35(4):15(2)', 'WAL-FIJ': '32(4):26(4)', 'WAL-POR': '28(4):8(1)', 'AUS-FIJ': '15(2):22(1)', 'GEO-POR': '18(2):18(2)', 'WAL-AUS': '40(3):6', 'FIJ-GEO': '17(2):12', 'AUS-POR': '', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
+            new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetRugbyMatches( {'IRL-ROM': '82(12):8(1)', 'RSA-SCO': '18(2):3', 'IRL-TON': '59(8):16(1)', 'RSA-ROM': '76(12):0', 'RSA-IRL': '8(1):13(1)', 'SCO-TON': '45(7):17(2)', 'SCO-ROM': '84(12):0', 'RSA-TON': '49(7):18(3)', 'IRL-SCO': '', 'TON-ROM': ''} ), RULES.RWC),
+            new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetRugbyMatches( {'AUS-GEO': '35(4):15(2)', 'WAL-FIJ': '32(4):26(4)', 'WAL-POR': '28(4):8(1)', 'AUS-FIJ': '15(2):22(1)', 'GEO-POR': '18(2):18(2)', 'WAL-AUS': '40(3):6', 'FIJ-GEO': '17(2):12', 'AUS-POR': '34(5):14(2)', 'WAL-GEO': '', 'FIJ-POR': ''} ), RULES.RWC),
             new Group('D', ['ENG', 'JPN', 'ARG', 'SAM', 'CHI'], preparePresetRugbyMatches( {'ENG-ARG': '27:10(1)', 'JPN-CHI': '42(6):12(2)', 'SAM-CHI': '43(5):10(1)', 'ENG-JPN': '34(4):12', 'ARG-SAM': '19(1):10(1)', 'ENG-CHI': '71(11):0', 'JPN-SAM': '28(3):22(3)', 'ARG-CHI': '59(8):5(1)', 'ENG-SAM': '', 'JPN-ARG': ''} ), RULES.RWC),
 
             new PlayoffTree('_result', ['C#1', 'D#2', 'B#1', 'A#2', 'D#1', 'C#2', 'A#1', 'B#2'], RULES.FIFA, preparePresetRugbyMatches({ }))
