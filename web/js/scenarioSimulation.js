@@ -740,28 +740,28 @@
     const RESULT_LOSS = { type: 'done', result: 'L', caption: 'Loss', home: 0, away: 3 };
 
     const RESULT_WIN_BIG_HOME_BONUS = { type: 'done', result: 'WIN_BIG_WINNER_BONUS', caption: 'WIN_BIG_WINNER_BONUS', home: 5, away: 0 };
-    const RESULT_WIN_BIG_NO_BONUS = { type: 'done', result: 'WIN_BIG_NO_BONUS', caption: 'WIN_BIG_NO_BONUS', home: 4, away: 0};
-    const RESULT_WIN_BIG_BOTH_BONUS = { type: 'done', result: 'WIN_BIG_BOTH_BONUS', caption: 'WIN_BIG_BOTH_BONUS', home: 5, away: 1};
-    const RESULT_WIN_BIG_AWAY_BONUS = { type: 'done', result: 'WIN_BIG_LOSER_BONUS', caption: 'WIN_BIG_LOSER_BONUS', home: 4, away: 1};
-    const RESULT_WIN_SMALL_HOME_BONUS = { type: 'done', result: 'WIN_SMALL_WINNER_BONUS', caption: 'WIN_SMALL_WINNER_BONUS', home: 5, away: 1};
-    const RESULT_WIN_SMALL_NO_BONUS = { type: 'done', result: 'WIN_SMALL_NO_BONUS', caption: 'WIN_SMALL_NO_BONUS', home: 4, away: 1};
-    const RESULT_WIN_SMALL_BOTH_BONUS = { type: 'done', result: 'WIN_SMALL_BOTH_BONUS', caption: 'WIN_SMALL_BOTH_BONUS', home: 5, away: 2};
-    const RESULT_WIN_SMALL_AWAY_BONUS = { type: 'done', result: 'WIN_SMALL_LOSER_BONUS', caption: 'WIN_SMALL_LOSER_BONUS', home: 4, away: 2};
-    const RESULT_DRAW_HOME_BONUS = { type: 'done', result: 'DRAW_HOME_BONUS', caption: 'DRAW_HOME_BONUS', home: 3, away: 2};
-    const RESULT_DRAW_NO_BONUS = { type: 'done', result: 'DRAW_NO_BONUS', caption: 'DRAW_NO_BONUS', home: 2, away: 2};
-    const RESULT_DRAW_BOTH_BONUS = { type: 'done', result: 'DRAW_BOTH_BONUS', caption: 'DRAW_BOTH_BONUS', home: 3, away: 3};
-    const RESULT_DRAW_AWAY_BONUS = { type: 'done', result: 'DRAW_AWAY_BONUS', caption: 'DRAW_AWAY_BONUS', home: 2, away: 3};
-    const RESULT_LOSS_BIG_AWAY_BONUS = { type: 'done', result: 'LOSS_BIG_WINNER_BONUS', caption: 'LOSS_BIG_WINNER_BONUS', home: 0, away: 5};
-    const RESULT_LOSS_BIG_NO_BONUS = { type: 'done', result: 'LOSS_BIG_NO_BONUS', caption: 'LOSS_BIG_NO_BONUS', home: 0, away: 4};
-    const RESULT_LOSS_BIG_BOTH_BONUS = { type: 'done', result: 'LOSS_BIG_BOTH_BONUS', caption: 'LOSS_BIG_BOTH_BONUS', home: 1, away: 5};
-    const RESULT_LOSS_BIG_HOME_BONUS = { type: 'done', result: 'LOSS_BIG_LOSER_BONUS', caption: 'LOSS_BIG_LOSER_BONUS', home: 1, away: 4};
-    const RESULT_LOSS_SMALL_AWAY_BONUS = { type: 'done', result: 'LOSS_SMALL_WINNER_BONUS', caption: 'LOSS_SMALL_WINNER_BONUS', home: 1, away: 5};
-    const RESULT_LOSS_SMALL_NO_BONUS = { type: 'done', result: 'LOSS_SMALL_NO_BONUS', caption: 'LOSS_SMALL_NO_BONUS', home: 1, away: 4};
-    const RESULT_LOSS_SMALL_BOTH_BONUS = { type: 'done', result: 'LOSS_SMALL_BOTH_BONUS', caption: 'LOSS_SMALL_BOTH_BONUS', home: 2, away: 5};
-    const RESULT_LOSS_SMALL_HOME_BONUS = { type: 'done', result: 'LOSS_SMALL_LOSER_BONUS', caption: 'LOSS_SMALL_LOSER_BONUS', home: 2, away: 4};
+    const RESULT_WIN_BIG_NO_BONUS = { type: 'done', result: 'WIN_BIG_NO_BONUS', caption: 'WIN_BIG_NO_BONUS', home: 4, away: 0 };
+    const RESULT_WIN_BIG_BOTH_BONUS = { type: 'done', result: 'WIN_BIG_BOTH_BONUS', caption: 'WIN_BIG_BOTH_BONUS', home: 5, away: 1 };
+    const RESULT_WIN_BIG_AWAY_BONUS = { type: 'done', result: 'WIN_BIG_LOSER_BONUS', caption: 'WIN_BIG_LOSER_BONUS', home: 4, away: 1 };
+    const RESULT_WIN_SMALL_HOME_BONUS = { type: 'done', result: 'WIN_SMALL_WINNER_BONUS', caption: 'WIN_SMALL_WINNER_BONUS', home: 5, away: 1 };
+    const RESULT_WIN_SMALL_NO_BONUS = { type: 'done', result: 'WIN_SMALL_NO_BONUS', caption: 'WIN_SMALL_NO_BONUS', home: 4, away: 1 };
+    const RESULT_WIN_SMALL_BOTH_BONUS = { type: 'done', result: 'WIN_SMALL_BOTH_BONUS', caption: 'WIN_SMALL_BOTH_BONUS', home: 5, away: 2 };
+    const RESULT_WIN_SMALL_AWAY_BONUS = { type: 'done', result: 'WIN_SMALL_LOSER_BONUS', caption: 'WIN_SMALL_LOSER_BONUS', home: 4, away: 2 };
+    const RESULT_DRAW_HOME_BONUS = { type: 'done', result: 'DRAW_HOME_BONUS', caption: 'DRAW_HOME_BONUS', home: 3, away: 2 };
+    const RESULT_DRAW_NO_BONUS = { type: 'done', result: 'DRAW_NO_BONUS', caption: 'DRAW_NO_BONUS', home: 2, away: 2 };
+    const RESULT_DRAW_BOTH_BONUS = { type: 'done', result: 'DRAW_BOTH_BONUS', caption: 'DRAW_BOTH_BONUS', home: 3, away: 3 };
+    const RESULT_DRAW_AWAY_BONUS = { type: 'done', result: 'DRAW_AWAY_BONUS', caption: 'DRAW_AWAY_BONUS', home: 2, away: 3 };
+    const RESULT_LOSS_BIG_AWAY_BONUS = { type: 'done', result: 'LOSS_BIG_WINNER_BONUS', caption: 'LOSS_BIG_WINNER_BONUS', home: 0, away: 5 };
+    const RESULT_LOSS_BIG_NO_BONUS = { type: 'done', result: 'LOSS_BIG_NO_BONUS', caption: 'LOSS_BIG_NO_BONUS', home: 0, away: 4 };
+    const RESULT_LOSS_BIG_BOTH_BONUS = { type: 'done', result: 'LOSS_BIG_BOTH_BONUS', caption: 'LOSS_BIG_BOTH_BONUS', home: 1, away: 5 };
+    const RESULT_LOSS_BIG_HOME_BONUS = { type: 'done', result: 'LOSS_BIG_LOSER_BONUS', caption: 'LOSS_BIG_LOSER_BONUS', home: 1, away: 4 };
+    const RESULT_LOSS_SMALL_AWAY_BONUS = { type: 'done', result: 'LOSS_SMALL_WINNER_BONUS', caption: 'LOSS_SMALL_WINNER_BONUS', home: 1, away: 5 };
+    const RESULT_LOSS_SMALL_NO_BONUS = { type: 'done', result: 'LOSS_SMALL_NO_BONUS', caption: 'LOSS_SMALL_NO_BONUS', home: 1, away: 4 };
+    const RESULT_LOSS_SMALL_BOTH_BONUS = { type: 'done', result: 'LOSS_SMALL_BOTH_BONUS', caption: 'LOSS_SMALL_BOTH_BONUS', home: 2, away: 5 };
+    const RESULT_LOSS_SMALL_HOME_BONUS = { type: 'done', result: 'LOSS_SMALL_LOSER_BONUS', caption: 'LOSS_SMALL_LOSER_BONUS', home: 2, away: 4 };
 
-    const UEFA_EURO_2020_RANKING = ['BEL', 'ITA', 'ENG', 'GER', 'ESP', 'UKR', 'FRA', 'POL', 'SUI', 'CRO', 'NED', 'RUS', 'POR', 'TUR', 'DEN', 'AUT', 'SWE', 'CZE', 'WAL', 'FIN', 'SRB', 'SVK', 'IRL', 'ISL', 'NIR', 'NOR', 'KVX', 'GRE', 'SCO', 'MKD', 'HUN', 'SVN', 'ROU', 'GEO', 'ALB', 'BIH', 'BUL', 'LUX', 'BLR', 'CYP', 'ARM', 'ISR', 'KAZ', 'MNE', 'AZE', 'AND', 'LTU', 'EST', 'FRO', 'GIB', 'MDA', 'MLT', 'LVA', 'LIE', 'SMR'];
-    const UEFA_EURO_2020_SORTING_ALGORITHM = [computeMatchPoints, computeGoalDifference, computeGoalsScored, computeGlobalGoalDifference, computeGlobalGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2020_RANKING)];
+    const UEFA_EURO_2024_RANKING = ['GER', 'POR', 'FRA', 'ESP', 'BEL', 'ENG', 'HUN', 'TUR', 'ROM', 'DEN', 'ALB', 'AUT', 'NED', 'SCO', 'CRO', 'SLO', 'SVK', 'CZE', 'ITA', 'SRB', 'SUI', 'UKR', 'POL', 'GEO'];
+    const UEFA_EURO_2024_SORTING_ALGORITHM = [computeMatchPoints, computeGoalDifference, computeGoalsScored, computeGlobalGoalDifference, computeGlobalGoalsScored, computeRandomRanking, makeRankingAlgorithm(UEFA_EURO_2024_RANKING)];
     const FIFA_WORLD_2022_SORTING_ALGORITHM = [computeGlobalMatchPoints, computeGlobalGoalDifference, computeGlobalGoalsScored, computeMatchPoints, computeGoalDifference, computeGoalsScored, computeRandomRanking];
 
     const WORLD_RUGBY_2023_RANKING = ['IRL', 'RSA', 'FRA', 'NZL', 'SCO', 'ARG', 'FIJ', 'ENG', 'AUS', 'WAL', 'GEO', 'SAM', 'ITA', 'JPN', 'TON', 'POR', 'URU', 'USA', 'ROM', 'ESP', 'NAM', 'CHI'];
@@ -769,15 +769,17 @@
 
     const RULES = {
         IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS], genFunc: generateRandomResult },
-        UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: UEFA_EURO_2020_SORTING_ALGORITHM, genFunc: generateRandomResult },
+        UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: UEFA_EURO_2024_SORTING_ALGORITHM, genFunc: generateRandomResult },
         FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithm: FIFA_WORLD_2022_SORTING_ALGORITHM, genFunc: generateRandomResult },
-        RWC: { results: [
-            RESULT_WIN_BIG_HOME_BONUS, RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_BOTH_BONUS, RESULT_WIN_BIG_AWAY_BONUS,
-            RESULT_WIN_SMALL_HOME_BONUS, RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, RESULT_WIN_SMALL_AWAY_BONUS,
-            RESULT_DRAW_HOME_BONUS, RESULT_DRAW_NO_BONUS, RESULT_DRAW_BOTH_BONUS, RESULT_DRAW_AWAY_BONUS,
-            RESULT_LOSS_BIG_AWAY_BONUS, RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, RESULT_LOSS_BIG_HOME_BONUS,
-            RESULT_LOSS_SMALL_AWAY_BONUS, RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, RESULT_LOSS_SMALL_HOME_BONUS,
-        ], sortingAlgorithm: RUGBY_WORLD_2023_SORTING_ALGORITHM, genFunc: generateRandomRugbyResult },
+        RWC: {
+            results: [
+                RESULT_WIN_BIG_HOME_BONUS, RESULT_WIN_BIG_NO_BONUS, RESULT_WIN_BIG_BOTH_BONUS, RESULT_WIN_BIG_AWAY_BONUS,
+                RESULT_WIN_SMALL_HOME_BONUS, RESULT_WIN_SMALL_NO_BONUS, RESULT_WIN_SMALL_BOTH_BONUS, RESULT_WIN_SMALL_AWAY_BONUS,
+                RESULT_DRAW_HOME_BONUS, RESULT_DRAW_NO_BONUS, RESULT_DRAW_BOTH_BONUS, RESULT_DRAW_AWAY_BONUS,
+                RESULT_LOSS_BIG_AWAY_BONUS, RESULT_LOSS_BIG_NO_BONUS, RESULT_LOSS_BIG_BOTH_BONUS, RESULT_LOSS_BIG_HOME_BONUS,
+                RESULT_LOSS_SMALL_AWAY_BONUS, RESULT_LOSS_SMALL_NO_BONUS, RESULT_LOSS_SMALL_BOTH_BONUS, RESULT_LOSS_SMALL_HOME_BONUS,
+            ], sortingAlgorithm: RUGBY_WORLD_2023_SORTING_ALGORITHM, genFunc: generateRandomRugbyResult
+        },
     };
 
     const FIFA_RANKING = {
@@ -839,60 +841,30 @@
     };
 
     const ELO_RATING_UEFA = {
-        BEL: 2158,
-        FRA: 2074,
-        ITA: 2061,
-        ESP: 2027,
-        POR: 2006,
-        ENG: 2001,
-        DEN: 1963,
-        NED: 1922,
-        GER: 1916,
-        SUI: 1907,
-        SWE: 1864,
-        CZE: 1854,
-        CRO: 1825,
-        WAL: 1822,
-        UKR: 1819,
-        SRB: 1784,
-        AUT: 1778,
-        POL: 1762,
-        HUN: 1755,
-        NOR: 1738,
-        TUR: 1731,
-        RUS: 1730,
-        FIN: 1706,
-        SVK: 1670,
-        GRE: 1661,
-        SCO: 1629,
-        ROU: 1629,
-        BIH: 1628,
-        IRL: 1622,
-        SLO: 1617,
-        ISL: 1612,
-        ARM: 1584,
-        NIR: 1567,
-        MKD: 1564,
-        ALB: 1556,
-        GEO: 1527,
-        MNE: 1518,
-        BUL: 1500,
-        BLR: 1491,
-        KOS: 1482,
-        EST: 1405,
-        LUX: 1386,
-        AZE: 1375,
-        CYP: 1365,
-        KAZ: 1347,
-        LTU: 1319,
-        LAT: 1281,
-        FRO: 1263,
-        MDA: 1220,
-        MLT: 1219,
-        LIE: 1093,
-        GIB: 1089,
-        AND: 1026,
-        SMR: 827
+        FRA: 2086,
+        ESP: 2019,
+        POR: 2015,
+        BEL: 1987,
+        ENG: 1981,
+        NED: 1972,
+        CRO: 1955,
+        ITA: 1949,
+        GER: 1920,
+        AUT: 1862,
+        UKR: 1850,
+        HUN: 1828,
+        DEN: 1826,
+        SUI: 1806,
+        SRB: 1783,
+        CZE: 1774,
+        SCO: 1770,
+        TUR: 1757,
+        SLO: 1741,
+        POL: 1738,
+        SVK: 1655,
+        GEO: 1650,
+        ROM: 1647,
+        ALB: 1624
     };
 
     const ELO_RATING_FIFA = {
@@ -984,19 +956,17 @@
     }
 
     function runSimulationMain() {
-        rating = WORLD_RUGBY_RATING;
+        rating = ELO_RATING_UEFA;
         scenario = [
-            /*
-                new Group('A', ["TUR", "ITA", "WAL", "SUI"], preparePresetMatches({ 'TUR-ITA': '0:3', 'WAL-SUI': '1:1', 'TUR-WAL': '0:2', 'ITA-SUI': '3:0', 'SUI-TUR': '3:1', 'ITA-WAL': '1:0' }), RULES.UEFA),
-                new Group('B', ["DEN", "FIN", "BEL", "RUS"], preparePresetMatches({ 'DEN-FIN': '0:1', 'BEL-RUS': '3:0', 'FIN-RUS': '0:1', 'DEN-BEL': '1:2', 'RUS-DEN': '1:4', 'FIN-BEL': '0:2' }), RULES.UEFA),
-                new Group('C', ["NED", "UKR", "AUT", "MKD"], preparePresetMatches({ 'AUT-MKD': '3:1', 'NED-UKR': '3:2', 'UKR-MKD': '2:1', 'NED-AUT': '2:0', 'MKD-NED': '0:3', 'UKR-AUT': '0:1' }), RULES.UEFA),
-                new Group('D', ["ENG", "CRO", "CZE", "SCO"], preparePresetMatches({ 'ENG-CRO': '1:0', 'SCO-CZE': '0:2', 'CRO-CZE': '1:1', 'ENG-SCO': '0:0', 'CRO-SCO': '3:1', 'CZE-ENG': '0:1' }), RULES.UEFA),
-                new Group('E', ["ESP", "SWE", "POL", "SVK"], preparePresetMatches({ 'POL-SVK': '1:2', 'ESP-SWE': '0:0', 'SWE-SVK': '1:0', 'ESP-POL': '1:1', 'SVK-ESP': '0:5', 'SWE-POL': '3:2' }), RULES.UEFA),
-                new Group('F', ["FRA", "GER", "HUN", "POR"], preparePresetMatches({ 'HUN-POR': '0:3', 'FRA-GER': '1:0', 'HUN-FRA': '1:1', 'POR-GER': '2:4', 'POR-FRA': '2:2', 'GER-HUN': '2:2' }), RULES.UEFA),
-                new LuckyLoserGroup('LL', ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'], RULES.UEFA),
-                new GroupOriginSorting('3P', ['LL#1', 'LL#2', 'LL#3', 'LL#4'], ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], ['1B', '1C', '1E', '1F']),
-                new PlayoffTree('_result', ['B#1', '3P#1B', 'A#1', 'C#2', 'F#1', '3P#1F', 'D#2', 'E#2', 'E#1', '3P#1E', 'D#1', 'F#2', 'C#1', '3P#1C', 'A#2', 'B#2'], RULES.UEFA)
-            */
+            new Group('A', ["GER", "SCO", "HUN", "SUI"], preparePresetMatches({ 'GER-SCO': '', 'HUN-SUI': '', 'GER-HUN': '', 'SCO-SUI': '', 'SUI-GER': '', 'SCO-HUN': '' }), RULES.UEFA),
+            new Group('B', ["ESP", "CRO", "ITA", "ALB"], preparePresetMatches({ 'ESP-CRO': '', 'ITA-ALB': '', 'CRO-ALB': '', 'ESP-ITA': '', 'ALB-ESP': '', 'CRO-ITA': '' }), RULES.UEFA),
+            new Group('C', ["SLO", "DEN", "SRB", "ENG"], preparePresetMatches({ 'SLO-DEN': '', 'SRB-ENG': '', 'SLO-SRB': '', 'DEN-ENG': '', 'ENG-SLO': '', 'DEN-SRB': '' }), RULES.UEFA),
+            new Group('D', ["POL", "NED", "AUT", "FRA"], preparePresetMatches({ 'POL-NED': '', 'AUT-FRA': '', 'POL-AUT': '', 'NED-FRA': '', 'NED-AUT': '', 'FRA-POL': '' }), RULES.UEFA),
+            new Group('E', ["BEL", "SVK", "ROM", "UKR"], preparePresetMatches({ 'ROM-UKR': '', 'BEL-SVK': '', 'SVK-UKR': '', 'BEL-ROM': '', 'SVK-ROM': '', 'UKR-BEL': '' }), RULES.UEFA),
+            new Group('F', ["TUR", "GEO", "POR", "CZE"], preparePresetMatches({ 'TUR-GEO': '', 'POR-CZE': '', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' }), RULES.UEFA),
+            new LuckyLoserGroup('LL', ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'], RULES.UEFA),
+            new GroupOriginSorting('3P', ['LL#1', 'LL#2', 'LL#3', 'LL#4'], ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], ['1B', '1C', '1E', '1F']),
+            new PlayoffTree('_result', ['B#1', '3P#1B', 'A#1', 'C#2', 'F#1', '3P#1F', 'D#2', 'E#2', 'E#1', '3P#1E', 'D#1', 'F#2', 'C#1', '3P#1C', 'A#2', 'B#2'], RULES.UEFA)
 
             //new PlayoffTree('_result', ['BEL', 'POR', 'ITA', 'AUT', 'FRA', 'SUI', 'CRO', 'ESP', 'SWE', 'UKR', 'ENG', 'GER', 'NED', 'CZE', 'WAL', 'DEN'], RULES.UEFA)
             //new PlayoffTree('_result', ['BEL', 'ITA', 'SUI', 'ESP', 'UKR', 'ENG', 'CZE', 'DEN'], RULES.UEFA)
@@ -1013,12 +983,13 @@
             new PlayoffTree('_result', ['A#1', 'B#2', 'C#1', 'D#2', 'E#1', 'F#2', 'G#1', 'H#2', 'B#1', 'A#2', 'D#1', 'C#2', 'F#1', 'E#2', 'H#1', 'G#2'], RULES.FIFA, preparePresetMatches({ 'NED-USA': '3:1', 'ARG-AUS': '2:1', 'FRA-POL': '3:1', 'JPN-CRO': '1:2o', 'BRA-KOR': '4:1', 'ENG-SEN': '3:0', 'MAR-ESP': '1:0o', 'POR-SUI': '6:1', 'CRO-BRA': '2:1o', 'NED-ARG': '2:3o', 'MAR-POR': '1:0', 'ENG-FRA': '1:2', 'ARG-CRO': '3:0', 'FRA-MAR': '2:0' }))
             */
 
+            /*
             new Group('A', ['NZL', 'FRA', 'ITA', 'URU', 'NAM'], preparePresetRugbyMatches( {'FRA-NZL': '27(2):13(2)', 'ITA-NAM': '52(7):8(1)', 'FRA-URU': '27(3):12(2)', 'NZL-NAM': '71(11):3', 'ITA-URU': '38(5):17(2)', 'FRA-NAM': '96(14):0', 'URU-NAM': '35(5):26(2)', 'NZL-ITA': '96(14):17(2)', 'NZL-URU': '73(11):0', 'FRA-ITA': '60(8):7(1)'} ), RULES.RWC),
             new Group('B', ['RSA', 'IRL', 'SCO', 'TON', 'ROM'], preparePresetRugbyMatches( {'IRL-ROM': '82(12):8(1)', 'RSA-SCO': '18(2):3', 'IRL-TON': '59(8):16(1)', 'RSA-ROM': '76(12):0', 'RSA-IRL': '8(1):13(1)', 'SCO-TON': '45(7):17(2)', 'SCO-ROM': '84(12):0', 'RSA-TON': '49(7):18(3)', 'IRL-SCO': '36(6):14(2)', 'TON-ROM': '45(7):24(3)'} ), RULES.RWC),
             new Group('C', ['WAL', 'AUS', 'FIJ', 'GEO', 'POR'], preparePresetRugbyMatches( {'AUS-GEO': '35(4):15(2)', 'WAL-FIJ': '32(4):26(4)', 'WAL-POR': '28(4):8(1)', 'AUS-FIJ': '15(2):22(1)', 'GEO-POR': '18(2):18(2)', 'WAL-AUS': '40(3):6', 'FIJ-GEO': '17(2):12', 'AUS-POR': '34(5):14(2)', 'WAL-GEO': '43(6):19(3)', 'FIJ-POR': '23(2):24(3)'} ), RULES.RWC),
             new Group('D', ['ENG', 'JPN', 'ARG', 'SAM', 'CHI'], preparePresetRugbyMatches( {'ENG-ARG': '27:10(1)', 'JPN-CHI': '42(6):12(2)', 'SAM-CHI': '43(5):10(1)', 'ENG-JPN': '34(4):12', 'ARG-SAM': '19(1):10(1)', 'ENG-CHI': '71(11):0', 'JPN-SAM': '28(3):22(3)', 'ARG-CHI': '59(8):5(1)', 'ENG-SAM': '18(2):17(2)', 'JPN-ARG': '27(3):39(5)'} ), RULES.RWC),
-
             new PlayoffTree('_result', ['C#1', 'D#2', 'B#1', 'A#2', 'D#1', 'C#2', 'A#1', 'B#2'], RULES.FIFA, preparePresetRugbyMatches({ }))
+            */
         ];
 
         validateScenario(scenario, rating);
@@ -1066,11 +1037,8 @@
                 teamPlacements[team] = placements;
             }
             // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
-            if ((results.stageTeams[0].indexOf('TON') >= 0) || (results.stageTeams[0].indexOf('SAM') >= 0) || (results.stageTeams[0].indexOf('FIJ') >= 0)) {
-                interestingResults.push(scenarioResults.full);
-            }
 
-            let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
+            let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
             sfTeams.sort();
             var id = sfTeams.join('+');
             let currCount = phaseTeamCounts[id] || 0;
