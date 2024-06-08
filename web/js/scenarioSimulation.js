@@ -1038,11 +1038,14 @@
             }
             // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
 
-            let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
+            let sfTeams = results.stageTeams[results.stageTeams.length - 5].slice();
             sfTeams.sort();
             var id = sfTeams.join('+');
             let currCount = phaseTeamCounts[id] || 0;
             phaseTeamCounts[id] = currCount + 1;
+
+            let winner = results.stageTeams[results.stageTeams.length - 1][0];
+            if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
 
             /*
             let winner = results.stageTeams[results.stageTeams.length - 1][0];
