@@ -1,5 +1,6 @@
 (function () {
     const $threadCount = document.getElementById('threadCount');
+    const $smoothFactor = document.getElementById('smoothFactor');
     const $startSimulation = document.getElementById('startSimulation');
     const $stopSimulation = document.getElementById('stopSimulation');
     const $simulationResults = document.getElementById('simulationResults');
@@ -116,6 +117,7 @@
 
     function startSimulation() {
         let threadCount = $threadCount.valueAsNumber;
+        let smoothFactor = $smoothFactor.valueAsNumber;
         totalSimulationCount = 0;
         teamPlacements = {};
         phaseTeamCounts = {};
@@ -158,7 +160,7 @@
                 console.error(error);
                 throw error;
             });
-            worker.postMessage({ type: 'run', id: workerId, workerData: {} });
+            worker.postMessage({ type: 'run', id: workerId, workerData: { smoothFactor: smoothFactor * 0.01 } });
         }
     }
 

@@ -2,6 +2,7 @@
     let workerId = 0;
     let doTerminate = false;
     let iterationLimit = 0;
+    let smoothFactor = 0;
 
     let scenario;
     let rating;
@@ -12,6 +13,7 @@
             case 'run':
                 workerId = msg.id;
                 iterationLimit = msg.workerData.iterations;
+                smoothFactor = msg.workerData.smoothFactor;
                 setTimeout(startSimulation, 0);
                 break;
 
@@ -352,7 +354,11 @@
             return rules.results[Math.floor(Math.random() * rules.results.length)];
         }
 
-        var expWin = 1 / (Math.pow(10, -Math.abs(homeParam - awayParam) / 400) + 1)
+        var avgParam = sumParam / 2;
+        homeParam += (avgParam - homeParam) * smoothFactor;
+        awayParam += (avgParam - awayParam) * smoothFactor;
+
+        var expWin = 1 / (Math.pow(10, -Math.abs(homeParam - awayParam) / 400) + 1);
         var small = 1 - expWin;
         var homeFrac = homeParam < awayParam ? small : expWin;
 
@@ -852,8 +858,8 @@
         GER: 1920,
         AUT: 1863,
         UKR: 1850,
-        HUN: 1832,
         DEN: 1834,
+        HUN: 1832,
         SUI: 1805,
         SRB: 1801,
         CZE: 1777,
