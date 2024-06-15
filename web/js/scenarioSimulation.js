@@ -848,19 +848,19 @@
 
     const ELO_RATING_UEFA = {
         FRA: 2077,
-        ESP: 2020,
+        ESP: 2057,
         POR: 2001,
         BEL: 1988,
         ENG: 1981,
         NED: 1972,
-        CRO: 1969,
+        CRO: 1932,
         ITA: 1950,
         GER: 1938,
         AUT: 1863,
         UKR: 1850,
         DEN: 1834,
-        HUN: 1832,
-        SUI: 1805,
+        HUN: 1792,
+        SUI: 1845,
         SRB: 1801,
         CZE: 1777,
         SCO: 1752,
@@ -964,8 +964,8 @@
     function runSimulationMain() {
         rating = ELO_RATING_UEFA;
         scenario = [
-            new Group('A', ["GER", "SCO", "HUN", "SUI"], preparePresetMatches({ 'GER-SCO': '5:1', 'HUN-SUI': '', 'GER-HUN': '', 'SCO-SUI': '', 'SUI-GER': '', 'SCO-HUN': '' }), RULES.UEFA),
-            new Group('B', ["ESP", "CRO", "ITA", "ALB"], preparePresetMatches({ 'ESP-CRO': '', 'ITA-ALB': '', 'CRO-ALB': '', 'ESP-ITA': '', 'ALB-ESP': '', 'CRO-ITA': '' }), RULES.UEFA),
+            new Group('A', ["GER", "SCO", "HUN", "SUI"], preparePresetMatches({ 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '', 'SCO-SUI': '', 'SUI-GER': '', 'SCO-HUN': '' }), RULES.UEFA),
+            new Group('B', ["ESP", "CRO", "ITA", "ALB"], preparePresetMatches({ 'ESP-CRO': '3:0', 'ITA-ALB': '', 'CRO-ALB': '', 'ESP-ITA': '', 'ALB-ESP': '', 'CRO-ITA': '' }), RULES.UEFA),
             new Group('C', ["SLO", "DEN", "SRB", "ENG"], preparePresetMatches({ 'SLO-DEN': '', 'SRB-ENG': '', 'SLO-SRB': '', 'DEN-ENG': '', 'ENG-SLO': '', 'DEN-SRB': '' }), RULES.UEFA),
             new Group('D', ["POL", "NED", "AUT", "FRA"], preparePresetMatches({ 'POL-NED': '', 'AUT-FRA': '', 'POL-AUT': '', 'NED-FRA': '', 'NED-AUT': '', 'FRA-POL': '' }), RULES.UEFA),
             new Group('E', ["BEL", "SVK", "ROM", "UKR"], preparePresetMatches({ 'ROM-UKR': '', 'BEL-SVK': '', 'SVK-UKR': '', 'BEL-ROM': '', 'SVK-ROM': '', 'UKR-BEL': '' }), RULES.UEFA),
