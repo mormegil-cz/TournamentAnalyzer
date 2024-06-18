@@ -864,11 +864,11 @@
         SRB: 1788,
         CZE: 1777,
         SCO: 1752,
-        TUR: 1757,
+        TUR: 1778,
         SLO: 1740,
         POL: 1735,
         SVK: 1714,
-        GEO: 1666,
+        GEO: 1637,
         ROM: 1714,
         ALB: 1617
     };
@@ -969,7 +969,7 @@
             new Group('C', ["SLO", "DEN", "SRB", "ENG"], preparePresetMatches({ 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '', 'DEN-ENG': '', 'ENG-SLO': '', 'DEN-SRB': '' }), RULES.UEFA),
             new Group('D', ["POL", "NED", "AUT", "FRA"], preparePresetMatches({ 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '', 'NED-FRA': '', 'NED-AUT': '', 'FRA-POL': '' }), RULES.UEFA),
             new Group('E', ["BEL", "SVK", "ROM", "UKR"], preparePresetMatches({ 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '', 'BEL-ROM': '', 'SVK-ROM': '', 'UKR-BEL': '' }), RULES.UEFA),
-            new Group('F', ["TUR", "GEO", "POR", "CZE"], preparePresetMatches({ 'TUR-GEO': '', 'POR-CZE': '', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' }), RULES.UEFA),
+            new Group('F', ["TUR", "GEO", "POR", "CZE"], preparePresetMatches({ 'TUR-GEO': '3:1', 'POR-CZE': '', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' }), RULES.UEFA),
             new LuckyLoserGroup('LL', ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'], RULES.UEFA),
             new GroupOriginSorting('3P', ['LL#1', 'LL#2', 'LL#3', 'LL#4'], ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], ['1B', '1C', '1E', '1F']),
             new PlayoffTree('_result', ['B#1', '3P#1B', 'A#1', 'C#2', 'F#1', '3P#1F', 'D#2', 'E#2', 'E#1', '3P#1E', 'D#1', 'F#2', 'C#1', '3P#1C', 'A#2', 'B#2'], RULES.UEFA)
