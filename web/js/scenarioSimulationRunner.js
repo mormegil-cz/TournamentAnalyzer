@@ -1,7 +1,16 @@
+const fs = require('fs');
+const vm = require('vm');// vm must be in the global context to work properly
 const Worker = require('web-worker');
 
 const THREAD_COUNT = 5;
 const ITER_COUNT = 50000;
+
+function include(filename) {
+    var code = fs.readFileSync(filename, 'utf-8');
+    vm.runInThisContext(code, filename);
+}
+
+include('./scenarioData.js');
 
 function mergeData(data, addedData) {
     if (!addedData) return;
@@ -139,7 +148,14 @@ function main() {
             throw error;
         });
 
-        worker.postMessage({ type: 'run', id: thread + 1, workerData: { smoothFactor: 0, iterations: ITER_COUNT } });
+        worker.postMessage({
+            type: 'run', id: thread + 1, workerData: {
+                rating: ELO_RATING_UEFA,
+                scenarioDefinition: SCENARIO_DEFINITION_UEFA_2024,
+                smoothFactor: 0.2,
+                iterations: ITER_COUNT
+            }
+        });
     }
 }
 

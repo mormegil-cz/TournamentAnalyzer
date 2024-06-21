@@ -1,18 +1,6 @@
-let vm;
-
-if (typeof importScripts === 'function') {
-    importScripts('scenarioData.js' + '?_=' + Date.now());
-} else {
-    const fs = require('fs');
-    vm = require('vm');
-
-    let filename = './scenarioData.js';
-
-    var code = fs.readFileSync(filename, 'utf-8');
-    vm.runInThisContext(code, filename);
-}
-
 (function () {
+    const ENTRY_TO_PLAY = { type: 'toplay' };
+
     let workerId = 0;
     let doTerminate = false;
     let iterationLimit = 0;
@@ -30,6 +18,8 @@ if (typeof importScripts === 'function') {
                 iterationLimit = msg.workerData.iterations;
                 updateFrequency = msg.workerData.updateFrequency ?? 0;
                 smoothFactor = msg.workerData.smoothFactor ?? 0;
+                rating = msg.workerData.rating;
+                scenario = buildAndValidateScenario(msg.workerData.scenarioDefinition, rating);
                 setTimeout(startSimulation, 0);
                 break;
 
@@ -43,7 +33,8 @@ if (typeof importScripts === 'function') {
     });
 
     function startSimulation() {
-        runSimulationMain();
+        doTerminate = false;
+        simulationLoop();
     }
 
     function computeMatchPoints(teams, matches) {
@@ -251,7 +242,17 @@ if (typeof importScripts === 'function') {
         return (_teams, _matches) => result;
     }
 
-    function preparePresetMatches(matches) {
+    function findResultDefinitionInRules(rules, result) {
+        return rules.results.find(r => r.result === result);
+    }
+
+    function preparePresetMatches(matches, rules) {
+        const RESULT_WIN = findResultDefinitionInRules(rules, 'W');
+        const RESULT_LOSS = findResultDefinitionInRules(rules, 'L');
+        const RESULT_DRAW = findResultDefinitionInRules(rules, 'D');
+        const RESULT_OT_WIN = findResultDefinitionInRules(rules, 'OW');
+        const RESULT_OT_LOSS = findResultDefinitionInRules(rules, 'OL');
+
         let result = {};
         for (let m of Object.keys(matches)) {
             let r = undefined;
@@ -835,7 +836,7 @@ if (typeof importScripts === 'function') {
         for (let part of definition.scenario) {
             switch (part.type) {
                 case 'group':
-                    scenario.push(new Group(part.label, part.params.members, preparePresetMatches(part.params.matches), rules));
+                    scenario.push(new Group(part.label, part.params.members, preparePresetMatches(part.params.matches, rules), rules));
                     break;
                 case 'luckylosergroup':
                     scenario.push(new LuckyLoserGroup(part.label, part.params.members, rules));
@@ -852,15 +853,6 @@ if (typeof importScripts === 'function') {
         }
         validateScenario(scenario, rating);
         return scenario;
-    }
-
-    function runSimulationMain() {
-        rating = ELO_RATING_UEFA;
-        scenario = buildAndValidateScenario(SCENARIO_DEFINITION_UEFA_2024, rating);
-
-        doTerminate = false;
-
-        simulationLoop();
     }
 
     function simulationLoop() {

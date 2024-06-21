@@ -160,7 +160,14 @@
                 console.error(error);
                 throw error;
             });
-            worker.postMessage({ type: 'run', id: workerId, workerData: { smoothFactor: smoothFactor * 0.01, updateFrequency: 1000 } });
+            worker.postMessage({
+                type: 'run', id: workerId, workerData: {
+                    rating: ELO_RATING_UEFA,
+                    scenarioDefinition: SCENARIO_DEFINITION_UEFA_2024,
+                    smoothFactor: smoothFactor * 0.01,
+                    updateFrequency: 1000
+                }
+            });
         }
     }
 
@@ -186,7 +193,18 @@
             stopSimulation();
             return false;
         });
+        $startSimulation.disabled = false;
     }
 
-    init();
+    function loadDataAndInit() {
+        let script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'js/scenarioData.js?_=' + Date.now();
+    
+        script.onload = init;
+    
+        document.body.appendChild(script);    
+    }
+
+    loadDataAndInit();
 })();
