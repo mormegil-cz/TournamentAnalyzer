@@ -112,12 +112,12 @@ function emphasizeRecentCoeff(current, start) {
 }
 
 const ELO_RATING_UEFA = {
-    FRA: emphasizeRecentCoeff(2088, 2077),
+    FRA: emphasizeRecentCoeff(2081, 2077),
     ESP: emphasizeRecentCoeff(2075, 2057),
     POR: emphasizeRecentCoeff(2014, 2003),
     BEL: emphasizeRecentCoeff(1945, 1988),
     ENG: emphasizeRecentCoeff(1983, 1981),
-    NED: emphasizeRecentCoeff(1985, 1974),
+    NED: emphasizeRecentCoeff(1992, 1974),
     CRO: emphasizeRecentCoeff(1914, 1969),
     ITA: emphasizeRecentCoeff(1939, 1950),
     GER: emphasizeRecentCoeff(1953, 1920),
@@ -204,7 +204,7 @@ const SCENARIO_DEFINITION_UEFA_2024 = {
         { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '2:0', 'SCO-SUI': '1:1', 'SUI-GER': '', 'SCO-HUN': '' } } },
         { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '2:2', 'ESP-ITA': '1:0', 'ALB-ESP': '', 'CRO-ITA': '' } } },
         { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '', 'DEN-SRB': '' } } },
-        { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '1:3', 'NED-FRA': '', 'NED-AUT': '', 'FRA-POL': '' } } },
+        { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '1:3', 'NED-FRA': '0:0', 'NED-AUT': '', 'FRA-POL': '' } } },
         { type: 'group', label: 'E', params: {members: ["BEL", "SVK", "ROM", "UKR"], matches: { 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '1:2', 'BEL-ROM': '', 'SVK-ROM': '', 'UKR-BEL': '' } } },
         { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '3:1', 'POR-CZE': '2:1', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' } } },
 
