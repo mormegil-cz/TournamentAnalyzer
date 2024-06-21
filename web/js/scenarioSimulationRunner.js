@@ -2,8 +2,9 @@ const fs = require('fs');
 const vm = require('vm');// vm must be in the global context to work properly
 const Worker = require('web-worker');
 
-const THREAD_COUNT = 5;
-const ITER_COUNT = 50000;
+const THREAD_COUNT = 7;
+const ITER_COUNT = 30000;
+const SMOOTH_FACTOR = 0.2;
 
 function include(filename) {
     var code = fs.readFileSync(filename, 'utf-8');
@@ -35,6 +36,12 @@ function mergeData(data, addedData) {
                 throw new Error('Unsupported data type ' + type);
         }
     }
+}
+
+function getPerc(num) {
+    if (typeof num !== 'number') return 0;
+    if (num === ITER_COUNT * THREAD_COUNT) return 100;
+    return num * 100 / ITER_COUNT / THREAD_COUNT;
 }
 
 function fmtPerc(num) {
@@ -111,7 +118,7 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults, totalSimu
     console.log(results.join('\n'));
 }
 
-function main() {
+function runScenarioAsync(rating, scenarioDefinition, resolve, reject) {
     let threadsRunning = THREAD_COUNT;
     let totalSimulationCount = 0;
     let teamPlacements = {};
@@ -135,7 +142,7 @@ function main() {
                     --threadsRunning;
 
                     if (threadsRunning === 0) {
-                        finished(teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount);
+                        resolve([teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount]);
                     }
                     break;
 
@@ -145,18 +152,148 @@ function main() {
         });
         worker.addEventListener('error', (error) => {
             console.error(error);
-            throw error;
+            reject(error);
         });
 
         worker.postMessage({
             type: 'run', id: thread + 1, workerData: {
-                rating: ELO_RATING_UEFA,
-                scenarioDefinition: SCENARIO_DEFINITION_UEFA_2024,
-                smoothFactor: 0.2,
+                rating: rating,
+                scenarioDefinition: scenarioDefinition,
+                smoothFactor: SMOOTH_FACTOR,
                 iterations: ITER_COUNT
             }
         });
     }
 }
 
-main();
+function main(rating, scenarioDefinition) {
+    let promise = new Promise((resolve, reject) => runScenarioAsync(rating, scenarioDefinition, resolve, reject));
+    promise.then(args => finished(...args));
+}
+
+function replayedEvolutionStep(rating, scenarioDefinition) {
+    return new Promise((resolve, reject) => runScenarioAsync(rating, scenarioDefinition, resolve, reject));
+}
+
+function clearDefinition(scenarioDefinition) {
+    let limitedDefinition = Object.assign({}, scenarioDefinition);
+    let limitedScenario = [];
+    for (let part of scenarioDefinition.scenario) {
+        switch (part.type) {
+            case 'group':
+                let limitedGroup = structuredClone(part);
+                for (let match of Object.keys(limitedGroup.params.matches)) {
+                    limitedGroup.params.matches[match] = '';
+                }
+                limitedScenario.push(limitedGroup);
+                break;
+            case 'playofftree':
+                let limitedTree = structuredClone(part);
+                limitedTree.knownResults = {};
+                limitedScenario.push(limitedTree);
+                break;
+            default:
+                limitedScenario.push(part);
+        }
+    }
+    limitedDefinition.scenario = limitedScenario;
+    return limitedDefinition;
+}
+
+function findInScenario(scenario, partName) {
+    for (let part of scenario) {
+        if (part.label === partName) return part;
+    }
+    throw new Error('Unknown part ' + partName);
+}
+
+function applyMatchToScenario(scenario, fullDefinition, match) {
+    const hash = match.indexOf('#');
+    const partName = match.substring(0, hash);
+    const matchName = match.substring(hash + 1);
+    let part = findInScenario(scenario.scenario, partName);
+    let fullPart = findInScenario(fullDefinition.scenario, partName);
+
+    switch (part.type) {
+        case 'group':
+            const fullGroupResult = fullPart.params.matches[matchName];
+            if (typeof fullGroupResult !== 'string') throw new Error(`Unknown match ${match}`);
+            if (part.params.matches[matchName]) throw new Error(`Duplicate match ${match}`);
+            if (!fullGroupResult) return false;
+            part.params.matches[matchName] = fullGroupResult;
+            break;
+
+        case 'playofftree':
+            const fullPlayoffResult = fullPart.params.knownResults[matchName];
+            if (typeof fullPlayoffResult !== 'string') throw new Error(`Unknown match ${match}`);
+            if (part.params.knownResults[matchName]) throw new Error(`Duplicate match ${match}`);
+            if (!fullPlayoffResult) return false;
+            part.params.knownResults[matchName] = fullPart.params.knownResults[matchName];
+            break;
+
+        default:
+            throw new Error(`Unable to apply match in ${partName} which is ${part.type}`);
+    }
+
+    // console.dir(scenario, { depth: null });
+
+    return true;
+}
+
+const EVOLUTION_STEP_PHASE = '4';
+let chanceEvolutionHistory = [];
+
+function recordEvolutionStep(afterMatch, teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount) {
+    let chances = {};
+    for (let team of Object.keys(teamPlacements)) {
+        let placements = teamPlacements[team];
+        chances[team] = getPerc(placements[EVOLUTION_STEP_PHASE]);
+    }
+    chanceEvolutionHistory.push({
+        afterMatch: afterMatch,
+        chances: chances
+    });
+    console.debug(`Recorded results after ${afterMatch}`);
+}
+
+function printChanceEvolutionHistory() {
+    let teams = Object.keys(chanceEvolutionHistory[0].chances);
+    let matches = chanceEvolutionHistory.map(e => e.afterMatch);
+    matches.unshift('');
+    console.log(matches.join(';'));
+
+    for (let team of teams) {
+        let line = [team];
+        for (let match of chanceEvolutionHistory) {
+            line.push(match.chances[team]);
+        }
+        console.log(line.join(';'));
+    }
+}
+
+function computeChanceEvolutionHistory(rating, scenarioDefinition, matchList) {
+    let currentScenario = clearDefinition(scenarioDefinition);
+    let promise = replayedEvolutionStep(rating, currentScenario)
+        .then(args => recordEvolutionStep('(start)', ...args));
+
+    for (let matchIndex = 0; matchIndex < matchList.length; ++matchIndex) {
+        let currentMatch = matchList[matchIndex];
+        promise = promise.then(() => {
+            applyMatchToScenario(currentScenario, scenarioDefinition, currentMatch);
+            // TODO: break
+    
+            return replayedEvolutionStep(rating, currentScenario);
+        })
+            .then(args => recordEvolutionStep(currentMatch, ...args));
+    }
+
+    promise.then(printChanceEvolutionHistory);
+}
+
+// main(ELO_RATING_UEFA, SCENARIO_DEFINITION_UEFA_2024);
+
+computeChanceEvolutionHistory(ELO_RATING_UEFA, SCENARIO_DEFINITION_UEFA_2024, [
+    'A#GER-SCO', 'A#HUN-SUI', 'B#ESP-CRO', 'B#ITA-ALB', 'D#POL-NED', 'C#SLO-DEN', 'C#SRB-ENG', 'E#ROM-UKR', 'E#BEL-SVK', 'D#AUT-FRA', 'F#TUR-GEO', 'F#POR-CZE',
+    'B#CRO-ALB', 'A#GER-HUN', 'A#SCO-SUI', 'C#SLO-SRB', 'C#DEN-ENG', 'B#ESP-ITA', /* 'E#SVK-UKR', 'D#POL-AUT', 'D#NED-FRA', 'E#BEL-ROM', 'F#GEO-CZE', 'F#TUR-POR',
+    'A#SUI-GER', 'A#SCO-HUN', 'B#ALB-ESP', 'B#CRO-ITA', 'C#ENG-SLO', 'C#DEN-SRB', 'D#NED-AUT', 'D#FRA-POL', 'E#SVK-ROM', 'E#UKR-BEL', 'F#GEO-POR', 'F#CZE-TUR'*/
+]);
