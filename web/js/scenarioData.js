@@ -106,31 +106,36 @@ const FIFA_RANKING = {
     SMR: 804.71
 };
 
+const RECENT_COEFFICIENT = 0.3;
+function emphasizeRecentCoeff(current, start) {
+    return current + RECENT_COEFFICIENT * (current - start);
+}
+
 const ELO_RATING_UEFA = {
-    FRA: 2077,
-    ESP: 2057,
-    POR: 2001,
-    BEL: 1945,
-    ENG: 1994,
-    NED: 1985,
-    CRO: 1932,
-    ITA: 1957,
-    GER: 1938,
-    AUT: 1863,
-    UKR: 1786,
-    DEN: 1827,
-    HUN: 1792,
-    SUI: 1845,
-    SRB: 1788,
-    CZE: 1777,
-    SCO: 1752,
-    TUR: 1757,
-    SLO: 1740,
-    POL: 1735,
-    SVK: 1714,
-    GEO: 1666,
-    ROM: 1714,
-    ALB: 1617
+    FRA: emphasizeRecentCoeff(2088, 2077),
+    ESP: emphasizeRecentCoeff(2075, 2057),
+    POR: emphasizeRecentCoeff(2014, 2003),
+    BEL: emphasizeRecentCoeff(1945, 1988),
+    ENG: emphasizeRecentCoeff(1983, 1981),
+    NED: emphasizeRecentCoeff(1985, 1974),
+    CRO: emphasizeRecentCoeff(1914, 1969),
+    ITA: emphasizeRecentCoeff(1939, 1950),
+    GER: emphasizeRecentCoeff(1953, 1920),
+    AUT: emphasizeRecentCoeff(1852, 1863),
+    UKR: emphasizeRecentCoeff(1786, 1853),
+    DEN: emphasizeRecentCoeff(1838, 1834),
+    HUN: emphasizeRecentCoeff(1777, 1832),
+    SUI: emphasizeRecentCoeff(1838, 1805),
+    SRB: emphasizeRecentCoeff(1785, 1801),
+    CZE: emphasizeRecentCoeff(1766, 1777),
+    SCO: emphasizeRecentCoeff(1759, 1770),
+    TUR: emphasizeRecentCoeff(1778, 1749),
+    SLO: emphasizeRecentCoeff(1743, 1733),
+    POL: emphasizeRecentCoeff(1735, 1746),
+    SVK: emphasizeRecentCoeff(1714, 1671),
+    GEO: emphasizeRecentCoeff(1637, 1666),
+    ROM: emphasizeRecentCoeff(1714, 1647),
+    ALB: emphasizeRecentCoeff(1635, 1624)
 };
 
 const ELO_RATING_FIFA = {
@@ -196,12 +201,12 @@ const WORLD_RUGBY_RATING = {
 const SCENARIO_DEFINITION_UEFA_2024 = {
     rules: RULES.UEFA,
     scenario: [
-        { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '', 'SCO-SUI': '', 'SUI-GER': '', 'SCO-HUN': '' } } },
-        { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '', 'ESP-ITA': '', 'ALB-ESP': '', 'CRO-ITA': '' } } },
-        { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '', 'DEN-ENG': '', 'ENG-SLO': '', 'DEN-SRB': '' } } },
-        { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '', 'POL-AUT': '', 'NED-FRA': '', 'NED-AUT': '', 'FRA-POL': '' } } },
+        { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '2:0', 'SCO-SUI': '1:1', 'SUI-GER': '', 'SCO-HUN': '' } } },
+        { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '2:2', 'ESP-ITA': '1:0', 'ALB-ESP': '', 'CRO-ITA': '' } } },
+        { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '', 'DEN-SRB': '' } } },
+        { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '', 'NED-FRA': '', 'NED-AUT': '', 'FRA-POL': '' } } },
         { type: 'group', label: 'E', params: {members: ["BEL", "SVK", "ROM", "UKR"], matches: { 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '', 'BEL-ROM': '', 'SVK-ROM': '', 'UKR-BEL': '' } } },
-        { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '', 'POR-CZE': '', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' } } },
+        { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '3:1', 'POR-CZE': '2:1', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' } } },
 
         { type: 'luckylosergroup', label: 'LL', params: {members: ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'] } },
         { type: 'grouporiginsorting', label: '3P', params: {members: ['LL#1', 'LL#2', 'LL#3', 'LL#4'], orderings: ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], naming: ['1B', '1C', '1E', '1F'] } },
