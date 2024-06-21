@@ -29,7 +29,7 @@ if (typeof importScripts === 'function') {
                 workerId = msg.id;
                 iterationLimit = msg.workerData.iterations;
                 updateFrequency = msg.workerData.updateFrequency ?? 0;
-                smoothFactor = msg.workerData.smoothFactor;
+                smoothFactor = msg.workerData.smoothFactor ?? 0;
                 setTimeout(startSimulation, 0);
                 break;
 

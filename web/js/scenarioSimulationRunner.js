@@ -1,9 +1,7 @@
 const Worker = require('web-worker');
-const fs = require('fs');
-const vm = require('vm');
 
-const THREAD_COUNT = 2;
-const ITER_COUNT = 500;
+const THREAD_COUNT = 5;
+const ITER_COUNT = 50000;
 
 function mergeData(data, addedData) {
     if (!addedData) return;
@@ -106,10 +104,10 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults, totalSimu
 
 function main() {
     let threadsRunning = THREAD_COUNT;
+    let totalSimulationCount = 0;
     let teamPlacements = {};
     let phaseTeamCounts = {};
     let interestingResults = {};
-    let totalSimulationCount = 0;
     for (let thread = 0; thread < THREAD_COUNT; ++thread) {
         const worker = new Worker('./scenarioSimulationWorker.js');
         worker.addEventListener('message', (evt) => {
@@ -141,7 +139,7 @@ function main() {
             throw error;
         });
 
-        worker.postMessage({ type: 'run', workerData: { iterations: ITER_COUNT } });
+        worker.postMessage({ type: 'run', id: thread + 1, workerData: { smoothFactor: 0, iterations: ITER_COUNT } });
     }
 }
 

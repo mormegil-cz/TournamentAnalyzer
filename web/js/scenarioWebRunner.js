@@ -141,7 +141,7 @@
                         mergeData(interestingResults, receivedResults.interestingResults);
                         // if (msg.interestingResults) console.dir(receivedResults.interestingResults, {depth: null});
                         if (!scheduledResultUpdate) {
-                            setTimeout(updateResults, 300);
+                            setTimeout(updateResults, 100);
                             scheduledResultUpdate = true;
                         }
                         break;
