@@ -103,7 +103,7 @@ function main() {
     let phaseTeamCounts = {};
     let interestingResults = {};
     for (let thread = 0; thread < THREAD_COUNT; ++thread) {
-        const worker = new Worker('./scenarioSimulation.js');
+        const worker = new Worker('./scenarioSimulationWorker.js');
         worker.addEventListener('message', (evt) => {
             const msg = evt.data;
             switch(msg.type) {

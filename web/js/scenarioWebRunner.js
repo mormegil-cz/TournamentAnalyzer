@@ -125,7 +125,7 @@
         scheduledResultUpdate = false;
 
         const cacheBuster = '?_=' + Date.now();
-        const workerScript = 'js/scenarioSimulation.js' + cacheBuster;
+        const workerScript = 'js/scenarioSimulationWorker.js' + cacheBuster;
         for (let thread = 0; thread < threadCount; ++thread) {
             const worker = new Worker(workerScript);
             const workerId = ++currentWorkerId;
