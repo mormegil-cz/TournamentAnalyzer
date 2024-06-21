@@ -1,9 +1,22 @@
-importScripts('scenarioData.js' + '?_=' + Date.now());
+let vm;
+
+if (typeof importScripts === 'function') {
+    importScripts('scenarioData.js' + '?_=' + Date.now());
+} else {
+    const fs = require('fs');
+    vm = require('vm');
+
+    let filename = './scenarioData.js';
+
+    var code = fs.readFileSync(filename, 'utf-8');
+    vm.runInThisContext(code, filename);
+}
 
 (function () {
     let workerId = 0;
     let doTerminate = false;
     let iterationLimit = 0;
+    let updateFrequency = 1000;
     let smoothFactor = 0;
 
     let scenario;
@@ -15,6 +28,7 @@ importScripts('scenarioData.js' + '?_=' + Date.now());
             case 'run':
                 workerId = msg.id;
                 iterationLimit = msg.workerData.iterations;
+                updateFrequency = msg.workerData.updateFrequency ?? 0;
                 smoothFactor = msg.workerData.smoothFactor;
                 setTimeout(startSimulation, 0);
                 break;
@@ -24,7 +38,7 @@ importScripts('scenarioData.js' + '?_=' + Date.now());
                 break;
 
             default:
-                throw new Error('Unexpected message for worker thread');
+                throw new Error('Unexpected message for worker thread: ' + JSON.stringify(msg));
         }
     });
 
@@ -858,7 +872,7 @@ importScripts('scenarioData.js' + '?_=' + Date.now());
 
         while (!doTerminate && (!iterationLimit || simulationCount < iterationLimit)) {
             let now = Date.now();
-            if (now - lastUpdate > 1000) {
+            if (updateFrequency && (now - lastUpdate > updateFrequency)) {
                 postMessage({
                     type: 'update',
                     simulationCount: simulationCount,

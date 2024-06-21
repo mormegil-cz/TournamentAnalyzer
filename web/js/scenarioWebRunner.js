@@ -160,7 +160,7 @@
                 console.error(error);
                 throw error;
             });
-            worker.postMessage({ type: 'run', id: workerId, workerData: { smoothFactor: smoothFactor * 0.01 } });
+            worker.postMessage({ type: 'run', id: workerId, workerData: { smoothFactor: smoothFactor * 0.01, updateFrequency: 1000 } });
         }
     }
 

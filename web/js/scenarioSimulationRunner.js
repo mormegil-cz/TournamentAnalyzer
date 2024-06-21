@@ -1,4 +1,6 @@
 const Worker = require('web-worker');
+const fs = require('fs');
+const vm = require('vm');
 
 const THREAD_COUNT = 2;
 const ITER_COUNT = 500;
@@ -46,23 +48,25 @@ function fmtNegOdds(num) {
     return (ITER_COUNT * THREAD_COUNT / (ITER_COUNT * THREAD_COUNT - num)).toFixed(3);
 }
 
-function finished(teamPlacements, phaseTeamCounts, interestingResults) {
+function finished(teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount) {
+    let results = [];
+
     let phaseTeams = Object.keys(phaseTeamCounts);
     phaseTeams.sort((a, b) => phaseTeamCounts[b] - phaseTeamCounts[a]);
     for (let i = 0; i < 20; ++i) {
         let t = phaseTeams[i];
-        console.log(`${t}\t${fmtPerc(phaseTeamCounts[t])}\t${fmtOdds(phaseTeamCounts[t])}`);
+        results.push(`${t}\t${fmtPerc(phaseTeamCounts[t])}\t${fmtOdds(phaseTeamCounts[t])}`);
     }
 
     let chosenTeamCount = 0;
     for (let t of phaseTeams) {
-        if (t.indexOf("FRA") >= 0 && t.indexOf("BRA") >= 0 && t.indexOf("ARG") >= 0) chosenTeamCount += phaseTeamCounts[t];
+        if (t.indexOf("CZE") >= 0 && t.indexOf("SVK") >= 0) chosenTeamCount += phaseTeamCounts[t];
     }
-    console.log(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
+    results.push(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
 
     let teams = Object.keys(teamPlacements);
     teams.sort((a, b) => {
-        for (let s = 3; s >= 0; --s) {
+        for (let s = Object.keys(teamPlacements[a]).length; s >= 0; --s) {
             var aCount = teamPlacements[a]['' + s];
             var bCount = teamPlacements[b]['' + s];
             if (aCount > bCount) return -1;
@@ -73,28 +77,31 @@ function finished(teamPlacements, phaseTeamCounts, interestingResults) {
 
     for (let team of teams) {
         let placements = teamPlacements[team];
-        console.log(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
+        results.push(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
     }
-    console.log('---');
+    results.push('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
-        console.log(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}`);
+        results.push(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}`);
     }
-    console.log('---');
+    results.push('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
-        console.log(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
+        results.push(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
     }
 
-    console.log('===');
-    console.log(`Interesting results: ${fmtPerc(interestingResults.count)} / ${fmtOdds(interestingResults.count)} / ${fmtNegOdds(interestingResults.count)}`);
+    results.push('===');
+    results.push(`Interesting results: ${fmtPerc(interestingResults.count)} / ${fmtOdds(interestingResults.count)} / ${fmtNegOdds(interestingResults.count)}`);
     /*
     let interestingTeams = Object.keys(interestingResults);
     interestingTeams.sort((a, b) => interestingResults[b] - interestingResults[a]);
     for (let team of interestingTeams) {
-        console.log(`${team}: ${fmtPerc(interestingResults[team])}`);
+        results.push(`${team}: ${fmtPerc(interestingResults[team])}`);
     }
     */
+
+    console.log(`After ${totalSimulationCount} simulations`);
+    console.log(results.join('\n'));
 }
 
 function main() {
@@ -102,30 +109,32 @@ function main() {
     let teamPlacements = {};
     let phaseTeamCounts = {};
     let interestingResults = {};
+    let totalSimulationCount = 0;
     for (let thread = 0; thread < THREAD_COUNT; ++thread) {
         const worker = new Worker('./scenarioSimulationWorker.js');
         worker.addEventListener('message', (evt) => {
             const msg = evt.data;
-            switch(msg.type) {
-                case 'done':
-                    mergeData(teamPlacements, msg.teamPlacements);
-                    mergeData(phaseTeamCounts, msg.phaseTeamCounts);
-                    mergeData(interestingResults, msg.interestingResults);
-                    // if (msg.interestingResults) console.dir(msg.interestingResults, {depth: null});
+            switch (msg.type) {
+                case 'update':
+                    let receivedResults = msg.results;
+                    totalSimulationCount += msg.simulationCount;
+                    mergeData(teamPlacements, receivedResults.teamPlacements);
+                    mergeData(phaseTeamCounts, receivedResults.phaseTeamCounts);
+                    mergeData(interestingResults, receivedResults.interestingResults);
+                    // if (receivedResults.interestingResults) console.dir(receivedResults.interestingResults, {depth: null});
                     break;
 
                 case 'exit':
                     --threadsRunning;
 
                     if (threadsRunning === 0) {
-                        finished(teamPlacements, phaseTeamCounts, interestingResults);
+                        finished(teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount);
                     }
                     break;
 
                 default:
-                    throw new Error('Unexpected message from worker thread');
+                    throw new Error('Unexpected message from worker thread: ' + JSON.stringify(msg));
             }
-
         });
         worker.addEventListener('error', (error) => {
             console.error(error);
