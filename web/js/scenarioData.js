@@ -127,13 +127,13 @@ const ELO_RATING_UEFA = {
     HUN: emphasizeRecentCoeff(1777, 1832),
     SUI: emphasizeRecentCoeff(1838, 1805),
     SRB: emphasizeRecentCoeff(1785, 1801),
-    CZE: emphasizeRecentCoeff(1766, 1777),
+    CZE: emphasizeRecentCoeff(1757, 1777),
     SCO: emphasizeRecentCoeff(1759, 1770),
     TUR: emphasizeRecentCoeff(1778, 1749),
     SLO: emphasizeRecentCoeff(1743, 1733),
     POL: emphasizeRecentCoeff(1710, 1746),
     SVK: emphasizeRecentCoeff(1694, 1671),
-    GEO: emphasizeRecentCoeff(1637, 1666),
+    GEO: emphasizeRecentCoeff(1646, 1666),
     ROM: emphasizeRecentCoeff(1714, 1647),
     ALB: emphasizeRecentCoeff(1635, 1624)
 };
@@ -206,7 +206,7 @@ const SCENARIO_DEFINITION_UEFA_2024 = {
         { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '', 'DEN-SRB': '' } } },
         { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '1:3', 'NED-FRA': '0:0', 'NED-AUT': '', 'FRA-POL': '' } } },
         { type: 'group', label: 'E', params: {members: ["BEL", "SVK", "ROM", "UKR"], matches: { 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '1:2', 'BEL-ROM': '', 'SVK-ROM': '', 'UKR-BEL': '' } } },
-        { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '3:1', 'POR-CZE': '2:1', 'GEO-CZE': '', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' } } },
+        { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '3:1', 'POR-CZE': '2:1', 'GEO-CZE': '1:1', 'TUR-POR': '', 'GEO-POR': '', 'CZE-TUR': '' } } },
 
         { type: 'luckylosergroup', label: 'LL', params: {members: ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'] } },
         { type: 'grouporiginsorting', label: '3P', params: {members: ['LL#1', 'LL#2', 'LL#3', 'LL#4'], orderings: ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], naming: ['1B', '1C', '1E', '1F'] } },
