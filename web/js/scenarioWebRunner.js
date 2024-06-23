@@ -1,6 +1,7 @@
 (function () {
     const $threadCount = document.getElementById('threadCount');
     const $smoothFactor = document.getElementById('smoothFactor');
+    const $scenarioDefinition = document.getElementById('scenarioDefinition');
     const $startSimulation = document.getElementById('startSimulation');
     const $stopSimulation = document.getElementById('stopSimulation');
     const $simulationResults = document.getElementById('simulationResults');
@@ -10,7 +11,9 @@
     let teamPlacements = {};
     let phaseTeamCounts = {};
     let interestingResults = {};
+    let interestingCounts = {};
     let scheduledResultUpdate = false;
+    let scenarioDefinition;
 
     function mergeData(data, addedData) {
         if (!addedData) return;
@@ -99,6 +102,13 @@
 
         results.push('===');
         results.push(`Interesting results: ${fmtPerc(interestingResults.count)} / ${fmtOdds(interestingResults.count)} / ${fmtNegOdds(interestingResults.count)}`);
+
+        let interestingTeams = Object.keys(interestingResults.counts);
+        interestingTeams.sort((a, b) => interestingResults[b] - interestingResults[a]);
+        for (let team of interestingTeams) {
+            results.push(`${team}: ${fmtPerc(interestingResults.counts[team])}`);
+        }
+
         /*
         let interestingTeams = Object.keys(interestingResults);
         interestingTeams.sort((a, b) => interestingResults[b] - interestingResults[a]);
@@ -141,7 +151,7 @@
                         mergeData(interestingResults, receivedResults.interestingResults);
                         // if (msg.interestingResults) console.dir(receivedResults.interestingResults, {depth: null});
                         if (!scheduledResultUpdate) {
-                            setTimeout(updateResults, 100);
+                            setTimeout(updateResults, 300);
                             scheduledResultUpdate = true;
                         }
                         break;
@@ -160,10 +170,13 @@
                 console.error(error);
                 throw error;
             });
+            console.debug(scenarioDefinition);
+            scenarioDefinition.scenario = $scenarioDefinition.value.split('\n').map(JSON.parse);
+            console.debug(scenarioDefinition);
             worker.postMessage({
                 type: 'run', id: workerId, workerData: {
                     rating: ELO_RATING_UEFA,
-                    scenarioDefinition: SCENARIO_DEFINITION_UEFA_2024,
+                    scenarioDefinition: scenarioDefinition,
                     smoothFactor: smoothFactor * 0.01,
                     updateFrequency: 1000
                 }
@@ -193,6 +206,8 @@
             stopSimulation();
             return false;
         });
+        scenarioDefinition = SCENARIO_DEFINITION_UEFA_2024;
+        $scenarioDefinition.value = scenarioDefinition.scenario.map(JSON.stringify).join("\n");
         $startSimulation.disabled = false;
     }
 
@@ -200,10 +215,10 @@
         let script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = 'js/scenarioData.js?_=' + Date.now();
-    
+
         script.onload = init;
-    
-        document.body.appendChild(script);    
+
+        document.body.appendChild(script);
     }
 
     loadDataAndInit();

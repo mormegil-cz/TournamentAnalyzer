@@ -240,7 +240,7 @@ function applyMatchToScenario(scenario, fullDefinition, match) {
     return true;
 }
 
-const EVOLUTION_STEP_PHASE = '4';
+const EVOLUTION_STEP_PHASE = '0'; // 0 = playoffs, 4 = tournament win
 let chanceEvolutionHistory = [];
 
 function recordEvolutionStep(afterMatch, teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount) {
@@ -294,6 +294,6 @@ function computeChanceEvolutionHistory(rating, scenarioDefinition, matchList) {
 
 computeChanceEvolutionHistory(ELO_RATING_UEFA, SCENARIO_DEFINITION_UEFA_2024, [
     'A#GER-SCO', 'A#HUN-SUI', 'B#ESP-CRO', 'B#ITA-ALB', 'D#POL-NED', 'C#SLO-DEN', 'C#SRB-ENG', 'E#ROM-UKR', 'E#BEL-SVK', 'D#AUT-FRA', 'F#TUR-GEO', 'F#POR-CZE',
-    'B#CRO-ALB', 'A#GER-HUN', 'A#SCO-SUI', 'C#SLO-SRB', 'C#DEN-ENG', 'B#ESP-ITA', /* 'E#SVK-UKR', 'D#POL-AUT', 'D#NED-FRA', 'E#BEL-ROM', 'F#GEO-CZE', 'F#TUR-POR',
-    'A#SUI-GER', 'A#SCO-HUN', 'B#ALB-ESP', 'B#CRO-ITA', 'C#ENG-SLO', 'C#DEN-SRB', 'D#NED-AUT', 'D#FRA-POL', 'E#SVK-ROM', 'E#UKR-BEL', 'F#GEO-POR', 'F#CZE-TUR'*/
+    'B#CRO-ALB', 'A#GER-HUN', 'A#SCO-SUI', 'C#SLO-SRB', 'C#DEN-ENG', 'B#ESP-ITA', 'E#SVK-UKR', 'D#POL-AUT', 'D#NED-FRA', 'F#GEO-CZE', 'F#TUR-POR', 'E#BEL-ROM',
+    /*'A#SUI-GER', 'A#SCO-HUN', 'B#ALB-ESP', 'B#CRO-ITA', 'D#NED-AUT', 'D#FRA-POL', 'C#ENG-SLO', 'C#DEN-SRB', 'E#SVK-ROM', 'E#UKR-BEL', 'F#GEO-POR', 'F#CZE-TUR'*/
 ]);

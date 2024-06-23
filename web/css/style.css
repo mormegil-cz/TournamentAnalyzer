@@ -1,3 +1,9 @@
+#scenarioDefinition {
+    white-space: pre;
+    font-family: monospace;
+    font-size: smaller;
+}
+
 #matchTable td, #matchTable th {
     text-align: center;
 }

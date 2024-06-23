@@ -861,6 +861,7 @@
         let teamPlacements = {};
         let phaseTeamCounts = {};
         let interestingResults = [];
+        let interestingCounts = {};
 
         while (!doTerminate && (!iterationLimit || simulationCount < iterationLimit)) {
             let now = Date.now();
@@ -871,7 +872,7 @@
                     results: {
                         teamPlacements: teamPlacements,
                         phaseTeamCounts: phaseTeamCounts,
-                        interestingResults: { count: interestingResults.length }
+                        interestingResults: { count: interestingResults.length, counts: interestingCounts }
                     }
                 });
 
@@ -893,6 +894,18 @@
                 teamPlacements[team] = placements;
             }
             // if (!('NED' in results.teamStages) || !('CZE' in results.teamStages)) interestingResults.push(scenarioResults.full);
+            //if (scenarioResults.full['B'].teams[0] === 'ESP') interestingResults.push(scenarioResults.full);
+            // if ('CZE' in results.teamStages) interestingResults.push(scenarioResults.full);
+
+            let czePlayoffPos = results.stageTeams[0].indexOf('CZE');
+            if (czePlayoffPos >= 0) {
+                let czePartner = results.stageTeams[0][czePlayoffPos ^ 1];
+                let counter = interestingCounts[czePartner] ?? 0;
+                interestingCounts[czePartner] = counter + 1;
+                interestingResults.push(scenarioResults.full);
+            } else {
+                // console.dir(scenarioResults.full, {depth:null});
+            }
 
             let sfTeams = results.stageTeams[results.stageTeams.length - 5].slice();
             sfTeams.sort();
@@ -900,8 +913,8 @@
             let currCount = phaseTeamCounts[id] || 0;
             phaseTeamCounts[id] = currCount + 1;
 
-            let winner = results.stageTeams[results.stageTeams.length - 1][0];
-            if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
+            //let winner = results.stageTeams[results.stageTeams.length - 1][0];
+            //if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
 
             /*
             let winner = results.stageTeams[results.stageTeams.length - 1][0];
@@ -922,7 +935,7 @@
             results: {
                 teamPlacements: teamPlacements,
                 phaseTeamCounts: phaseTeamCounts,
-                interestingResults: { count: interestingResults.length }
+                interestingResults: { count: interestingResults.length, counts: interestingCounts }
             }
         });
         postMessage({

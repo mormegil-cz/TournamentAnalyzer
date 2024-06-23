@@ -13,30 +13,41 @@
     <div class="container">
         <div id="alertcontainer"></div>
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <h3>Simulation settings</h3>
                 <label for="threadCount" class="form-label">Simulation threads:</label>
-                <input type="number" class="form-input" id="threadCount" value="3" min="1" size="2" maxlength="2" /><br />
+                <input type="number" class="form-input" id="threadCount" value="3" min="1" size="2"
+                    maxlength="2" /><br />
                 <label for="smoothFactor" class="form-label">Smoothing factor:</label>
-                <input type="number" class="form-input" id="smoothFactor" value="0" min="0" max="99" size="2" maxlength="2" /> %<br />
-                <button id="startSimulation" type="button" class="btn btn-primary" disabled="disabled">Start simulation</button>
-                <button id="stopSimulation" type="button" class="btn btn-primary" disabled="disabled">Stop simulation</button>
+                <input type="number" class="form-input" id="smoothFactor" value="0" min="0" max="99" size="2"
+                    maxlength="2" /> %<br />
+                <button id="startSimulation" type="button" class="btn btn-primary" disabled="disabled">Start
+                    simulation</button>
+                <button id="stopSimulation" type="button" class="btn btn-primary" disabled="disabled">Stop
+                    simulation</button>
             </div>
-            <div class="col-8">
-                <h3>Simulation results</h3>
-                <div id="simulationStats">After 0 simulations</div>
-                <!--table class="table" id="simulationTable">
-                </table-->
-                <pre id="simulationResults"></pre>
+            <div class="col-9">
+                <h3>Scenario definition</h3>
+                <textarea rows="10" cols="80" id="scenarioDefinition">
+                </textarea>
             </div>
         </div>
+        <div class="row">
+            <h3>Simulation results</h3>
+            <div id="simulationStats">After 0 simulations</div>
+            <!--table class="table" id="simulationTable">
+            </table-->
+            <pre id="simulationResults"></pre>
+        </div>
 
-        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="simulationDetailOffCanvas" aria-labelledby="offCanvasSimulationHeader">
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="simulationDetailOffCanvas"
+            aria-labelledby="offCanvasSimulationHeader">
             <div class="offcanvas-header">
                 <h4 id="offCanvasSimulationHeader">Simulation results for <span id="simulationDetailTeam"></span>’s
                     <span id="simulationDetailPlace"></span> place
                 </h4>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <h5>Success matches</h5>
