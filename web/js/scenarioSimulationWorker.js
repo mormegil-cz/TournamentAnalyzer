@@ -897,6 +897,7 @@
             //if (scenarioResults.full['B'].teams[0] === 'ESP') interestingResults.push(scenarioResults.full);
             // if ('CZE' in results.teamStages) interestingResults.push(scenarioResults.full);
 
+            /*
             let gertur = false;
             for (let s = 0; s < 4 && !gertur; ++s) {
                 let t = results.stageTeams[s];
@@ -908,18 +909,18 @@
                 }
             }
             if (gertur) interestingResults.push(scenarioResults.full);
+            */
 
-            /*
             let czePlayoffPos = results.stageTeams[0].indexOf('CZE');
             if (czePlayoffPos >= 0) {
                 let czePartner = results.stageTeams[0][czePlayoffPos ^ 1];
                 let counter = interestingCounts[czePartner] ?? 0;
                 interestingCounts[czePartner] = counter + 1;
                 interestingResults.push(scenarioResults.full);
+                // console.dir(scenarioResults.full, {depth:null});
             } else {
                 // console.dir(scenarioResults.full, {depth:null});
             }
-            */
 
             let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
             sfTeams.sort();
