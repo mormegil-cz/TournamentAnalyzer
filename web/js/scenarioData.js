@@ -112,16 +112,16 @@ function emphasizeRecentCoeff(current, start) {
 }
 
 const ELO_RATING_UEFA = {
-    FRA: emphasizeRecentCoeff(2081, 2077),
+    FRA: emphasizeRecentCoeff(2061, 2077),
     ESP: emphasizeRecentCoeff(2079, 2057),
     POR: emphasizeRecentCoeff(2032, 2003),
     BEL: emphasizeRecentCoeff(1961, 1988),
     ENG: emphasizeRecentCoeff(1983, 1981),
-    NED: emphasizeRecentCoeff(1992, 1974),
+    NED: emphasizeRecentCoeff(1959, 1974),
     CRO: emphasizeRecentCoeff(1916, 1969),
     ITA: emphasizeRecentCoeff(1937, 1950),
     GER: emphasizeRecentCoeff(1939, 1920),
-    AUT: emphasizeRecentCoeff(1877, 1863),
+    AUT: emphasizeRecentCoeff(1910, 1863),
     UKR: emphasizeRecentCoeff(1806, 1853),
     DEN: emphasizeRecentCoeff(1838, 1834),
     HUN: emphasizeRecentCoeff(1801, 1832),
@@ -131,7 +131,7 @@ const ELO_RATING_UEFA = {
     SCO: emphasizeRecentCoeff(1735, 1770),
     TUR: emphasizeRecentCoeff(1760, 1749),
     SLO: emphasizeRecentCoeff(1743, 1733),
-    POL: emphasizeRecentCoeff(1710, 1746),
+    POL: emphasizeRecentCoeff(1730, 1746),
     SVK: emphasizeRecentCoeff(1694, 1671),
     GEO: emphasizeRecentCoeff(1646, 1666),
     ROM: emphasizeRecentCoeff(1698, 1647),
@@ -204,7 +204,7 @@ const SCENARIO_DEFINITION_UEFA_2024 = {
         { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '2:0', 'SCO-SUI': '1:1', 'SUI-GER': '1:1', 'SCO-HUN': '0:1' } } },
         { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '2:2', 'ESP-ITA': '1:0', 'ALB-ESP': '0:1', 'CRO-ITA': '1:1' } } },
         { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '', 'DEN-SRB': '' } } },
-        { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '1:3', 'NED-FRA': '0:0', 'NED-AUT': '', 'FRA-POL': '' } } },
+        { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '1:3', 'NED-FRA': '0:0', 'NED-AUT': '2:3', 'FRA-POL': '1:1' } } },
         { type: 'group', label: 'E', params: {members: ["BEL", "SVK", "ROM", "UKR"], matches: { 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '1:2', 'BEL-ROM': '2:0', 'SVK-ROM': '', 'UKR-BEL': '' } } },
         { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '3:1', 'POR-CZE': '2:1', 'GEO-CZE': '1:1', 'TUR-POR': '0:3', 'GEO-POR': '', 'CZE-TUR': '' } } },
 
