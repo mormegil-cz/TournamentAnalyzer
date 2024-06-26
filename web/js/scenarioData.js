@@ -27,7 +27,7 @@ const RESULT_LOSS_SMALL_BOTH_BONUS = { type: 'done', result: 'LOSS_SMALL_BOTH_BO
 const RESULT_LOSS_SMALL_HOME_BONUS = { type: 'done', result: 'LOSS_SMALL_LOSER_BONUS', caption: 'LOSS_SMALL_LOSER_BONUS', home: 2, away: 4 };
 
 const UEFA_EURO_2024_RANKING = ['GER', 'POR', 'FRA', 'ESP', 'BEL', 'ENG', 'HUN', 'TUR', 'ROM', 'DEN', 'ALB', 'AUT', 'NED', 'SCO', 'CRO', 'SLO', 'SVK', 'CZE', 'ITA', 'SRB', 'SUI', 'UKR', 'POL', 'GEO'];
-const UEFA_EURO_2024_SORTING_ALGORITHM_DEF = ['computeMatchPoints', 'computeGoalDifference', 'computeGoalsScored', 'computeGlobalGoalDifference', 'computeGlobalGoalsScored', 'computeRandomRanking', {type: 'ranking', ranking: UEFA_EURO_2024_RANKING}];
+const UEFA_EURO_2024_SORTING_ALGORITHM_DEF = ['computeMatchPoints', 'computeGoalDifference', 'computeGoalsScored', 'computeGlobalGoalDifference', 'computeGlobalGoalsScored', {type: 'ranking', ranking: UEFA_EURO_2024_RANKING}];
 const FIFA_WORLD_2022_SORTING_ALGORITHM_DEF = ['computeGlobalMatchPoints', 'computeGlobalGoalDifference', 'computeGlobalGoalsScored', 'computeMatchPoints', 'computeGoalDifference', 'computeGoalsScored', 'computeRandomRanking'];
 
 const WORLD_RUGBY_2023_RANKING = ['IRL', 'RSA', 'FRA', 'NZL', 'SCO', 'ARG', 'FIJ', 'ENG', 'AUS', 'WAL', 'GEO', 'SAM', 'ITA', 'JPN', 'TON', 'POR', 'URU', 'USA', 'ROM', 'ESP', 'NAM', 'CHI'];
@@ -115,22 +115,22 @@ const ELO_RATING_UEFA = {
     FRA: emphasizeRecentCoeff(2061, 2077),
     ESP: emphasizeRecentCoeff(2079, 2057),
     POR: emphasizeRecentCoeff(2032, 2003),
-    BEL: emphasizeRecentCoeff(1961, 1988),
-    ENG: emphasizeRecentCoeff(1983, 1981),
+    BEL: emphasizeRecentCoeff(1951, 1988),
+    ENG: emphasizeRecentCoeff(1968, 1981),
     NED: emphasizeRecentCoeff(1959, 1974),
     CRO: emphasizeRecentCoeff(1916, 1969),
     ITA: emphasizeRecentCoeff(1937, 1950),
     GER: emphasizeRecentCoeff(1939, 1920),
     AUT: emphasizeRecentCoeff(1910, 1863),
-    UKR: emphasizeRecentCoeff(1806, 1853),
-    DEN: emphasizeRecentCoeff(1838, 1834),
+    UKR: emphasizeRecentCoeff(1816, 1853),
+    DEN: emphasizeRecentCoeff(1834, 1834),
     HUN: emphasizeRecentCoeff(1801, 1832),
     SUI: emphasizeRecentCoeff(1852, 1805),
-    SRB: emphasizeRecentCoeff(1785, 1801),
+    SRB: emphasizeRecentCoeff(1789, 1801),
     CZE: emphasizeRecentCoeff(1757, 1777),
     SCO: emphasizeRecentCoeff(1735, 1770),
     TUR: emphasizeRecentCoeff(1760, 1749),
-    SLO: emphasizeRecentCoeff(1743, 1733),
+    SLO: emphasizeRecentCoeff(1758, 1733),
     POL: emphasizeRecentCoeff(1730, 1746),
     SVK: emphasizeRecentCoeff(1694, 1671),
     GEO: emphasizeRecentCoeff(1646, 1666),
@@ -203,9 +203,9 @@ const SCENARIO_DEFINITION_UEFA_2024 = {
     scenario: [
         { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '2:0', 'SCO-SUI': '1:1', 'SUI-GER': '1:1', 'SCO-HUN': '0:1' } } },
         { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '2:2', 'ESP-ITA': '1:0', 'ALB-ESP': '0:1', 'CRO-ITA': '1:1' } } },
-        { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '', 'DEN-SRB': '' } } },
+        { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '0:0', 'DEN-SRB': '0:0' } } },
         { type: 'group', label: 'D', params: {members: ["POL", "NED", "AUT", "FRA"], matches: { 'POL-NED': '1:2', 'AUT-FRA': '0:1', 'POL-AUT': '1:3', 'NED-FRA': '0:0', 'NED-AUT': '2:3', 'FRA-POL': '1:1' } } },
-        { type: 'group', label: 'E', params: {members: ["BEL", "SVK", "ROM", "UKR"], matches: { 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '1:2', 'BEL-ROM': '2:0', 'SVK-ROM': '', 'UKR-BEL': '' } } },
+        { type: 'group', label: 'E', params: {members: ["BEL", "SVK", "ROM", "UKR"], matches: { 'ROM-UKR': '3:0', 'BEL-SVK': '0:1', 'SVK-UKR': '1:2', 'BEL-ROM': '2:0', 'SVK-ROM': '1:1', 'UKR-BEL': '0:0' } } },
         { type: 'group', label: 'F', params: {members: ["TUR", "GEO", "POR", "CZE"], matches: { 'TUR-GEO': '3:1', 'POR-CZE': '2:1', 'GEO-CZE': '1:1', 'TUR-POR': '0:3', 'GEO-POR': '', 'CZE-TUR': '' } } },
 
         { type: 'luckylosergroup', label: 'LL', params: {members: ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'] } },
