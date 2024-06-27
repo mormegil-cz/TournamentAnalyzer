@@ -911,6 +911,7 @@
             if (gertur) interestingResults.push(scenarioResults.full);
             */
 
+            /*
             let czePlayoffPos = results.stageTeams[0].indexOf('CZE');
             if (czePlayoffPos >= 0) {
                 let czePartner = results.stageTeams[0][czePlayoffPos ^ 1];
@@ -921,6 +922,7 @@
             } else {
                 // console.dir(scenarioResults.full, {depth:null});
             }
+            */
 
             let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
             sfTeams.sort();
@@ -928,8 +930,9 @@
             let currCount = phaseTeamCounts[id] || 0;
             phaseTeamCounts[id] = currCount + 1;
 
-            //let winner = results.stageTeams[results.stageTeams.length - 1][0];
-            //if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
+            let winner = results.stageTeams[results.stageTeams.length - 1][0];
+            console.debug(winner);
+            if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
 
             /*
             let winner = results.stageTeams[results.stageTeams.length - 1][0];

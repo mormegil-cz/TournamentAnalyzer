@@ -201,6 +201,7 @@ const WORLD_RUGBY_RATING = {
 const SCENARIO_DEFINITION_UEFA_2024 = {
     rules: RULES.UEFA,
     scenario: [
+        /*
         { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '2:0', 'SCO-SUI': '1:1', 'SUI-GER': '1:1', 'SCO-HUN': '0:1' } } },
         { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '2:2', 'ESP-ITA': '1:0', 'ALB-ESP': '0:1', 'CRO-ITA': '1:1' } } },
         { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '0:0', 'DEN-SRB': '0:0' } } },
@@ -211,6 +212,8 @@ const SCENARIO_DEFINITION_UEFA_2024 = {
         { type: 'luckylosergroup', label: 'LL', params: {members: ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'] } },
         { type: 'grouporiginsorting', label: '3P', params: {members: ['LL#1', 'LL#2', 'LL#3', 'LL#4'], orderings: ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], naming: ['1B', '1C', '1E', '1F'] } },
         { type: 'playofftree', label: '_result', params: {members: ['B#1', '3P#1B', 'A#1', 'C#2', 'F#1', '3P#1F', 'D#2', 'E#2', 'E#1', '3P#1E', 'D#1', 'F#2', 'C#1', '3P#1C', 'A#2', 'B#2'], knownResults: {} } }
+        */
+        {"type":"playofftree","label":"_result","params":{"members":["ESP","GEO","GER","DEN","POR","SLO","FRA","BEL","ROM","NED","AUT","TUR","ENG","SVK","SUI","ITA"],"knownResults":{}}}
     ]
 };
 
