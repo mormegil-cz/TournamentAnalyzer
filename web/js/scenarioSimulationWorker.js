@@ -546,6 +546,23 @@
         }
     }
 
+    class Condition extends ScenarioPart {
+        constructor (id, conditions, thenPart, elsePart) {
+            super(id);
+            this.conditions = conditions;
+            this.thenPart = thenPart;
+            this.elsePart = elsePart;
+        }
+
+        execute(scenarioResults, simulationParameters) {
+            let usedPart = this.conditions.every(condition => {
+                let [teamRef, expected] = condition;
+                return this.getTeam(teamRef, scenarioResults) === expected;
+            }) ? this.thenPart : this.elsePart;
+            return usedPart.execute(scenarioResults, simulationParameters);
+        }
+    }
+
     class GroupResult extends ScenarioPartResult {
         constructor(teams, matchResults, rules) {
             super();
@@ -678,6 +695,52 @@
 
             console.error(scenarioResults, groupTeams, teamGroups, participatingTeamFromGroup, participantGroups);
             throw new Error('No ordering found!');
+        }
+    }
+
+    class PlayoffRoundResults extends ScenarioPartResult {
+        constructor(winners) {
+            super();
+            this.winners = winners;
+        }
+
+        getTeam(specifier) {
+            return this.winners[(+specifier) - 1];
+        }
+    }
+
+    class PlayoffRound extends ScenarioPart {
+        constructor(id, teams, matches, ordering, rules) {
+            if (teams.length === 0 || teams.length % 2 !== 0) throw new Error('Invalid number of playoff round teams');
+
+            super(id);
+            this.teams = teams;
+            this.matches = matches;
+            this.ordering = ordering;
+            this.rules = rules;
+        }
+
+        execute(scenarioResults, simulationParameters) {
+            const teamOrdering = new Map(this.ordering.map((t, index) => [t, index]));
+
+            let winners = [];
+            for (let id of Object.keys(this.matches)) {
+                let teams = id.split('-');
+                let homeTeam = teams[0];
+                let awayTeam = teams[1];
+                let matchResult = this.matches[id];
+                if (matchResult.type === 'toplay') {
+                    do {
+                        matchResult = this.rules.genFunc(homeTeam, awayTeam, this.rules, simulationParameters);
+                    } while (matchResult.home === matchResult.away);
+                }
+                let winner = matchResult.home > matchResult.away ? homeTeam : awayTeam;
+                winners.push(winner);
+            }
+
+            winners.sort((a, b) => teamOrdering.get(a) - teamOrdering.get(b));
+
+            return new PlayoffRoundResults(winners.map(t => this.getTeam(t, scenarioResults)));
         }
     }
 
@@ -830,26 +893,30 @@
         };
     }
 
+    function buildScenarioPart(part, rules) {
+        switch (part.type) {
+            case 'condition':
+                return new Condition(part.label, part.params.conditions, buildScenarioPart(part.params.then, rules), buildScenarioPart(part.params.else, rules));
+            case 'group':
+                return new Group(part.label, part.params.members, preparePresetMatches(part.params.matches, rules), rules);
+            case 'luckylosergroup':
+                return new LuckyLoserGroup(part.label, part.params.members, rules);
+            case 'grouporiginsorting':
+                return new GroupOriginSorting(part.label, part.params.members, part.params.orderings, part.params.naming);
+            case 'playoffround':
+                return new PlayoffRound(part.label, part.params.members, preparePresetMatches(part.params.matches, rules), part.params.ordering, rules);
+            case 'playofftree':
+                return new PlayoffTree(part.label, part.params.members, rules, part.params.knownResults);
+            default:
+                throw new Error(`Unknown scenario definition type ${part.type}`);
+        }
+    }
+
     function buildAndValidateScenario(definition, rating) {
         let rules = buildRules(definition.rules);
         let scenario = [];
         for (let part of definition.scenario) {
-            switch (part.type) {
-                case 'group':
-                    scenario.push(new Group(part.label, part.params.members, preparePresetMatches(part.params.matches, rules), rules));
-                    break;
-                case 'luckylosergroup':
-                    scenario.push(new LuckyLoserGroup(part.label, part.params.members, rules));
-                    break;
-                case 'grouporiginsorting':
-                    scenario.push(new GroupOriginSorting(part.label, part.params.members, part.params.orderings, part.params.naming));
-                    break;
-                case 'playofftree':
-                    scenario.push(new PlayoffTree(part.label, part.params.members, rules, part.params.knownResults));
-                    break;
-                default:
-                    throw new Error(`Unknown scenario definition type ${part.type}`);
-            }
+            scenario.push(buildScenarioPart(part, rules));
         }
         validateScenario(scenario, rating);
         return scenario;
@@ -930,9 +997,10 @@
             let currCount = phaseTeamCounts[id] || 0;
             phaseTeamCounts[id] = currCount + 1;
 
-            let winner = results.stageTeams[results.stageTeams.length - 1][0];
-            console.debug(winner);
-            if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
+            // let winner = results.stageTeams[results.stageTeams.length - 1][0];
+            // console.debug(winner);
+            // if (winner === 'BEL' || winner === 'SCO' || winner === 'TUR' || winner === 'AUT' || winner === 'ENG' || winner === 'HUN' || winner === 'ALB' || winner === 'ROM' || winner === 'SUI' || winner === 'SRB' || winner === 'SLO' || winner === 'CRO' || winner === 'GEO' || winner === 'UKR' || winner === 'POL') interestingResults.push(scenarioResults.full);
+
 
             /*
             let winner = results.stageTeams[results.stageTeams.length - 1][0];

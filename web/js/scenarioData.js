@@ -33,8 +33,11 @@ const FIFA_WORLD_2022_SORTING_ALGORITHM_DEF = ['computeGlobalMatchPoints', 'comp
 const WORLD_RUGBY_2023_RANKING = ['IRL', 'RSA', 'FRA', 'NZL', 'SCO', 'ARG', 'FIJ', 'ENG', 'AUS', 'WAL', 'GEO', 'SAM', 'ITA', 'JPN', 'TON', 'POR', 'URU', 'USA', 'ROM', 'ESP', 'NAM', 'CHI'];
 const RUGBY_WORLD_2023_SORTING_ALGORITHM_DEF = ['computeMatchPoints', 'computeGlobalGoalDifference', 'computeGlobalTriesDifference', 'computeGlobalGoalsScored', 'computeGlobalTriesScored', {type: 'ranking', ranking: WORLD_RUGBY_2023_RANKING}];
 
+const IIHF_2026_RANKING = ['USA', 'SUI', 'CAN', 'SWE', 'CZE', 'FIN', 'GER', 'DEN', 'SVK', 'LAT', 'AUT', 'NOR', 'SLO', 'HUN', 'GBR', 'ITA'];
+const IIHF_2026_SORTING_ALGORITHM_DEF = ['computeMatchPoints', 'computeGoalDifference', 'computeGoalsScored', {type: 'ranking', ranking: IIHF_2026_RANKING}];
+
 const RULES = {
-    IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS], genFuncName: 'generateRandomResult' },
+    IIHF: { results: [RESULT_WIN, RESULT_OT_WIN, RESULT_OT_LOSS, RESULT_LOSS], sortingAlgorithmDefinition: IIHF_2026_SORTING_ALGORITHM_DEF, genFuncName: 'generateRandomResult' },
     UEFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithmDefinition: UEFA_EURO_2024_SORTING_ALGORITHM_DEF, genFuncName: 'generateRandomResult' },
     FIFA: { results: [RESULT_WIN, RESULT_DRAW, RESULT_LOSS], sortingAlgorithmDefinition: FIFA_WORLD_2022_SORTING_ALGORITHM_DEF, genFuncName: 'generateRandomResult' },
     RWC: {
@@ -198,10 +201,41 @@ const WORLD_RUGBY_RATING = {
     CHI: 60.49, // 60.49
 };
 
+const ELO_RATING_IIHF = {
+    'USA': 2717,
+    'CAN': 2654,
+    'SWE': 2598,
+    'FIN': 2454,
+    'CZE': 2418,
+    'SUI': 2378,
+    'SVK': 2249,
+    'GER': 2209,
+    'LAT': 2150,
+    'DEN': 2105,
+    'AUT': 1991,
+    'NOR': 1979,
+    'SLO': 1890,
+    'GBR': 1813,
+    'ITA': 1784,
+    'HUN': 1674
+};
+
+const SCENARIO_DEFINITION_IIHF_2026 = {
+    rules: RULES.IIHF,
+    scenario: [
+        { type: 'group', label: 'A', params: {members: ['USA', 'SUI', 'FIN', 'GER', 'LAT', 'AUT', 'HUN', 'GBR'], matches: { 'FIN-GER': '', 'USA-SUI': '', 'GBR-AUT': '', 'HUN-FIN': '', 'SUI-LAT': '', 'GBR-USA': '', 'AUT-HUN': '', 'GER-LAT': '', 'FIN-USA': '', 'GER-SUI': '', 'LAT-AUT': '', 'HUN-GBR': '', 'AUT-SUI': '', 'USA-GER': '', 'FIN-LAT': '', 'SUI-GBR': '', 'GER-HUN': '', 'FIN-GBR': '', 'USA-LAT': '', 'SUI-HUN': '', 'AUT-GER': '', 'GBR-LAT': '', 'FIN-AUT': '', 'USA-HUN': '', 'GER-GBR': '', 'HUN-LAT': '', 'USA-AUT': '', 'SUI-FIN': ''} } },
+        { type: 'group', label: 'B', params: {members: ['CAN', 'SWE', 'CZE', 'DEN', 'SVK', 'NOR', 'SLO', 'ITA'], matches: { 'CAN-SWE': '', 'CZE-DEN': '', 'SVK-NOR': '', 'ITA-CAN': '', 'SLO-CZE': '', 'ITA-SVK': '', 'DEN-SWE': '', 'NOR-SLO': '', 'CAN-DEN': '', 'SWE-CZE': '', 'ITA-NOR': '', 'SLO-SVK': '', 'CZE-ITA': '', 'SWE-SLO': '', 'CAN-NOR': '', 'DEN-SVK': '', 'CAN-SLO': '', 'SWE-ITA': '', 'DEN-SLO': '', 'SVK-CZE': '', 'NOR-SWE': '', 'DEN-ITA': '', 'SVK-CAN': '', 'CZE-NOR': '', 'SLO-ITA': '', 'NOR-DEN': '', 'SWE-SVK': '', 'CZE-CAN': ''} } },
+
+        { type: 'playoffround', label: 'QF', params: { members: ['A#1', 'A#2', 'A#3', 'A#4', 'B#1', 'B#2', 'B#3', 'B#4'], matches: { 'A#1-B#4': '', 'A#2-B#3': '', 'A#3-B#2': '', 'A#4-B#1': ''}, ordering: ['A#1', 'B#1', 'A#2', 'B#2', 'A#3', 'B#3', 'A#4', 'B#4']}},
+        { type: 'playofftree', label: '_result', params: {members: ['QF#1', 'QF#4', 'QF#2', 'QF#3'], knownResults: {} } }
+    ]
+}
+
+/*
 const SCENARIO_DEFINITION_UEFA_2024 = {
     rules: RULES.UEFA,
     scenario: [
-        /*
+        //
         { type: 'group', label: 'A', params: {members: ["GER", "SCO", "HUN", "SUI"], matches: { 'GER-SCO': '5:1', 'HUN-SUI': '1:3', 'GER-HUN': '2:0', 'SCO-SUI': '1:1', 'SUI-GER': '1:1', 'SCO-HUN': '0:1' } } },
         { type: 'group', label: 'B', params: {members: ["ESP", "CRO", "ITA", "ALB"], matches: { 'ESP-CRO': '3:0', 'ITA-ALB': '2:1', 'CRO-ALB': '2:2', 'ESP-ITA': '1:0', 'ALB-ESP': '0:1', 'CRO-ITA': '1:1' } } },
         { type: 'group', label: 'C', params: {members: ["SLO", "DEN", "SRB", "ENG"], matches: { 'SLO-DEN': '1:1', 'SRB-ENG': '0:1', 'SLO-SRB': '1:1', 'DEN-ENG': '1:1', 'ENG-SLO': '0:0', 'DEN-SRB': '0:0' } } },
@@ -212,10 +246,11 @@ const SCENARIO_DEFINITION_UEFA_2024 = {
         { type: 'luckylosergroup', label: 'LL', params: {members: ['A#3', 'B#3', 'C#3', 'D#3', 'E#3', 'F#3'] } },
         { type: 'grouporiginsorting', label: '3P', params: {members: ['LL#1', 'LL#2', 'LL#3', 'LL#4'], orderings: ['ADBC', 'AEBC', 'AFBC', 'DEAB', 'DFAB', 'EFBA', 'EDCA', 'FDCA', 'EFCA', 'EFDA', 'EDBC', 'FDCB', 'FECB', 'FEDB', 'FEDC'], naming: ['1B', '1C', '1E', '1F'] } },
         { type: 'playofftree', label: '_result', params: {members: ['B#1', '3P#1B', 'A#1', 'C#2', 'F#1', '3P#1F', 'D#2', 'E#2', 'E#1', '3P#1E', 'D#1', 'F#2', 'C#1', '3P#1C', 'A#2', 'B#2'], knownResults: {} } }
-        */
+        //
         {"type":"playofftree","label":"_result","params":{"members":["ESP","GEO","GER","DEN","POR","SLO","FRA","BEL","ROM","NED","AUT","TUR","ENG","SVK","SUI","ITA"],"knownResults":{}}}
     ]
 };
+*/
 
     //new PlayoffTree('_result', ['BEL', 'POR', 'ITA', 'AUT', 'FRA', 'SUI', 'CRO', 'ESP', 'SWE', 'UKR', 'ENG', 'GER', 'NED', 'CZE', 'WAL', 'DEN'], RULES.UEFA)
     //new PlayoffTree('_result', ['BEL', 'ITA', 'SUI', 'ESP', 'UKR', 'ENG', 'CZE', 'DEN'], RULES.UEFA)

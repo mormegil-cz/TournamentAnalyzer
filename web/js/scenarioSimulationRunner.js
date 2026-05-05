@@ -2,8 +2,8 @@ const fs = require('fs');
 const vm = require('vm');// vm must be in the global context to work properly
 const Worker = require('web-worker');
 
-const THREAD_COUNT = 7;
-const ITER_COUNT = 30000;
+const THREAD_COUNT = 5;
+const ITER_COUNT = 300000;
 const SMOOTH_FACTOR = 0.2;
 
 function include(filename) {
@@ -290,10 +290,11 @@ function computeChanceEvolutionHistory(rating, scenarioDefinition, matchList) {
     promise.then(printChanceEvolutionHistory);
 }
 
-// main(ELO_RATING_UEFA, SCENARIO_DEFINITION_UEFA_2024);
+main(ELO_RATING_IIHF, SCENARIO_DEFINITION_IIHF_2026);
 
+/*
 computeChanceEvolutionHistory(ELO_RATING_UEFA, SCENARIO_DEFINITION_UEFA_2024, [
     'A#GER-SCO', 'A#HUN-SUI', 'B#ESP-CRO', 'B#ITA-ALB', 'D#POL-NED', 'C#SLO-DEN', 'C#SRB-ENG', 'E#ROM-UKR', 'E#BEL-SVK', 'D#AUT-FRA', 'F#TUR-GEO', 'F#POR-CZE',
     'B#CRO-ALB', 'A#GER-HUN', 'A#SCO-SUI', 'C#SLO-SRB', 'C#DEN-ENG', 'B#ESP-ITA', 'E#SVK-UKR', 'D#POL-AUT', 'D#NED-FRA', 'F#GEO-CZE', 'F#TUR-POR', 'E#BEL-ROM',
-    /*'A#SUI-GER', 'A#SCO-HUN', 'B#ALB-ESP', 'B#CRO-ITA', 'D#NED-AUT', 'D#FRA-POL', 'C#ENG-SLO', 'C#DEN-SRB', 'E#SVK-ROM', 'E#UKR-BEL', 'F#GEO-POR', 'F#CZE-TUR'*/
 ]);
+*/
