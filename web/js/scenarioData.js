@@ -202,29 +202,29 @@ const WORLD_RUGBY_RATING = {
 };
 
 const ELO_RATING_IIHF = {
-    'USA': 2717,
-    'CAN': 2654,
-    'SWE': 2598,
-    'FIN': 2454,
-    'CZE': 2418,
-    'SUI': 2378,
-    'SVK': 2249,
-    'GER': 2209,
-    'LAT': 2150,
-    'DEN': 2105,
-    'AUT': 1991,
-    'NOR': 1979,
-    'SLO': 1890,
-    'GBR': 1813,
-    'ITA': 1784,
-    'HUN': 1674
+    'USA': emphasizeRecentCoeff(2594, 2717),
+    'CAN': emphasizeRecentCoeff(2680, 2654),
+    'SWE': emphasizeRecentCoeff(2474, 2598),
+    'FIN': emphasizeRecentCoeff(2594, 2454),
+    'CZE': emphasizeRecentCoeff(2402, 2418),
+    'SUI': emphasizeRecentCoeff(2479, 2378),
+    'SVK': emphasizeRecentCoeff(2253, 2249),
+    'GER': emphasizeRecentCoeff(2173, 2209),
+    'LAT': emphasizeRecentCoeff(2126, 2150),
+    'DEN': emphasizeRecentCoeff(2073, 2105),
+    'AUT': emphasizeRecentCoeff(2066, 1991),
+    'NOR': emphasizeRecentCoeff(2024, 1979),
+    'SLO': emphasizeRecentCoeff(1913, 1890),
+    'GBR': emphasizeRecentCoeff(1739, 1813),
+    'ITA': emphasizeRecentCoeff(1754, 1784),
+    'HUN': emphasizeRecentCoeff(1720, 1674)
 };
 
 const SCENARIO_DEFINITION_IIHF_2026 = {
     rules: RULES.IIHF,
     scenario: [
-        { type: 'group', label: 'A', params: {members: ['USA', 'SUI', 'FIN', 'GER', 'LAT', 'AUT', 'HUN', 'GBR'], matches: { 'FIN-GER': '', 'USA-SUI': '', 'GBR-AUT': '', 'HUN-FIN': '', 'SUI-LAT': '', 'GBR-USA': '', 'AUT-HUN': '', 'GER-LAT': '', 'FIN-USA': '', 'GER-SUI': '', 'LAT-AUT': '', 'HUN-GBR': '', 'AUT-SUI': '', 'USA-GER': '', 'FIN-LAT': '', 'SUI-GBR': '', 'GER-HUN': '', 'FIN-GBR': '', 'USA-LAT': '', 'SUI-HUN': '', 'AUT-GER': '', 'GBR-LAT': '', 'FIN-AUT': '', 'USA-HUN': '', 'GER-GBR': '', 'HUN-LAT': '', 'USA-AUT': '', 'SUI-FIN': ''} } },
-        { type: 'group', label: 'B', params: {members: ['CAN', 'SWE', 'CZE', 'DEN', 'SVK', 'NOR', 'SLO', 'ITA'], matches: { 'CAN-SWE': '', 'CZE-DEN': '', 'SVK-NOR': '', 'ITA-CAN': '', 'SLO-CZE': '', 'ITA-SVK': '', 'DEN-SWE': '', 'NOR-SLO': '', 'CAN-DEN': '', 'SWE-CZE': '', 'ITA-NOR': '', 'SLO-SVK': '', 'CZE-ITA': '', 'SWE-SLO': '', 'CAN-NOR': '', 'DEN-SVK': '', 'CAN-SLO': '', 'SWE-ITA': '', 'DEN-SLO': '', 'SVK-CZE': '', 'NOR-SWE': '', 'DEN-ITA': '', 'SVK-CAN': '', 'CZE-NOR': '', 'SLO-ITA': '', 'NOR-DEN': '', 'SWE-SVK': '', 'CZE-CAN': ''} } },
+        { type: 'group', label: 'A', params: {members: ['USA', 'SUI', 'FIN', 'GER', 'LAT', 'AUT', 'HUN', 'GBR'], matches: { 'FIN-GER': '3:1', 'USA-SUI': '1:3', 'GBR-AUT': '2:5', 'HUN-FIN': '1:4', 'SUI-LAT': '4:2', 'GBR-USA': '1:5', 'AUT-HUN': '4:2', 'GER-LAT': '0:2', 'FIN-USA': '2:6', 'GER-SUI': '1:6', 'LAT-AUT': '1:3', 'HUN-GBR': '5:0', 'AUT-SUI': '0:9', 'USA-GER': '4:3o', 'FIN-LAT': '7:1', 'SUI-GBR': '4:1', 'GER-HUN': '6:2', 'FIN-GBR': '', 'USA-LAT': '', 'SUI-HUN': '', 'AUT-GER': '', 'GBR-LAT': '', 'FIN-AUT': '', 'USA-HUN': '', 'GER-GBR': '', 'HUN-LAT': '', 'USA-AUT': '', 'SUI-FIN': ''} } },
+        { type: 'group', label: 'B', params: {members: ['CAN', 'SWE', 'CZE', 'DEN', 'SVK', 'NOR', 'SLO', 'ITA'], matches: { 'CAN-SWE': '5:3', 'CZE-DEN': '4:1', 'SVK-NOR': '2:1', 'ITA-CAN': '0:6', 'SLO-CZE': '3:2o', 'ITA-SVK': '1:4', 'DEN-SWE': '2:6', 'NOR-SLO': '4:0', 'CAN-DEN': '5:1', 'SWE-CZE': '3:4', 'ITA-NOR': '0:4', 'SLO-SVK': '4:5o', 'CZE-ITA': '3:1', 'SWE-SLO': '6:0', 'CAN-NOR': '6:5o', 'DEN-SVK': '1:5', 'CAN-SLO': '3:1', 'SWE-ITA': '', 'DEN-SLO': '', 'SVK-CZE': '', 'NOR-SWE': '', 'DEN-ITA': '', 'SVK-CAN': '', 'CZE-NOR': '', 'SLO-ITA': '', 'NOR-DEN': '', 'SWE-SVK': '', 'CZE-CAN': ''} } },
 
         { type: 'playoffround', label: 'QF', params: { members: ['A#1', 'A#2', 'A#3', 'A#4', 'B#1', 'B#2', 'B#3', 'B#4'], matches: { 'A#1-B#4': '', 'A#2-B#3': '', 'A#3-B#2': '', 'A#4-B#1': ''}, ordering: ['A#1', 'B#1', 'A#2', 'B#2', 'A#3', 'B#3', 'A#4', 'B#4']}},
         { type: 'playofftree', label: '_result', params: {members: ['QF#1', 'QF#4', 'QF#2', 'QF#3'], knownResults: {} } }

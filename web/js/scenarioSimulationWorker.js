@@ -929,6 +929,7 @@
         let phaseTeamCounts = {};
         let interestingResults = [];
         let interestingCounts = {};
+        let fullResults = {};
 
         while (!doTerminate && (!iterationLimit || simulationCount < iterationLimit)) {
             let now = Date.now();
@@ -937,6 +938,7 @@
                     type: 'update',
                     simulationCount: simulationCount,
                     results: {
+                        fullResults: fullResults,
                         teamPlacements: teamPlacements,
                         phaseTeamCounts: phaseTeamCounts,
                         interestingResults: { count: interestingResults.length, counts: interestingCounts }
@@ -1019,6 +1021,7 @@
             type: 'update',
             simulationCount: simulationCount,
             results: {
+                fullResults: fullResults,
                 teamPlacements: teamPlacements,
                 phaseTeamCounts: phaseTeamCounts,
                 interestingResults: { count: interestingResults.length, counts: interestingCounts }

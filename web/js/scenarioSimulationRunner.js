@@ -2,8 +2,8 @@ const fs = require('fs');
 const vm = require('vm');// vm must be in the global context to work properly
 const Worker = require('web-worker');
 
-const THREAD_COUNT = 5;
-const ITER_COUNT = 300000;
+const THREAD_COUNT = 8;
+const ITER_COUNT = 400000;
 const SMOOTH_FACTOR = 0.2;
 
 function include(filename) {
@@ -62,7 +62,7 @@ function fmtNegOdds(num) {
     return (ITER_COUNT * THREAD_COUNT / (ITER_COUNT * THREAD_COUNT - num)).toFixed(3);
 }
 
-function finished(teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount) {
+function finished(fullResults, teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount) {
     let results = [];
 
     let phaseTeams = Object.keys(phaseTeamCounts);
@@ -124,6 +124,7 @@ function runScenarioAsync(rating, scenarioDefinition, resolve, reject) {
     let teamPlacements = {};
     let phaseTeamCounts = {};
     let interestingResults = {};
+    let fullResults = {};
     for (let thread = 0; thread < THREAD_COUNT; ++thread) {
         const worker = new Worker('./scenarioSimulationWorker.js');
         worker.addEventListener('message', (evt) => {
@@ -132,6 +133,7 @@ function runScenarioAsync(rating, scenarioDefinition, resolve, reject) {
                 case 'update':
                     let receivedResults = msg.results;
                     totalSimulationCount += msg.simulationCount;
+                    mergeData(fullResults, receivedResults.fullResults);
                     mergeData(teamPlacements, receivedResults.teamPlacements);
                     mergeData(phaseTeamCounts, receivedResults.phaseTeamCounts);
                     mergeData(interestingResults, receivedResults.interestingResults);
@@ -142,7 +144,7 @@ function runScenarioAsync(rating, scenarioDefinition, resolve, reject) {
                     --threadsRunning;
 
                     if (threadsRunning === 0) {
-                        resolve([teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount]);
+                        resolve([fullResults, teamPlacements, phaseTeamCounts, interestingResults, totalSimulationCount]);
                     }
                     break;
 
