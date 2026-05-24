@@ -953,12 +953,23 @@
 
             let scenarioResults = executeScenario(scenario, rating);
             let results = scenarioResults.result;
+            let fullResults = scenarioResults.full;
+            for (let groupResults of [fullResults.A, fullResults.B]) {
+                for (let i = 0; i < 4; ++i) {
+                    let team = groupResults.teams[i];
+                    let placements = teamPlacements[team] || {};
+                    let teamStage = results.teamStages[team];
+                    let currCount = placements[0] || 0;
+                    placements[0] = currCount + 1;
+                    teamPlacements[team] = placements;
+                }
+            }
             for (let team of Object.keys(results.teamStages)) {
                 let placements = teamPlacements[team] || {};
                 let teamStage = results.teamStages[team];
                 for (let stage = 0; stage <= teamStage; ++stage) {
-                    let currCount = placements[stage] || 0;
-                    placements[stage] = currCount + 1;
+                    let currCount = placements[stage + 1] || 0;
+                    placements[stage + 1] = currCount + 1;
                 }
                 teamPlacements[team] = placements;
             }
