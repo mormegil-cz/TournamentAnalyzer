@@ -202,29 +202,29 @@ const WORLD_RUGBY_RATING = {
 };
 
 const ELO_RATING_IIHF = {
-    'USA': emphasizeRecentCoeff(2533, 2717),
-    'CAN': emphasizeRecentCoeff(2681, 2654),
+    'USA': emphasizeRecentCoeff(2534, 2717),
+    'CAN': emphasizeRecentCoeff(2687, 2654),
     'SWE': emphasizeRecentCoeff(2428, 2598),
-    'FIN': emphasizeRecentCoeff(2595, 2454),
-    'CZE': emphasizeRecentCoeff(2417, 2418),
+    'FIN': emphasizeRecentCoeff(2598, 2454),
+    'CZE': emphasizeRecentCoeff(2351, 2418),
     'SUI': emphasizeRecentCoeff(2480, 2378),
-    'SVK': emphasizeRecentCoeff(2238, 2249),
-    'GER': emphasizeRecentCoeff(2206, 2209),
-    'LAT': emphasizeRecentCoeff(2187, 2150),
-    'DEN': emphasizeRecentCoeff(2096, 2105),
-    'AUT': emphasizeRecentCoeff(2038, 1991),
-    'NOR': emphasizeRecentCoeff(2071, 1979),
-    'SLO': emphasizeRecentCoeff(1889, 1890),
-    'GBR': emphasizeRecentCoeff(1738, 1813),
-    'ITA': emphasizeRecentCoeff(1753, 1784),
-    'HUN': emphasizeRecentCoeff(1714, 1674)
+    'SVK': emphasizeRecentCoeff(2232, 2249),
+    'GER': emphasizeRecentCoeff(2211, 2209),
+    'LAT': emphasizeRecentCoeff(2193, 2150),
+    'DEN': emphasizeRecentCoeff(2077, 2105),
+    'AUT': emphasizeRecentCoeff(2035, 1991),
+    'NOR': emphasizeRecentCoeff(2137, 1979),
+    'SLO': emphasizeRecentCoeff(1916, 1890),
+    'GBR': emphasizeRecentCoeff(1727, 1813),
+    'ITA': emphasizeRecentCoeff(1745, 1784),
+    'HUN': emphasizeRecentCoeff(1713, 1674)
 };
 
 const SCENARIO_DEFINITION_IIHF_2026 = {
     rules: RULES.IIHF,
     scenario: [
-        { type: 'group', label: 'A', params: {members: ['USA', 'SUI', 'FIN', 'GER', 'LAT', 'AUT', 'HUN', 'GBR'], matches: { 'FIN-GER': '3:1', 'USA-SUI': '1:3', 'GBR-AUT': '2:5', 'HUN-FIN': '1:4', 'SUI-LAT': '4:2', 'GBR-USA': '1:5', 'AUT-HUN': '4:2', 'GER-LAT': '0:2', 'FIN-USA': '2:6', 'GER-SUI': '1:6', 'LAT-AUT': '1:3', 'HUN-GBR': '5:0', 'AUT-SUI': '0:9', 'USA-GER': '4:3o', 'FIN-LAT': '7:1', 'SUI-GBR': '4:1', 'GER-HUN': '6:2', 'FIN-GBR': '4:0', 'LAT-USA': '4:2', 'SUI-HUN': '9:0', 'AUT-GER': '2:6', 'GBR-LAT': '', 'FIN-AUT': '', 'USA-HUN': '', 'GER-GBR': '', 'HUN-LAT': '', 'USA-AUT': '', 'SUI-FIN': ''} } },
-        { type: 'group', label: 'B', params: {members: ['CAN', 'SWE', 'CZE', 'DEN', 'SVK', 'NOR', 'SLO', 'ITA'], matches: { 'CAN-SWE': '5:3', 'CZE-DEN': '4:1', 'SVK-NOR': '2:1', 'ITA-CAN': '0:6', 'SLO-CZE': '3:2o', 'ITA-SVK': '1:4', 'DEN-SWE': '2:6', 'NOR-SLO': '4:0', 'CAN-DEN': '5:1', 'SWE-CZE': '3:4', 'ITA-NOR': '0:4', 'SLO-SVK': '4:5o', 'CZE-ITA': '3:1', 'SWE-SLO': '6:0', 'CAN-NOR': '6:5o', 'DEN-SVK': '1:5', 'CAN-SLO': '3:1', 'SWE-ITA': '3:0', 'DEN-SLO': '4:0', 'SVK-CZE': '2:3', 'NOR-SWE': '3:2', 'DEN-ITA': '', 'SVK-CAN': '', 'CZE-NOR': '', 'SLO-ITA': '', 'NOR-DEN': '', 'SWE-SVK': '', 'CZE-CAN': ''} } },
+        { type: 'group', label: 'A', params: {members: ['USA', 'SUI', 'FIN', 'GER', 'LAT', 'AUT', 'HUN', 'GBR'], matches: { 'FIN-GER': '3:1', 'USA-SUI': '1:3', 'GBR-AUT': '2:5', 'HUN-FIN': '1:4', 'SUI-LAT': '4:2', 'GBR-USA': '1:5', 'AUT-HUN': '4:2', 'GER-LAT': '0:2', 'FIN-USA': '2:6', 'GER-SUI': '1:6', 'LAT-AUT': '1:3', 'HUN-GBR': '5:0', 'AUT-SUI': '0:9', 'USA-GER': '4:3o', 'FIN-LAT': '7:1', 'SUI-GBR': '4:1', 'GER-HUN': '6:2', 'FIN-GBR': '4:0', 'LAT-USA': '4:2', 'SUI-HUN': '9:0', 'AUT-GER': '2:6', 'GBR-LAT': '0:6', 'FIN-AUT': '5:2', 'USA-HUN': '7:3', 'GER-GBR': '6:3', 'HUN-LAT': '', 'USA-AUT': '', 'SUI-FIN': ''} } },
+        { type: 'group', label: 'B', params: {members: ['CAN', 'SWE', 'CZE', 'DEN', 'SVK', 'NOR', 'SLO', 'ITA'], matches: { 'CAN-SWE': '5:3', 'CZE-DEN': '4:1', 'SVK-NOR': '2:1', 'ITA-CAN': '0:6', 'SLO-CZE': '3:2o', 'ITA-SVK': '1:4', 'DEN-SWE': '2:6', 'NOR-SLO': '4:0', 'CAN-DEN': '5:1', 'SWE-CZE': '3:4', 'ITA-NOR': '0:4', 'SLO-SVK': '4:5o', 'CZE-ITA': '3:1', 'SWE-SLO': '6:0', 'CAN-NOR': '6:5o', 'DEN-SVK': '1:5', 'CAN-SLO': '3:1', 'SWE-ITA': '3:0', 'DEN-SLO': '4:0', 'SVK-CZE': '2:3', 'NOR-SWE': '3:2', 'DEN-ITA': '3:2o', 'SVK-CAN': '1:5', 'CZE-NOR': '1:4', 'SLO-ITA': '5:1', 'NOR-DEN': '', 'SWE-SVK': '', 'CZE-CAN': ''} } },
 
         { type: 'playoffround', label: 'QF', params: { members: ['A#1', 'A#2', 'A#3', 'A#4', 'B#1', 'B#2', 'B#3', 'B#4'], matches: { 'A#1-B#4': '', 'A#2-B#3': '', 'A#3-B#2': '', 'A#4-B#1': ''}, ordering: ['A#1', 'B#1', 'A#2', 'B#2', 'A#3', 'B#3', 'A#4', 'B#4']}},
         { type: 'playofftree', label: '_result', params: {members: ['QF#1', 'QF#4', 'QF#2', 'QF#3'], knownResults: {} } }

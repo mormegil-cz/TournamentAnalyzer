@@ -721,6 +721,7 @@
         }
 
         execute(scenarioResults, simulationParameters) {
+            const resolvedTeams = this.teams.map(t => this.getTeam(t, scenarioResults));
             const teamOrdering = new Map(this.ordering.map((t, index) => [t, index]));
 
             let winners = [];
@@ -730,8 +731,10 @@
                 let awayTeam = teams[1];
                 let matchResult = this.matches[id];
                 if (matchResult.type === 'toplay') {
+                    const resolvedHomeTeam = this.getTeam(homeTeam, scenarioResults);
+                    const resolvedAwayTeam = this.getTeam(awayTeam, scenarioResults);
                     do {
-                        matchResult = this.rules.genFunc(homeTeam, awayTeam, this.rules, simulationParameters);
+                        matchResult = this.rules.genFunc(resolvedHomeTeam, resolvedAwayTeam, this.rules, simulationParameters);
                     } while (matchResult.home === matchResult.away);
                 }
                 let winner = matchResult.home > matchResult.away ? homeTeam : awayTeam;
