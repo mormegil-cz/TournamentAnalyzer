@@ -3,7 +3,7 @@ const vm = require('vm');// vm must be in the global context to work properly
 const Worker = require('web-worker');
 
 const THREAD_COUNT = 8;
-const ITER_COUNT = 400000;
+const ITER_COUNT = 80000;
 const SMOOTH_FACTOR = 0.2;
 
 function include(filename) {
@@ -91,17 +91,18 @@ function finished(fullResults, teamPlacements, phaseTeamCounts, interestingResul
 
     for (let team of teams) {
         let placements = teamPlacements[team];
-        results.push(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
+        //results.push(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}`);
+        results.push(`${team}\t${fmtPerc(placements['0'])}\t${fmtPerc(placements['1'])}\t${fmtPerc(placements['2'])}\t${fmtPerc(placements['3'])}\t${fmtPerc(placements['4'])}\t${fmtPerc(placements['5'])}\t${fmtPerc(placements['6'])}`);
     }
     results.push('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
-        results.push(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}`);
+        results.push(`${team}\t${fmtOdds(placements['0'])}\t${fmtOdds(placements['1'])}\t${fmtOdds(placements['2'])}\t${fmtOdds(placements['3'])}\t${fmtOdds(placements['4'])}\t${fmtOdds(placements['5'])}\t${fmtOdds(placements['6'])}`);
     }
     results.push('---');
     for (let team of teams) {
         let placements = teamPlacements[team];
-        results.push(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}`);
+        results.push(`${team}\t${fmtNegOdds(placements['0'])}\t${fmtNegOdds(placements['1'])}\t${fmtNegOdds(placements['2'])}\t${fmtNegOdds(placements['3'])}\t${fmtNegOdds(placements['4'])}\t${fmtNegOdds(placements['5'])}\t${fmtNegOdds(placements['6'])}`);
     }
 
     results.push('===');
@@ -292,7 +293,8 @@ function computeChanceEvolutionHistory(rating, scenarioDefinition, matchList) {
     promise.then(printChanceEvolutionHistory);
 }
 
-main(ELO_RATING_IIHF, SCENARIO_DEFINITION_IIHF_2026);
+// main(ELO_RATING_IIHF, SCENARIO_DEFINITION_IIHF_2026);
+main(ELO_RATING_FIFA, SCENARIO_FIFA_2026);
 
 /*
 computeChanceEvolutionHistory(ELO_RATING_UEFA, SCENARIO_DEFINITION_UEFA_2024, [

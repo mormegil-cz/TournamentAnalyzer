@@ -499,7 +499,7 @@
                 sorted = false;
                 let appliedLevel = group.levelApplied;
                 if (appliedLevel >= algorithm.length) {
-                    console.error(state);
+                    console.error('group.teams', group.teams, 'matches', matches, 'state', state);
                     throw new Error('Unable to sort group');
                 }
                 let criteriumPoints = algorithm[appliedLevel](group.teams, matches);
@@ -693,7 +693,7 @@
                 }
             }
 
-            console.error(scenarioResults, groupTeams, teamGroups, participatingTeamFromGroup, participantGroups);
+            console.error('scenarioResults', scenarioResults, 'groupTeams', groupTeams, 'teamGroups', teamGroups, 'participatingTeamFromGroup', participatingTeamFromGroup, 'participantGroups', participantGroups);
             throw new Error('No ordering found!');
         }
     }
