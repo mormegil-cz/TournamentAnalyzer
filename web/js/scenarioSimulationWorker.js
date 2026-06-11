@@ -748,9 +748,10 @@
     }
 
     class PlayoffTreeResults extends ScenarioPartResult {
-        constructor(stageTeams) {
+        constructor(stageTeams, lostTo) {
             super();
             this.stageTeams = stageTeams;
+            this.lostTo = lostTo;
 
             let teamStages = {};
             let stageCount = stageTeams.length;
@@ -799,6 +800,7 @@
 
             let currTeams = resolvedTeams;
             let stages = [];
+            let lostTo = new Map();
             while (currTeams.length > 1) {
                 var nextTeams = [];
                 for (let i = 0; i < currTeams.length; i += 2) {
@@ -811,13 +813,15 @@
                         } while (matchResult.home === matchResult.away);
                     }
                     let winner = matchResult.home > matchResult.away ? homeTeam : awayTeam;
+                    let loser = winner == homeTeam ? awayTeam : homeTeam;
                     nextTeams.push(winner);
+                    lostTo.set(loser, winner);
                 }
                 stages.push(currTeams);
                 currTeams = nextTeams;
             }
             stages.push(currTeams);
-            return new PlayoffTreeResults(stages);
+            return new PlayoffTreeResults(stages, lostTo);
         }
     }
 
@@ -956,6 +960,7 @@
 
             let scenarioResults = executeScenario(scenario, rating);
             let results = scenarioResults.result;
+            /*
             let fullResults = scenarioResults.full;
             for (let groupResults of [fullResults.A, fullResults.B]) {
                 for (let i = 0; i < 4; ++i) {
@@ -967,12 +972,13 @@
                     teamPlacements[team] = placements;
                 }
             }
+            */
             for (let team of Object.keys(results.teamStages)) {
                 let placements = teamPlacements[team] || {};
                 let teamStage = results.teamStages[team];
                 for (let stage = 0; stage <= teamStage; ++stage) {
-                    let currCount = placements[stage + 1] || 0;
-                    placements[stage + 1] = currCount + 1;
+                    let currCount = placements[stage] || 0;
+                    placements[stage] = currCount + 1;
                 }
                 teamPlacements[team] = placements;
             }
@@ -1007,11 +1013,26 @@
             }
             */
 
+            /*
             let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
             sfTeams.sort();
             var id = sfTeams.join('+');
             let currCount = phaseTeamCounts[id] || 0;
             phaseTeamCounts[id] = currCount + 1;
+            */
+
+            /*
+            let lostTo = results.lostTo.get('CZE');
+            let currCount = phaseTeamCounts[lostTo] || 0;
+            phaseTeamCounts[lostTo] = currCount + 1;
+
+            if (results.lostTo.get('POR') === 'ARG') {
+                phaseTeamCounts['POR/ARG'] = (phaseTeamCounts['POR/ARG'] || 0) + 1;
+            }
+            if (results.lostTo.get('ARG') === 'POR') {
+                phaseTeamCounts['ARG/POR'] = (phaseTeamCounts['ARG/POR'] || 0) + 1;
+            }
+            */
 
             // let winner = results.stageTeams[results.stageTeams.length - 1][0];
             // console.debug(winner);

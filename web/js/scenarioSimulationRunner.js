@@ -74,7 +74,7 @@ function finished(fullResults, teamPlacements, phaseTeamCounts, interestingResul
 
     let chosenTeamCount = 0;
     for (let t of phaseTeams) {
-        if (t.indexOf("CZE") >= 0 && t.indexOf("SVK") >= 0) chosenTeamCount += phaseTeamCounts[t];
+        if (t.indexOf("CZE") >= 0) chosenTeamCount += phaseTeamCounts[t];
     }
     results.push(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
 
