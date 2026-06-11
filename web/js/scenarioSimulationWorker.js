@@ -1013,19 +1013,17 @@
             }
             */
 
-            /*
             let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
             sfTeams.sort();
             var id = sfTeams.join('+');
             let currCount = phaseTeamCounts[id] || 0;
             phaseTeamCounts[id] = currCount + 1;
-            */
+
+            let lostTo = results.lostTo.get('CZE');
+            let currLostToCount = phaseTeamCounts[lostTo] || 0;
+            phaseTeamCounts[lostTo] = currLostToCount + 1;
 
             /*
-            let lostTo = results.lostTo.get('CZE');
-            let currCount = phaseTeamCounts[lostTo] || 0;
-            phaseTeamCounts[lostTo] = currCount + 1;
-
             if (results.lostTo.get('POR') === 'ARG') {
                 phaseTeamCounts['POR/ARG'] = (phaseTeamCounts['POR/ARG'] || 0) + 1;
             }
