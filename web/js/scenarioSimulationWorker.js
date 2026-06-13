@@ -1013,7 +1013,7 @@
             }
             */
 
-            let sfTeams = results.stageTeams[results.stageTeams.length - 2].slice();
+            let sfTeams = results.stageTeams[results.stageTeams.length - 3].slice();
             sfTeams.sort();
             var id = sfTeams.join('+');
             let currCount = phaseTeamCounts[id] || 0;

@@ -67,14 +67,15 @@ function finished(fullResults, teamPlacements, phaseTeamCounts, interestingResul
 
     let phaseTeams = Object.keys(phaseTeamCounts);
     phaseTeams.sort((a, b) => phaseTeamCounts[b] - phaseTeamCounts[a]);
-    for (let i = 0; i < 20; ++i) {
+    for (let i = 0; i < 40; ++i) {
         let t = phaseTeams[i];
         results.push(`${t}\t${fmtPerc(phaseTeamCounts[t])}\t${fmtOdds(phaseTeamCounts[t])}`);
     }
 
     let chosenTeamCount = 0;
     for (let t of phaseTeams) {
-        if (t.indexOf("CZE") >= 0) chosenTeamCount += phaseTeamCounts[t];
+        // https://manifold.markets/Mochi/2026-fifa-world-cup-prop-bets – A fully southern hemisphere team (Australia, NZ, South Africa, Uruguay or Argentina) makes semi finals.
+        if (t.indexOf("AUS") >= 0 || t.indexOf("NZL") >= 0 || t.indexOf("RSA") >= 0 || t.indexOf("URU") >= 0 || t.indexOf("ARG") >= 0) chosenTeamCount += phaseTeamCounts[t];
     }
     results.push(`Chosen teams: ${fmtPerc(chosenTeamCount)}\t${fmtOdds(chosenTeamCount)}`);
 
