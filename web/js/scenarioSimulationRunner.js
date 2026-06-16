@@ -3,7 +3,7 @@ const vm = require('vm');// vm must be in the global context to work properly
 const Worker = require('web-worker');
 
 const THREAD_COUNT = 8;
-const ITER_COUNT = 10000;
+const ITER_COUNT = 80000;
 const SMOOTH_FACTOR = 0.2;
 
 function include(filename) {
