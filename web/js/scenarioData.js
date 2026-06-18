@@ -167,7 +167,7 @@ const ELO_RATING_FIFA = {
     'ALG': emphasizeRecentCoeff(1759, 1743),
     'PAN': emphasizeRecentCoeff(1683, 1737),
     'UZB': emphasizeRecentCoeff(1698, 1727),
-    'CZE': emphasizeRecentCoeff(1712, 1726),
+    'CZE': emphasizeRecentCoeff(1696, 1726),
     'USA': emphasizeRecentCoeff(1780, 1721),
     'SWE': emphasizeRecentCoeff(1755, 1719),
     'JOR': emphasizeRecentCoeff(1653, 1690),
@@ -181,7 +181,7 @@ const ELO_RATING_FIFA = {
     'KSA': emphasizeRecentCoeff(1598, 1568),
     'CPV': emphasizeRecentCoeff(1606, 1549),
     'HAI': emphasizeRecentCoeff(1536, 1532),
-    'RSA': emphasizeRecentCoeff(1511, 1524),
+    'RSA': emphasizeRecentCoeff(1527, 1524),
     'GHA': emphasizeRecentCoeff(1557, 1503),
     'CUW': emphasizeRecentCoeff(1427, 1436),
     'QAT': emphasizeRecentCoeff(1447, 1425),
@@ -291,7 +291,7 @@ const SCENARIO_UEFA_2018 = [
 const SCENARIO_FIFA_2026 = {
     rules: RULES.FIFA,
     scenario: [
-        { type: 'group', label: 'A', params: {members: ['MEX', 'RSA', 'KOR', 'CZE'], matches: { 'MEX-RSA': '2:0', 'KOR-CZE': '2:1', 'CZE-RSA': '', 'MEX-KOR': '', 'CZE-MEX': '', 'RSA-KOR': '' } } },
+        { type: 'group', label: 'A', params: {members: ['MEX', 'RSA', 'KOR', 'CZE'], matches: { 'MEX-RSA': '2:0', 'KOR-CZE': '2:1', 'CZE-RSA': '1:1', 'MEX-KOR': '', 'CZE-MEX': '', 'RSA-KOR': '' } } },
         { type: 'group', label: 'B', params: {members: ['CAN', 'BIH', 'QAT', 'SUI'], matches: { 'CAN-BIH': '1:1', 'QAT-SUI': '1:1', 'SUI-BIH': '', 'CAN-QAT': '', 'SUI-CAN': '', 'BIH-QAT': '' } } },
         { type: 'group', label: 'C', params: {members: ['BRA', 'MAR', 'HAI', 'SCO'], matches: { 'BRA-MAR': '1:1', 'HAI-SCO': '0:1', 'SCO-MAR': '', 'BRA-HAI': '', 'SCO-BRA': '', 'MAR-HAI': '' } } },
         { type: 'group', label: 'D', params: {members: ['USA', 'PAR', 'AUS', 'TUR'], matches: { 'USA-PAR': '4:1', 'AUS-TUR': '2:0', 'USA-AUS': '', 'TUR-PAR': '', 'TUR-USA': '', 'PAR-AUS': '' } } },
