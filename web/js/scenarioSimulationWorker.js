@@ -1000,6 +1000,14 @@
             if (gertur) interestingResults.push(scenarioResults.full);
             */
 
+            if (results.stageTeams[0].indexOf('BIH') >= 0 || results.stageTeams[0].indexOf('QAT') >= 0) {
+                // interestingCounts[czePartner] = counter + 1;
+                interestingResults.push(scenarioResults.full);
+                // console.dir(scenarioResults.full, {depth:null});
+            } else {
+                // console.dir(scenarioResults.full, {depth:null});
+            }
+
             /*
             let czePlayoffPos = results.stageTeams[0].indexOf('CZE');
             if (czePlayoffPos >= 0) {
