@@ -175,7 +175,7 @@
             console.debug(scenarioDefinition);
             worker.postMessage({
                 type: 'run', id: workerId, workerData: {
-                    rating: ELO_RATING_UEFA,
+                    rating: ELO_RATING_FIFA,
                     scenarioDefinition: scenarioDefinition,
                     smoothFactor: smoothFactor * 0.01,
                     updateFrequency: 1000
@@ -206,7 +206,7 @@
             stopSimulation();
             return false;
         });
-        scenarioDefinition = SCENARIO_DEFINITION_UEFA_2024;
+        scenarioDefinition = SCENARIO_FIFA_2026;
         $scenarioDefinition.value = scenarioDefinition.scenario.map(JSON.stringify).join("\n");
         $startSimulation.disabled = false;
     }
